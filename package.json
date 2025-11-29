@@ -25,6 +25,8 @@
     }
   },
   "dependencies": {
-    "pixi.js": "^8.14.3"
+    "pixi.js": "^8.14.3",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0"
   }
 }

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import "./style.css";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `

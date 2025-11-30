@@ -1,19 +1,18 @@
 import type { ScoreEntity } from "@/entity/GameState";
 import { Given, Then, When } from "quickpickle";
 import { expect } from "vitest";
-import type { ScoreTestWorld } from "../support/world";
-import { createScoreTestWorld } from "../support/world";
+import type { GameWorld } from "../support/world";
 
 // Setup steps
-Given("the game has started", (world) => {
-  (world as any).scoreWorld = createScoreTestWorld();
+Given("the game has started", (world: GameWorld) => {
+  // World is already initialized by constructor - no action needed
+  // Each scenario gets a fresh GameWorld instance automatically
 });
 
 Given(
   "a score exists with id {string} and value {int}",
-  (world, id: string, value: number) => {
-    const { engine } = (world as any).scoreWorld as ScoreTestWorld;
-    engine.dispatch({
+  (world: GameWorld, id: string, value: number) => {
+    world.engine.dispatch({
       type: "CREATE_SCORE",
       payload: {
         id,
@@ -24,16 +23,15 @@ Given(
         alignment: "left",
       },
     });
-    engine.tick({ deltaTime: 0 });
+    world.engine.tick({ deltaTime: 0 });
   },
 );
 
 // Action steps
 When(
   "I create a score with id {string} and value {int}",
-  (world, id: string, value: number) => {
-    const { engine } = (world as any).scoreWorld as ScoreTestWorld;
-    engine.dispatch({
+  (world: GameWorld, id: string, value: number) => {
+    world.engine.dispatch({
       type: "CREATE_SCORE",
       payload: {
         id,
@@ -44,14 +42,14 @@ When(
         alignment: "left",
       },
     });
-    engine.tick({ deltaTime: 0 });
+    world.engine.tick({ deltaTime: 0 });
   },
 );
 
 When(
   "I create a score with id {string}, value {int}, position \\({int}, {int}), scale {float}, spacing {int}, and {string} alignment",
   (
-    world,
+    world: GameWorld,
     id: string,
     value: number,
     x: number,
@@ -60,8 +58,7 @@ When(
     spacing: number,
     alignment: string,
   ) => {
-    const { engine } = (world as any).scoreWorld as ScoreTestWorld;
-    engine.dispatch({
+    world.engine.dispatch({
       type: "CREATE_SCORE",
       payload: {
         id,
@@ -72,50 +69,45 @@ When(
         alignment,
       },
     });
-    engine.tick({ deltaTime: 0 });
+    world.engine.tick({ deltaTime: 0 });
   },
 );
 
 When(
   "I update the score {string} to value {int}",
-  (world, id: string, value: number) => {
-    const { engine } = (world as any).scoreWorld as ScoreTestWorld;
-    engine.dispatch({
+  (world: GameWorld, id: string, value: number) => {
+    world.engine.dispatch({
       type: "UPDATE_SCORE",
       payload: { id, value },
     });
-    engine.tick({ deltaTime: 0 });
+    world.engine.tick({ deltaTime: 0 });
   },
 );
 
-When("I remove the score {string}", (world, id: string) => {
-  const { engine } = (world as any).scoreWorld as ScoreTestWorld;
-  engine.dispatch({
+When("I remove the score {string}", (world: GameWorld, id: string) => {
+  world.engine.dispatch({
     type: "REMOVE_SCORE",
     payload: { id },
   });
-  engine.tick({ deltaTime: 0 });
+  world.engine.tick({ deltaTime: 0 });
 });
 
 // Verification steps
-Then("the score {string} should exist", (world, id: string) => {
-  const { getState } = (world as any).scoreWorld as ScoreTestWorld;
-  const state = getState();
+Then("the score {string} should exist", (world: GameWorld, id: string) => {
+  const state = world.getState();
   expect(state.entities[id]).toBeDefined();
   expect(state.entities[id].type).toBe("score");
 });
 
-Then("the score {string} should not exist", (world, id: string) => {
-  const { getState } = (world as any).scoreWorld as ScoreTestWorld;
-  const state = getState();
+Then("the score {string} should not exist", (world: GameWorld, id: string) => {
+  const state = world.getState();
   expect(state.entities[id]).toBeUndefined();
 });
 
 Then(
   "the score {string} should have value {int}",
-  (world, id: string, value: number) => {
-    const { getState } = (world as any).scoreWorld as ScoreTestWorld;
-    const state = getState();
+  (world: GameWorld, id: string, value: number) => {
+    const state = world.getState();
     const entity = state.entities[id] as ScoreEntity;
     expect(entity).toBeDefined();
     expect(entity.value).toBe(value);
@@ -124,9 +116,8 @@ Then(
 
 Then(
   "the score {string} should have position \\({int}, {int})",
-  (world, id: string, x: number, y: number) => {
-    const { getState } = (world as any).scoreWorld as ScoreTestWorld;
-    const state = getState();
+  (world: GameWorld, id: string, x: number, y: number) => {
+    const state = world.getState();
     const entity = state.entities[id] as ScoreEntity;
     expect(entity).toBeDefined();
     expect(entity.position.x).toBe(x);
@@ -136,9 +127,8 @@ Then(
 
 Then(
   "the score {string} should have scale {float}",
-  (world, id: string, scale: number) => {
-    const { getState } = (world as any).scoreWorld as ScoreTestWorld;
-    const state = getState();
+  (world: GameWorld, id: string, scale: number) => {
+    const state = world.getState();
     const entity = state.entities[id] as ScoreEntity;
     expect(entity).toBeDefined();
     expect(entity.scale).toBe(scale);
@@ -147,9 +137,8 @@ Then(
 
 Then(
   "the score {string} should have spacing {int}",
-  (world, id: string, spacing: number) => {
-    const { getState } = (world as any).scoreWorld as ScoreTestWorld;
-    const state = getState();
+  (world: GameWorld, id: string, spacing: number) => {
+    const state = world.getState();
     const entity = state.entities[id] as ScoreEntity;
     expect(entity).toBeDefined();
     expect(entity.spacing).toBe(spacing);
@@ -158,25 +147,26 @@ Then(
 
 Then(
   "the score {string} should have {string} alignment",
-  (world, id: string, alignment: string) => {
-    const { getState } = (world as any).scoreWorld as ScoreTestWorld;
-    const state = getState();
+  (world: GameWorld, id: string, alignment: string) => {
+    const state = world.getState();
     const entity = state.entities[id] as ScoreEntity;
     expect(entity).toBeDefined();
     expect(entity.alignment).toBe(alignment);
   },
 );
 
-Then("there should be {int} score(s) in the game", (world, count: number) => {
-  const { getState } = (world as any).scoreWorld as ScoreTestWorld;
-  const state = getState();
-  const scores = Object.values(state.entities).filter(
-    (entity) => entity.type === "score",
-  );
-  expect(scores).toHaveLength(count);
-});
+Then(
+  "there should be {int} score(s) in the game",
+  (world: GameWorld, count: number) => {
+    const state = world.getState();
+    const scores = Object.values(state.entities).filter(
+      (entity) => entity.type === "score",
+    );
+    expect(scores).toHaveLength(count);
+  },
+);
 
-Then("the previous state should not be modified", (world) => {
+Then("the previous state should not be modified", (world: GameWorld) => {
   // This is a placeholder for immutability verification
   // In a real implementation, we would capture the state before an operation
   // and verify it hasn't changed after

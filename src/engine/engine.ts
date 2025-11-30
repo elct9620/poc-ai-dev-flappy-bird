@@ -27,6 +27,19 @@ export class Engine {
     this.eventQueue.push(event);
   }
 
+  /**
+   * Get a clone of the current game state
+   *
+   * Returns a shallow clone to prevent external code from mutating the internal state.
+   *
+   * @returns Cloned State object
+   */
+  getState(): State {
+    return {
+      entities: { ...this.state.entities },
+    };
+  }
+
   tick = (ticker: { deltaTime: number }) => {
     const events = [
       ...this.eventQueue,

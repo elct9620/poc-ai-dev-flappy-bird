@@ -62,6 +62,31 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
       }
     }
 
+    if (event.type === "INCREMENT_SCORE") {
+      const entity = gameState.entities[event.payload.id];
+      if (entity && entity.type === "score") {
+        commands.push((state) => {
+          const currentState = state as GameState;
+          const scoreEntity = entity as ScoreEntity;
+          const updatedEntity: ScoreEntity = {
+            ...scoreEntity,
+            value: scoreEntity.value + 1,
+          };
+
+          // Update adapter immediately
+          adapter.updateScore(updatedEntity);
+
+          return {
+            ...currentState,
+            entities: {
+              ...currentState.entities,
+              [event.payload.id]: updatedEntity,
+            },
+          };
+        });
+      }
+    }
+
     if (event.type === "REMOVE_SCORE") {
       commands.push((state) => {
         const currentState = state as GameState;

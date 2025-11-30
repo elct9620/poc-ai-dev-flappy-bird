@@ -1,3 +1,5 @@
+import { EventBus } from "./eventbus";
+
 export interface Entity {
   id: string;
 }
@@ -16,15 +18,14 @@ export type Command = (state: State) => State;
 export type System = (state: State, event: Event) => Command[];
 
 export class Engine {
-  private eventQueue: Event[] = [];
-
   constructor(
     private state: State,
+    private eventBus: EventBus,
     private systems: System[],
   ) {}
 
   dispatch(event: Event): void {
-    this.eventQueue.push(event);
+    this.eventBus.dispatch(event);
   }
 
   /**
@@ -41,12 +42,16 @@ export class Engine {
   }
 
   tick = (ticker: { deltaTime: number }) => {
-    const events = [
-      ...this.eventQueue,
-      { type: "TICK", payload: { deltaTime: ticker.deltaTime } },
-    ];
-    this.eventQueue = [];
+    // Generate TICK event
+    this.eventBus.dispatch({
+      type: "TICK",
+      payload: { deltaTime: ticker.deltaTime },
+    });
 
+    // Flush all events (including TICK)
+    const events = this.eventBus.flush();
+
+    // Process events
     for (const event of events) {
       const commands = this.processEvent(event);
       for (const command of commands) {

@@ -5,6 +5,7 @@ import { Application } from "pixi.js";
 import { PixiInputAdapter } from "@/adapters/PixiInputAdapter";
 import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
+import { EventBus } from "@/engine/eventbus";
 import { createGameState } from "@/entity/GameState";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import { loadNumberAssets } from "@/utils/AssetLoader";
@@ -35,8 +36,11 @@ const scoreSystem = ScoreSystem(stageAdapter);
 // Create initial state
 const initialState = createGameState();
 
+// Create event bus
+const eventBus = new EventBus();
+
 // Initialize engine
-const engine = new Engine(initialState, [scoreSystem]);
+const engine = new Engine(initialState, eventBus, [scoreSystem]);
 
 // Connect to PixiJS ticker
 app.ticker.add(engine.tick);
@@ -56,4 +60,4 @@ engine.dispatch({
 });
 
 // Setup input handling
-const inputAdapter = new PixiInputAdapter(engine, app, "score");
+new PixiInputAdapter(eventBus, app, "score");

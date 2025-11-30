@@ -1,4 +1,5 @@
 import { Engine } from "@/engine/engine";
+import { EventBus } from "@/engine/eventbus";
 import { createGameState, type GameState } from "@/entity/GameState";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import { QuickPickleWorld } from "quickpickle";
@@ -13,6 +14,7 @@ import { MockStageAdapter } from "./mockAdapter";
 export class GameWorld extends QuickPickleWorld {
   public engine: Engine;
   public adapter: MockStageAdapter;
+  public eventBus: EventBus;
 
   constructor(context: TestContext, info: any) {
     super(context, info);
@@ -20,7 +22,8 @@ export class GameWorld extends QuickPickleWorld {
     // Initialize fresh test infrastructure for each scenario
     this.adapter = new MockStageAdapter();
     const state = createGameState();
-    this.engine = new Engine(state, [ScoreSystem(this.adapter)]);
+    this.eventBus = new EventBus();
+    this.engine = new Engine(state, this.eventBus, [ScoreSystem(this.adapter)]);
   }
 
   /**

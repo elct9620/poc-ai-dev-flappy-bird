@@ -21,6 +21,7 @@ root/
 │   ├── assets/                 # Static assets (images, sounds, etc.)
 │   ├── engine/                 # Self-contained game engine framework
 │   │   ├── engine.ts           # Core engine interfaces and types
+│   │   ├── eventbus.ts         # Event bus for handling game events
 │   ├── entity/                 # Game state definitions and management
 │   ├── systems/                # Systems that process events and update state
 │   ├── components/             # PixiJS components for rendering and interaction
@@ -55,17 +56,16 @@ Singleton class that manages the game loop and routes events to systems.
 // src/engine/engine.ts
 
 export class Engine {
-    private eventQueue: Event[] = [];
-
     constructor(
         private state: State,
+        private eventBus: EventBus,
         private systems: System[],
     ) {}
 
 
     tick = (ticker: { deltaTime: number }) => {
-        const events = [...this.eventQueue, { type: 'TICK', payload: { deltaTime: ticker.deltaTime } }];
-        this.eventQueue = [];
+        this.eventBus.dispatch({ type: 'TICK', payload: { deltaTime: ticker.deltaTime } });
+        const events = this.eventBus.flush();
 
         for (const event of events) {
             const commands = this.processEvent(event);

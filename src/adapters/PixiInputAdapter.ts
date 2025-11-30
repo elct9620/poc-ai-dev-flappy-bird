@@ -1,7 +1,6 @@
 import type { Application } from "pixi.js";
 
-import type { Engine } from "@/engine/engine";
-import type { GameState, ScoreEntity } from "@/entity/GameState";
+import type { EventBus } from "@/engine/eventbus";
 
 /**
  * PixiInputAdapter handles user input events and translates them to game events
@@ -9,14 +8,14 @@ import type { GameState, ScoreEntity } from "@/entity/GameState";
  * Responsibilities:
  * - Listen to PixiJS stage pointer events for clicks
  * - Listen to document keyboard events for spacebar
- * - Dispatch UPDATE_SCORE events to increment score
+ * - Dispatch INCREMENT_SCORE events to increment score
  */
 export class PixiInputAdapter {
   private boundHandlePointer: () => void;
   private boundHandleKeydown: (e: KeyboardEvent) => void;
 
   constructor(
-    private engine: Engine,
+    private eventBus: EventBus,
     private app: Application,
     private scoreId: string = "score",
   ) {
@@ -47,18 +46,12 @@ export class PixiInputAdapter {
   }
 
   private incrementScore(): void {
-    const state = this.engine.getState() as GameState;
-    const scoreEntity = state.entities[this.scoreId] as ScoreEntity | undefined;
-
-    if (scoreEntity) {
-      this.engine.dispatch({
-        type: "UPDATE_SCORE",
-        payload: {
-          id: this.scoreId,
-          value: scoreEntity.value + 1,
-        },
-      });
-    }
+    this.eventBus.dispatch({
+      type: "INCREMENT_SCORE",
+      payload: {
+        id: this.scoreId,
+      },
+    });
   }
 
   destroy(): void {

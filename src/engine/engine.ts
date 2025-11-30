@@ -1,4 +1,10 @@
-export interface State {}
+export interface Entity {
+  id: string;
+}
+
+export interface State {
+  entities: Record<string, Entity>;
+}
 
 export interface Event {
   type: string;
@@ -16,6 +22,10 @@ export class Engine {
     private state: State,
     private systems: System[],
   ) {}
+
+  dispatch(event: Event): void {
+    this.eventQueue.push(event);
+  }
 
   tick = (ticker: { deltaTime: number }) => {
     const events = [

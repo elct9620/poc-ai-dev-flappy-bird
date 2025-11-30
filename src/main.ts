@@ -1,6 +1,8 @@
-import { Application } from "pixi.js";
 import "reflect-metadata";
-import { Runner } from "./engine/runner";
+
+import { Application } from "pixi.js";
+
+import { Engine } from "@/engine/engine";
 import "./style.css";
 
 // Create PIXI application
@@ -17,5 +19,6 @@ await app.init({
 document.querySelector<HTMLDivElement>("#app")!.appendChild(app.canvas);
 
 // Start game loop
-const runner = new Runner(app);
-runner.start();
+const engine = new Engine({}, []);
+app.ticker.add(engine.tick);
+app.start();

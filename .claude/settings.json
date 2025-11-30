@@ -21,7 +21,8 @@
     ]
   },
   "enabledPlugins": {
-    "rubric@claudekit": true
+    "rubric@claudekit": true,
+    "git@claudekit": true
   },
   "extraKnownMarketplaces": {
     "claudekit": {

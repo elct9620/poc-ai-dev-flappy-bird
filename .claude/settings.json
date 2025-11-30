@@ -1,5 +1,12 @@
 {
-  "permissions": {},
+  "permissions": {
+    "allow": [
+      "Bash(pnpm test:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(pnpm prettier:*)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -18,7 +25,10 @@
   },
   "extraKnownMarketplaces": {
     "claudekit": {
-      "source": { "source": "github", "repo": "elct9620/claudekit" }
+      "source": {
+        "source": "github",
+        "repo": "elct9620/claudekit"
+      }
     }
   }
 }

@@ -5,8 +5,5 @@
     "moduleResolution": "bundler",
     "noEmit": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.feature"
-  ]
+  "include": ["**/*.ts", "**/*.feature"]
 }

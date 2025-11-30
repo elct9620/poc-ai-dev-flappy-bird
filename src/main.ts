@@ -1,5 +1,5 @@
-import "reflect-metadata";
 import { Application } from "pixi.js";
+import "reflect-metadata";
 import "./style.css";
 
 // Create PIXI application

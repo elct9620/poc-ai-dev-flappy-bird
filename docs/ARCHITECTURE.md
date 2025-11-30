@@ -1,5 +1,4 @@
-Architecture
-===
+# Architecture
 
 This document outlines the architecture of the project, detailing its structure, components, and design principles.
 
@@ -80,18 +79,18 @@ Run the main game loop, processing commands and applying systems to update the g
 // src/engine/runner.ts
 
 export class Runner<T> {
-    private app: PIXI.Application;
-    private state: T;
-    private services: Service[];
-    private reducer: (state: T, command: Command) => [T, Command];
-    private commandQueue: Command[];
+  private app: PIXI.Application;
+  private state: T;
+  private services: Service[];
+  private reducer: (state: T, command: Command) => [T, Command];
+  private commandQueue: Command[];
 
-    private tick = (ticker: { deltaTime: number }) => {
-       // Execute pre-tick services
-       // e.g. InputService to enqueue input commands, ViewService to render the current state
-       // Process commands through the reducer
-       // Enqueue resulting commands for the next tick
-    };
+  private tick = (ticker: { deltaTime: number }) => {
+    // Execute pre-tick services
+    // e.g. InputService to enqueue input commands, ViewService to render the current state
+    // Process commands through the reducer
+    // Enqueue resulting commands for the next tick
+  };
 }
 ```
 
@@ -103,25 +102,25 @@ Located in `src/states/` contains the core game state definitions and update log
 // src/states/GameState.ts
 
 export interface GameState {
-    // implicitly implements Engine's State interface
-    entities: Record<string, Entity>;
+  // implicitly implements Engine's State interface
+  entities: Record<string, Entity>;
 }
 
 export function createGameState(): GameState {
-    return {
-        entities: {},
-    };
+  return {
+    entities: {},
+  };
 }
 
 // src/states/commands/AddEntityCommand.ts
 
 export interface AddEntityCommand {
-    // implicitly implements Engine's Command interface
-    type: 'AddEntity';
-    payload: {
-        id: string;
-        name: string;
-    };
+  // implicitly implements Engine's Command interface
+  type: "AddEntity";
+  payload: {
+    id: string;
+    name: string;
+  };
 }
 ```
 
@@ -158,15 +157,15 @@ Located in `src/services/`, services interact with external systems such as inpu
 // src/services/ViewService.ts
 
 export class ViewService implements Service {
-    private views: Record<string, PIXI.Container>;
-    private entitieIds: Set<string>;
+  private views: Record<string, PIXI.Container>;
+  private entitieIds: Set<string>;
 
-    execute(state: GameState): Command {
-        // Sync views with the current game state
-        // Create new views for new entities
-        // Remove views for deleted entities
-        return None();
-    }
+  execute(state: GameState): Command {
+    // Sync views with the current game state
+    // Create new views for new entities
+    // Remove views for deleted entities
+    return None();
+  }
 }
 ```
 
@@ -178,14 +177,14 @@ Located in `src/views/`, views handle the rendering of the game using PixiJS. It
 // src/views/Monster.ts
 
 export class Monster extends PIXI.Sprite {
-    constructor(texture: PIXI.Texture) {
-        super(texture);
-        this.anchor.set(0.5);
-    }
+  constructor(texture: PIXI.Texture) {
+    super(texture);
+    this.anchor.set(0.5);
+  }
 
-    public apply(state: MonsterState) {
-        this.position.set(state.x, state.y);
-        this.rotation = state.rotation;
-    }
+  public apply(state: MonsterState) {
+    this.position.set(state.x, state.y);
+    this.rotation = state.rotation;
+  }
 }
 ```

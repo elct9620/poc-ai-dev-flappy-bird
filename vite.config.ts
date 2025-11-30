@@ -10,7 +10,11 @@ export default {
     },
   },
   test: {
-    include: ["features/*.feature"],
-    setupFiles: ["features/*.steps.ts"],
+    include: ["features/**/*.feature"],
+    setupFiles: [
+      "features/support/world.ts",
+      "features/support/mockAdapter.ts",
+      "features/steps/score.steps.ts",
+    ],
   },
 };

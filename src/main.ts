@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 import { Application } from "pixi.js";
 
+import { PixiInputAdapter } from "@/adapters/PixiInputAdapter";
 import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
 import { createGameState } from "@/entity/GameState";
@@ -53,3 +54,6 @@ engine.dispatch({
     alignment: "center",
   },
 });
+
+// Setup input handling
+const inputAdapter = new PixiInputAdapter(engine, app, "score");

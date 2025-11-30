@@ -1,6 +1,15 @@
 import "reflect-metadata";
+import { Application } from "pixi.js";
 import "./style.css";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-<div>TODO</div>
-`;
+// Create PIXI application
+const app = new Application();
+
+// Initialize and mount
+await app.init({
+  resizeTo: window,
+  background: "#1099bb",
+  antialias: true,
+});
+
+document.querySelector<HTMLDivElement>("#app")!.appendChild(app.canvas);

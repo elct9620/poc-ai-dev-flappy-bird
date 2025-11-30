@@ -36,38 +36,47 @@ pnpm test:ui
 
 ## Architecture
 
-This project follows a **functional reactive architecture** with clear separation of concerns:
+This project follows an **event-driven architecture with adapters** pattern for building a game engine. The architecture documentation in `docs/ARCHITECTURE.md` describes the complete vision, but implementation is currently minimal.
 
-### Core Concepts
+### Current Implementation
 
-- **Engine** (`src/engine/`): Framework-agnostic game loop and state management
-  - `reducer.ts`: Combines systems into a single reducer function
-  - `runner.ts`: Main game loop that processes commands and updates state
-  - `service.ts`: Adapter interfaces for external systems (input, view, etc.)
+The codebase currently contains:
+- `src/main.ts`: Entry point that initializes PixiJS and starts the Runner
+- `src/engine/runner.ts`: Minimal Runner class with empty tick function
+- PixiJS application setup with basic configuration
 
-- **States** (`src/states/`): Pure state definitions and command types
-  - Must be immutable and free of side effects
-  - `commands/`: Command definitions that trigger state changes
+### Planned Architecture (see `docs/ARCHITECTURE.md`)
 
-- **Systems** (`src/systems/`): Pure functions that process commands
-  - Signature: `(state: GameState, command: Command) => [GameState, Command]`
-  - Must be side-effect free
-  - Combined by reducer into a single processing pipeline
+The target architecture separates concerns into:
 
-- **Services** (`src/services/`): Handle external systems and side effects
-  - Bridge between engine and external systems (input, rendering, etc.)
-  - Execute during pre-tick/post-tick phases
+1. **Engine** (`src/engine/`): Framework-agnostic game loop
+   - Event-driven system processing
+   - State management through pure functions
+   - Command pattern for state updates
 
-- **Views** (`src/views/`): PixiJS rendering components
-  - Apply state to visual representations
-  - Method: `apply(state: EntityState)`
+2. **Entity** (`src/entity/`): Immutable game state definitions
+   - Pure functions for state transformations
+   - No direct mutations
+
+3. **Systems** (`src/systems/`): Pure event processors
+   - Signature: `(state: State, event: Event) => Command[]`
+   - Generate commands to update state
+   - Can accept adapters for side effects
+
+4. **Adapters** (`src/adapters/`): External system interfaces
+   - Bridge to PixiJS, sound, input, etc.
+   - Handle side effects outside the pure engine
+
+5. **Components** (`src/components/`): PixiJS visual components
+   - Factory pattern for creating display objects
 
 ### Testing Strategy
 
-- **BDD tests**: Gherkin features in `features/` (using QuickPickle)
-  - Configure in `vite.config.ts`
+- **BDD tests**: Gherkin features (when created) will go in `features/`
+  - QuickPickle configured in `vite.config.ts`
   - Step definitions in `features/*.steps.ts`
-- **No unit test folder**: E2E tested by humans; integration via Gherkin
+- **No unit tests folder**: E2E testing by humans; integration via Gherkin
+- Currently no feature files exist
 
 ## Important Notes
 

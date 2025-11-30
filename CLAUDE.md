@@ -36,47 +36,145 @@ pnpm test:ui
 
 ## Architecture
 
-This project follows an **event-driven architecture with adapters** pattern for building a game engine. The architecture documentation in `docs/ARCHITECTURE.md` describes the complete vision, but implementation is currently minimal.
+This project follows an **event-driven architecture with adapters** pattern for building a game engine. The architecture documentation in `docs/ARCHITECTURE.md` describes the complete vision.
 
-### Current Implementation
+### Current Implementation Status
 
-The codebase currently contains:
-- `src/main.ts`: Entry point that initializes PixiJS and starts the Runner
-- `src/engine/runner.ts`: Minimal Runner class with empty tick function
-- PixiJS application setup with basic configuration
+**Implemented:**
+- Core event-driven Engine (`src/engine/engine.ts`) - Singleton managing game loop, event routing, and state updates
+- Score system with full CRUD operations - Complete with BDD tests (9 scenarios in `features/score.feature`)
+- PixiJS integration via PixiStageAdapter - Manages rendering and component lifecycle
+- Score component - Renders digit sprites with alignment and spacing
+- Asset loading system - Async preload of game sprites and sounds
 
-### Planned Architecture (see `docs/ARCHITECTURE.md`)
+**Not Yet Implemented:**
+- Bird/Player entity and physics
+- Pipe generation and movement
+- Collision detection
+- Input handling
+- Sound playback
+- Game state (menu, playing, game over)
 
-The target architecture separates concerns into:
+### Architecture Layers
 
-1. **Engine** (`src/engine/`): Framework-agnostic game loop
-   - Event-driven system processing
-   - State management through pure functions
-   - Command pattern for state updates
+The architecture separates concerns into distinct layers:
 
-2. **Entity** (`src/entity/`): Immutable game state definitions
-   - Pure functions for state transformations
-   - No direct mutations
+1. **Engine** (`src/engine/engine.ts`): Framework-agnostic game loop
+   - **Event Queue**: Dispatches events to systems
+   - **System Processing**: Systems generate commands based on events
+   - **Command Execution**: Pure functions update state immutably
+   - **API**: `dispatch(event)`, `tick(ticker)`, `getState()`
+
+2. **Entity** (`src/entity/GameState.ts`): Immutable game state definitions
+   - GameState contains `entities` record keyed by ID
+   - Entities updated via pure functions (never mutated)
+   - Example: `ScoreEntity` with position, scale, alignment, value
 
 3. **Systems** (`src/systems/`): Pure event processors
-   - Signature: `(state: State, event: Event) => Command[]`
-   - Generate commands to update state
-   - Can accept adapters for side effects
+   - **Signature**: `(state: State, event: Event) => Command[]`
+   - Example: `ScoreSystem` handles CREATE_SCORE, UPDATE_SCORE, REMOVE_SCORE
+   - Can accept adapters as dependencies for side effects
 
 4. **Adapters** (`src/adapters/`): External system interfaces
-   - Bridge to PixiJS, sound, input, etc.
-   - Handle side effects outside the pure engine
+   - Bridge between pure engine and PixiJS rendering
+   - `PixiStageAdapter` manages components, provides lifecycle hooks
+   - Implements interfaces defined by systems (loose coupling)
 
 5. **Components** (`src/components/`): PixiJS visual components
    - Factory pattern for creating display objects
+   - `sync(entity)` method reconciles state changes
+   - Example: `Score` component renders number sprites
+
+### Data Flow
+
+```
+User/Timer → Events → Engine → Systems → Commands → State Updates → Adapters → PixiJS Rendering
+```
+
+**Key Pattern**: Systems are pure functions; side effects isolated in adapters.
 
 ### Testing Strategy
 
-- **BDD tests**: Gherkin features (when created) will go in `features/`
-  - QuickPickle configured in `vite.config.ts`
-  - Step definitions in `features/*.steps.ts`
-- **No unit tests folder**: E2E testing by humans; integration via Gherkin
-- Currently no feature files exist
+**BDD with Gherkin:**
+- Feature files: `features/*.feature` (human-readable specifications)
+- Step definitions: `features/steps/*.steps.ts` (test implementations)
+- World context: `features/support/world.ts` (test environment setup)
+- Mock adapters: `features/support/mockAdapter.ts` (isolate engine from rendering)
+
+**Current Coverage:**
+- `features/score.feature`: 9 scenarios testing Score system
+- Tests state immutability, CRUD operations, alignments, boundary values
+
+**No unit tests folder**: E2E testing by humans; integration via Gherkin
+
+**QuickPickle Configuration** (`vite.config.ts`):
+- Auto-discovers `.feature` files
+- Setup files load in order: `setup.ts` → `world.ts` → `mockAdapter.ts` → `*.steps.ts`
+- Use `setWorldConstructor` pattern for world initialization
+
+## Implementation Patterns
+
+### State Immutability
+
+All state updates create new objects (never mutate):
+
+```typescript
+// Pattern used throughout
+return {
+  ...state,
+  entities: {
+    ...state.entities,
+    [id]: updatedEntity
+  }
+};
+```
+
+### Event Processing
+
+Events queued via `dispatch()`, processed in `tick()`:
+
+```typescript
+engine.dispatch({
+  type: "CREATE_SCORE",
+  payload: { id, value, position, scale, spacing, alignment }
+});
+engine.tick({ deltaTime: 0 }); // Process all queued events
+```
+
+### System Implementation
+
+Systems return commands (pure state transformers):
+
+```typescript
+export const ScoreSystem = (adapter: StageAdapter): System => {
+  return (state, event) => {
+    if (event.type === "CREATE_SCORE") {
+      return [(state) => ({
+        ...state,
+        entities: {
+          ...state.entities,
+          [event.payload.id]: createScoreEntity(event.payload)
+        }
+      })];
+    }
+    return [];
+  };
+};
+```
+
+### Component Sync Pattern
+
+Components reconcile state changes via `sync()`:
+
+```typescript
+class Score extends Container {
+  sync(entity: ScoreEntity) {
+    // Update visual representation based on entity state
+    this.updateDigits(entity.value);
+    this.position.set(entity.position.x, entity.position.y);
+  }
+}
+```
 
 ## Important Notes
 
@@ -85,6 +183,7 @@ The target architecture separates concerns into:
 - Experimental decorators enabled for tsyringe dependency injection
 - Entry point: `index.html` → `src/main.ts`
 - Prettier configured with `organize-imports` plugin
+- Path alias `@/*` maps to `src/*` for clean imports
 - Full architecture documented in `docs/ARCHITECTURE.md`
 
 ## GitHub Actions Integration

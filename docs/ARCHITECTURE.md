@@ -18,88 +18,79 @@ This is a Game built using the following technologies:
 ```plaintext
 root/
 ├── src/
-│   ├── assets/             # Static assets (images, sounds, etc.)
-│   ├── engine/             # Self-contained game engine framework
-│   │   ├── reducer.ts      # Combines systems into a single reducer function
-│   │   ├── service.ts      # Adapter interfaces to bridge engine and input, view, etc.
-│   │   ├── runner.ts       # Game loop and main runner logic
-│   ├── systems/            # Pure functions that operate on the game state
-│   ├── states/             # Game state definitions and management
-│   │   ├── commands/       # Command definitions the side effects
-│   ├── services/           # Services that interact with external systems (input, view, etc.)
-│   ├── views/              # PixiJS view components and rendering logic
-│   ├── di/                 # Dependency Injection setup and configurations
-│   ├── utils/              # Utility functions and helpers
-│   ├── view.ts             # The ViewSync implementation for the game
-│   ├── main.ts             # Entry point of the application
-├── features/               # Gherkin feature files for behavior-driven development
-│   ├── steps/              # Step definitions for Gherkin features
-├── public/                 # Public assets served directly
-├── index.html              # Main HTML file
-├── vite.config.ts          # Vite configuration file
-├── tsconfig.json           # TypeScript configuration file
-└── package.json            # Project metadata and dependencies
+│   ├── assets/                 # Static assets (images, sounds, etc.)
+│   ├── engine/                 # Self-contained game engine framework
+│   │   ├── engine.ts           # Core engine interfaces and types
+│   ├── entity/                 # Game state definitions and management
+│   ├── systems/                # Systems that process events and update state
+│   ├── components/             # PixiJS components for rendering and interaction
+│   ├── adapters/               # Adapters for external systems (e.g., PixiJS)
+│   │   ├── pixiStageAdapter.ts # Adapter for PixiJS stage
+│   ├── utils/                  # Utility functions and helpers
+│   ├── main.ts                 # Entry point of the application
+├── features/                   # Gherkin feature files for behavior-driven development
+│   ├── steps/                  # Step definitions for Gherkin features
+├── public/                     # Public assets served directly
+├── index.html                  # Main HTML file
+├── vite.config.ts              # Vite configuration file
+├── tsconfig.json               # TypeScript configuration file
+└── package.json                # Project metadata and dependencies
 ```
 
 > NOTE: we do not use `tests/` folder because E2E is tested by human testers playing the game, and integration tests are done via Gherkin feature files in the `features/` folder.
 
 ## Engine
 
-Located in `src/engine/`, play as the core game engine framework, orchestrating the game loop, state management, and view synchronization.
+Located in `src/engine/`, play as the core game engine framework, orchestrating the events and state updates.
 
-### Reducer
+- Command: Represents actions to be executed to update the game state.
+- Event: Represents occurrences that systems can respond to,
+- System: Pure functions that process events and generate commands to update the game state.
 
-Combines all systems into a single reducer function that processes commands and updates the game state.
+### Engine Core
+
+Singleton class that manages the game loop and routes events to systems.
 
 ```typescript
-// src/engine/reducer.ts
+// src/engine/engine.ts
 
-export interface System {
-    (state: GameState, command: Command): [GameState, Command];
-}
+export class Engine {
+    private eventQueue: Event[] = [];
 
-export function createReducer(systems: System[]): System {
-    return (state: GameState, command: Command): [GameState, Command] => (
-        systems.reduce(
-            ([currentState, cmd], system) => {
-                const [newState, newCmd] = system(currentState, event);
-                return [newState, Batch(cmd, newCmd)];
+    constructor(
+        private state: State,
+        private systems: System[],
+    ) {}
+
+
+    tick = (ticker: { deltaTime: number }) => {
+        const events = [...this.eventQueue, { type: 'TICK', payload: { deltaTime: ticker.deltaTime } }];
+        this.eventQueue = [];
+
+        for (const event of events) {
+            const commands = this.processEvent(event);
+            for (const command of commands) {
+                this.state = command(this.state);
             }
-            [state, None()] as [GameState, Command]
-        )
-    )
+        }
+    };
+
+    private processEvent = (event: Event): Command[] => {
+        let commands: Command[] = [];
+        for (const system of this.systems) {
+            commands = commands.concat(system(this.state, event));
+        }
+        return commands;
+    };
 }
 ```
 
-### Runner
+## Entity
 
-Run the main game loop, processing commands and applying systems to update the game state.
-
-```typescript
-// src/engine/runner.ts
-
-export class Runner<T> {
-  private app: PIXI.Application;
-  private state: T;
-  private services: Service[];
-  private reducer: (state: T, command: Command) => [T, Command];
-  private commandQueue: Command[];
-
-  private tick = (ticker: { deltaTime: number }) => {
-    // Execute pre-tick services
-    // e.g. InputService to enqueue input commands, ViewService to render the current state
-    // Process commands through the reducer
-    // Enqueue resulting commands for the next tick
-  };
-}
-```
-
-## States
-
-Located in `src/states/` contains the core game state definitions and update logic. Must be pure and free of side effects.
+Located in `src/entity/`, this module defines the game state which is an entity in the engine, the entity is immutably updated by pure functions.
 
 ```typescript
-// src/states/GameState.ts
+// src/entity/GameState.ts
 
 export interface GameState {
   // implicitly implements Engine's State interface
@@ -112,79 +103,135 @@ export function createGameState(): GameState {
   };
 }
 
-// src/states/commands/AddEntityCommand.ts
+// src/entity/Player.ts
 
-export interface AddEntityCommand {
-  // implicitly implements Engine's Command interface
-  type: "AddEntity";
-  payload: {
-    id: string;
-    name: string;
+export interface Player extends Entity {
+  id: string;
+  position: { x: number; y: number };
+  health: number;
+}
+
+export function createPlayer(id: string, x: number, y: number): Player {
+  return {
+    id,
+    position: { x, y },
+    health: 100,
   };
+}
+
+export function movePlayer(player: Player, dx: number, dy: number): Player {
+    return {
+        ...player,
+        position: {
+            x: player.position.x + dx,
+            y: player.position.y + dy,
+        },
+    };
 }
 ```
 
 ## Systems
 
-Located in `src/systems/`, systems are pure functions that take the current game state and a command, returning a new game state and any resulting events.
+Located in `src/systems/`, systems are pure functions that process events and generate commands to update the game state.
 
-```typescripttypescript
-// src/systems/addEntitySystem.ts
+```typescript
+// src/systems/MovementSystem.ts
 
-import { GameState } from '@/states/GameState';
+import { System, Event, Command } from '@/engine/engine';
+import { GameState } from '@/entity/GameState';
+import { movePlayer } from '@/entity/Player';
 
-export function spawnEnemiesSystem(state: GameState, command: Command): [GameState, Command] {
-    switch (event.type) {
-        case 'SpawnEnemies': {
-            const newState = { ...state };
-            event.enemies.forEach((enemy) => {
-                newState.entities[enemy.id] = enemy;
+export const MovementSystem: System = (state: GameState, event: Event): Command[] => {
+    const commands: Command[] = [];
+
+    if (event.type === 'MOVE_PLAYER') {
+        const { playerId, dx, dy } = event.payload;
+        const player = state.entities[playerId] as Player;
+
+        if (player) {
+            commands.push((state: GameState) => {
+                const updatedPlayer = movePlayer(player, dx, dy);
+                return {
+                    ...state,
+                    entities: {
+                        ...state.entities,
+                        [playerId]: updatedPlayer,
+                    },
+                };
             });
-
-            return [newState, None()];
         }
-        default:
-            return [state, None()];
     }
+
+    return commands;
+};
+
+// src/systems/SoundEffectSystem.ts
+
+import { System, Event, Command } from '@/engine/engine';
+import { GameState } from '@/entity/GameState';
+
+export interface SoundAdapter {
+    playSound: (soundId: string) => void;
 }
+
+export const SoundEffectSystem = (soundAdapter: SoundAdapter): System => {
+    return (state: GameState, event: Event): Command[] => {
+        const commands: Command[] = [];
+
+        if (event.type === 'PLAYER_HIT') {
+            commands.push(() => {
+                soundAdapter.playSound('hit-sound');
+                return state;
+            });
+        }
+
+        return commands;
+    };
+};
 ```
 
-## Services
+## Adapters
 
-Located in `src/services/`, services interact with external systems such as input handling and view rendering. They bridge the gap between the engine and these external systems.
-
-```typescript
-// src/services/ViewService.ts
-
-export class ViewService implements Service {
-  private views: Record<string, PIXI.Container>;
-  private entitieIds: Set<string>;
-
-  execute(state: GameState): Command {
-    // Sync views with the current game state
-    // Create new views for new entities
-    // Remove views for deleted entities
-    return None();
-  }
-}
-```
-
-## Views
-
-Located in `src/views/`, views handle the rendering of the game using PixiJS. It predefines various visual components that represent game entities.
+Located in `src/adapters/`, adapters interface with external systems like PixiJS for rendering and sound.
 
 ```typescript
-// src/views/Monster.ts
+// src/adapters/PixiStageAdapter.ts
 
-export class Monster extends PIXI.Sprite {
-  constructor(texture: PIXI.Texture) {
-    super(texture);
-    this.anchor.set(0.5);
-  }
+import * as PIXI from 'pixi.js';
+import { StageAdapter } from '@/systems/RenderingSystem';
+import { ComponentFactory } from '@/components/ComponentFactory';
 
-  public apply(state: MonsterState) {
-    this.position.set(state.x, state.y);
-    this.rotation = state.rotation;
-  }
+export class PixiStageAdapter implements StageAdapter {
+    private app: PIXI.Application;
+    private entities: Record<string, PIXI.DisplayObject> = {};
+
+    constructor(app: PIXI.Application) {
+        this.app = app;
+    }
+
+    createEntity(id: string, componentId: string): void {
+        const displayObject = ComponentFactory.createComponent(componentId);
+        this.entities[id] = displayObject;
+        this.app.stage.addChild(displayObject);
+    }
+
+    attachEntity(id: string, parentId: string): void {
+        const entity = this.entities[id];
+        const parent = this.entities[parentId];
+        if (entity && parent) {
+            parent.addChild(entity);
+        }
+    }
+
+    sweepEntities(existingEntityIds: Set<string>): void {
+        for (const id in this.entities) {
+            if (!existingEntityIds.has(id)) {
+                const entity = this.entities[id];
+                this.app.stage.removeChild(entity);
+                entity.destroy();
+                delete this.entities[id];
+            }
+        }
+    }
 }
 ```

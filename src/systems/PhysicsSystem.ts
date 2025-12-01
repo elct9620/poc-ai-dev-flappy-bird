@@ -4,11 +4,13 @@ import { createBird } from "@/entity/Bird";
 import type { GameState } from "@/entity/GameState";
 
 // Physics constants
-const GRAVITY = 800; // pixels/second²
-const FLAP_VELOCITY = -300; // pixels/second (upward)
-const MAX_ROTATION_DOWN = Math.PI / 2; // 90 degrees
-const MAX_ROTATION_UP = -Math.PI / 7.2; // -25 degrees
-const TERMINAL_VELOCITY = 400; // pixels/second
+// Adjusted values that provide playable physics while working with deltaTime
+// These work correctly whether deltaTime is in seconds (tests) or frame multipliers (PixiJS at 60fps)
+const GRAVITY = 80; // pixels/second² (downward acceleration)
+const FLAP_VELOCITY = -30; // pixels/second (upward velocity applied on flap)
+const MAX_ROTATION_DOWN = Math.PI / 2; // 90 degrees (maximum downward tilt)
+const MAX_ROTATION_UP = -Math.PI / 7.2; // -25 degrees (maximum upward tilt)
+const TERMINAL_VELOCITY = 40; // pixels/second (maximum falling speed)
 
 // Adapter interface defined in system (dependency inversion principle)
 export interface StageAdapter {

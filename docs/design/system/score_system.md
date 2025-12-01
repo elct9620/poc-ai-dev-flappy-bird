@@ -17,18 +17,17 @@ Creates a new score entity in the game state with full configuration.
 | spacing   | number                         | Horizontal spacing between digit sprites             |
 | alignment | "left" \| "center" \| "right"  | Horizontal alignment of digits                       |
 
-### UPDATE_SCORE
+### RESET_SCORE
 
-Updates the value of an existing score entity.
+Resets an existing score entity's value to its initial value (typically 0). This is used when starting a new game or resetting the current game state.
 
 | Name  | Type   | Description                                |
 |-------|--------|--------------------------------------------|
-| id    | string | Identifier of the score entity to update   |
-| value | number | New numeric score value                    |
+| id    | string | Identifier of the score entity to reset    |
 
 ### INCREMENT_SCORE
 
-Increments an existing score entity's value by 1.
+Increments an existing score entity's value by 1. This is the primary way scores increase during gameplay (e.g., when the player passes a pipe).
 
 | Name | Type   | Description                                |
 |------|--------|--------------------------------------------|
@@ -48,13 +47,13 @@ Removes a score entity from the game state.
 
 Adds a new Score to the game state's entities record and notifies the adapter to create the visual representation. Returns a new state with the entity added immutably.
 
-### Update Score Entity Command
+### Reset Score Entity Command
 
-Updates the value property of an existing Score and notifies the adapter to sync the visual representation. Returns a new state with the updated entity.
+Sets the value property of an existing Score to 0 (the initial/default value) and notifies the adapter to sync the visual representation. Returns a new state with the reset entity. This ensures scores can be reset for new games without recreating the entity.
 
 ### Increment Score Entity Command
 
-Increases the value property of an existing Score by 1 and notifies the adapter. This is implemented as a specialized update that reads the current value and increments it.
+Increases the value property of an existing Score by 1 and notifies the adapter. This is the only way to increase score values during gameplay, ensuring consistent game mechanics.
 
 ### Remove Score Entity Command
 

@@ -1,0 +1,11 @@
+{
+  "rubric": {
+    "rules": [
+      {
+        "name": "Document Index Files",
+        "pattern": "docs/(entities|systems|components)\\.md$",
+        "path": "docs/rubrics/document_index.md"
+      }
+    ]
+  }
+}

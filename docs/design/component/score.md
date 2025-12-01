@@ -1,0 +1,46 @@
+# Score
+
+The Score component is a PixiJS Container that displays a numeric score value using sprite-based digit rendering. It handles layout, alignment, and synchronization with the ScoreEntity state.
+
+## Properties
+
+| Name          | Type                           | Description                                    |
+|---------------|--------------------------------|------------------------------------------------|
+| textures      | Record<string, Texture>        | Texture atlas mapping digit characters to sprites |
+| currentValue  | number                         | Cached value to detect changes and avoid unnecessary rebuilds |
+| digitSprites  | Sprite[]                       | Array of sprite instances representing each digit |
+
+## Structure
+
+```markdown
+Container (Score)
+    ├── Sprite (digit 0)
+    ├── Sprite (digit 1)
+    ├── Sprite (digit 2)
+    └── ... (variable number based on value)
+```
+
+- Each digit in the score value is represented by a separate Sprite instance
+- Sprites are positioned horizontally with configurable spacing
+- The entire container can be positioned and scaled via ScoreEntity properties
+
+## Synchronization
+
+The `sync(entity: ScoreEntity)` method reconciles the component's visual state with the entity:
+
+1. **Position & Scale**: Updates the container's position and scale immediately
+2. **Value Change Detection**: Compares `entity.value` with cached `currentValue`
+3. **Conditional Rebuild**: Only rebuilds digit sprites if the value has changed
+4. **Layout Algorithm**:
+   - Converts value to string and splits into digit characters
+   - Creates sprite for each digit using texture atlas
+   - Calculates total width based on digit count and spacing
+   - Applies alignment offset (left: 0, center: -width/2, right: -width)
+   - Positions each sprite with configured spacing
+
+## Performance Considerations
+
+- Digit sprites are only rebuilt when the value changes, not on every sync
+- Old sprites are properly destroyed to prevent memory leaks
+- Alignment calculations are performed only during rebuilds
+- Texture lookups use a pre-loaded atlas for fast rendering

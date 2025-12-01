@@ -1,3 +1,5 @@
+import type { Vector } from "./Vector";
+
 export interface Entity {
   id: string;
   type: string;
@@ -6,7 +8,7 @@ export interface Entity {
 export interface ScoreEntity extends Entity {
   type: "score";
   value: number;
-  position: { x: number; y: number };
+  position: Vector;
   scale: number;
   spacing: number;
   alignment: "left" | "center" | "right";

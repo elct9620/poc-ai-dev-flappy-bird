@@ -3,14 +3,13 @@ import type { Bird } from "@/entity/Bird";
 import { createBird } from "@/entity/Bird";
 import type { GameState } from "@/entity/GameState";
 
-// Physics constants
-// Adjusted values that provide playable physics while working with deltaTime
-// These work correctly whether deltaTime is in seconds (tests) or frame multipliers (PixiJS at 60fps)
-const GRAVITY = 80; // pixels/second² (downward acceleration)
-const FLAP_VELOCITY = -30; // pixels/second (upward velocity applied on flap)
+// Physics constants (per design document: docs/design/system/physics_system.md)
+// Values in frame-based units for PixiJS deltaTime (1.0 = one frame at 60fps)
+const GRAVITY = 0.8; // pixels/frame² (downward acceleration)
+const FLAP_VELOCITY = -5; // pixels/frame (upward velocity applied on flap)
 const MAX_ROTATION_DOWN = Math.PI / 2; // 90 degrees (maximum downward tilt)
 const MAX_ROTATION_UP = -Math.PI / 7.2; // -25 degrees (maximum upward tilt)
-const TERMINAL_VELOCITY = 40; // pixels/second (maximum falling speed)
+const TERMINAL_VELOCITY = 10; // pixels/frame (maximum falling speed)
 
 // Adapter interface defined in system (dependency inversion principle)
 export interface StageAdapter {

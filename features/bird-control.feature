@@ -34,9 +34,9 @@ Feature: Bird Control
 
   Scenario: Bird can flap multiple times
     When the player clicks the mouse
-    And the game advances by 0.2 seconds
+    And the game advances by 0.05 seconds
     And the player clicks the mouse
-    And the game advances by 0.2 seconds
+    And the game advances by 0.05 seconds
     And the player clicks the mouse
     Then the bird should be higher than its initial position
 

@@ -39,14 +39,14 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
       });
     }
 
-    if (event.type === "UPDATE_SCORE") {
+    if (event.type === "RESET_SCORE") {
       const entity = gameState.entities[event.payload.id];
       if (entity && entity.type === "score") {
         commands.push((state) => {
           const currentState = state as GameState;
           const updatedEntity: Score = {
             ...(entity as Score),
-            value: event.payload.value,
+            value: 0,
           };
 
           // Update adapter immediately

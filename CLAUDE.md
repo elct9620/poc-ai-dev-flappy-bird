@@ -186,6 +186,42 @@ class Score extends Container {
 - Path alias `@/*` maps to `src/*` for clean imports
 - Full architecture documented in `docs/ARCHITECTURE.md`
 
+## Design-First Workflow
+
+This project follows a design-first approach using custom slash commands:
+
+### `/design [feature description] [clarify instructions]`
+Creates or edits design documents for game mechanics:
+- Creates documents in `docs/design/entity/`, `docs/design/system/`, or `docs/design/component/`
+- Uses templates from `docs/templates/` (entity.md, system.md, component.md)
+- Updates index files in `docs/entities.md`, `docs/systems.md`, `docs/components.md`
+- May create pending Gherkin tests in `features/` (tests fail until implementation)
+- Design documents are technology-agnostic, focusing on behavior not implementation
+
+### `/implement [mechanic or feature]`
+Implements or refactors features based on design documents:
+- Reads design documents from `docs/design/` to understand requirements
+- Creates tasks and assigns them (uses Task tool for parallel work)
+- Implements entities in `src/entity/`, systems in `src/systems/`, components in `src/components/`
+- Ensures all Gherkin tests in `features/` pass after implementation
+- Includes self-review for quality assurance
+
+**Workflow Pattern:**
+1. Use `/design` to create design documents first
+2. Review and clarify design with stakeholders
+3. Use `/implement` to build the feature according to design specs
+4. Verify all BDD tests pass
+
+## Important Notes
+
+- This project uses `rolldown-vite@7.2.5` as a Vite replacement (specified in pnpm overrides)
+- TypeScript uses strict mode with bundler module resolution
+- Experimental decorators enabled for tsyringe dependency injection
+- Entry point: `index.html` → `src/main.ts`
+- Prettier configured with `organize-imports` plugin
+- Path alias `@/*` maps to `src/*` for clean imports
+- Full architecture documented in `docs/ARCHITECTURE.md`
+
 ## GitHub Actions Integration
 
 The project uses Claude Code as a GitHub App that responds to:

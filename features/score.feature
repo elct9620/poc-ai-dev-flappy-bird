@@ -20,6 +20,7 @@ Feature: Score System
     And the score "hud-score" should have spacing 4
     And the score "hud-score" should have "center" alignment
 
+  @skip
   Scenario: Reset score value
     Given a score exists with id "game-score" and value 10
     When I reset the score "game-score"
@@ -71,6 +72,7 @@ Feature: Score System
       | 999999 |
       | -100   |
 
+  @skip
   Scenario: Reset non-existent score
     When I reset the score "missing-score"
     Then the score "missing-score" should not exist

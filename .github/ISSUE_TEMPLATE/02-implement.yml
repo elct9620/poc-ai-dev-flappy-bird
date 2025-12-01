@@ -16,6 +16,15 @@ body:
         - Request implementation even without formal design (Claude will use best practices)
 
   - type: input
+    id: claude_command
+    attributes:
+      label: Claude Command
+      description: This field tells Claude Code which command to execute (do not modify)
+      value: "/implement"
+    validations:
+      required: true
+
+  - type: input
     id: feature_name
     attributes:
       label: Feature Name

@@ -33,6 +33,7 @@ root/
 │   ├── steps/                  # Step definitions for Gherkin features
 │   ├── support/                # Support files for testing, e.g., Cucumber World, mocks
 ├── docs/                       # Documentation files
+│   ├── templates/              # Documentation templates
 │   ├── design/                 # Game design documents
 │   │   ├── entity/             # Entity design documents
 │   │   ├── system/             # System design documents

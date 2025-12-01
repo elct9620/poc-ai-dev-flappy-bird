@@ -1,4 +1,4 @@
-@pending
+@skip
 Feature: Bird Control
   As a player
   I want to control the player character

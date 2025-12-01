@@ -17,6 +17,7 @@ You are a lead game developer. Your task is to break down tasks related to the i
 - Ensure tasks are clear and actionable focusing on single responsibilities.
 - Use "Task" tool to manage and track task assignments.
 - Ensure testing and code review are included in the tasks.
+- No pending tests in `features/` after implementation.
 
 # Definition
 

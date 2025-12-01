@@ -1,5 +1,8 @@
 import { Assets, Texture } from "pixi.js";
 
+import birdDownflap from "@/assets/gameObjects/yellowbird-downflap.png";
+import birdMidflap from "@/assets/gameObjects/yellowbird-midflap.png";
+import birdUpflap from "@/assets/gameObjects/yellowbird-upflap.png";
 import digit0 from "@/assets/ui/numbers/0.png";
 import digit1 from "@/assets/ui/numbers/1.png";
 import digit2 from "@/assets/ui/numbers/2.png";
@@ -28,6 +31,17 @@ export async function loadNumberAssets(): Promise<Record<string, Texture>> {
   const textures: Record<string, Texture> = {};
   for (const [digit, path] of Object.entries(paths)) {
     textures[digit] = await Assets.load<Texture>(path);
+  }
+
+  return textures;
+}
+
+export async function loadBirdAssets(): Promise<Texture[]> {
+  const paths = [birdDownflap, birdMidflap, birdUpflap];
+
+  const textures: Texture[] = [];
+  for (const path of paths) {
+    textures.push(await Assets.load<Texture>(path));
   }
 
   return textures;

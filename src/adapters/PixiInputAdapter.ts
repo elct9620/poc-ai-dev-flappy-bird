@@ -8,16 +8,15 @@ import type { EventBus } from "@/engine/eventbus";
  * Responsibilities:
  * - Listen to PixiJS stage pointer events for clicks
  * - Listen to document keyboard events for spacebar
- * - Dispatch INCREMENT_SCORE events to increment score
+ * - Dispatch MOUSE_CLICK and KEY_DOWN events for game systems to handle
  */
 export class PixiInputAdapter {
-  private boundHandlePointer: () => void;
+  private boundHandlePointer: (e: PointerEvent) => void;
   private boundHandleKeydown: (e: KeyboardEvent) => void;
 
   constructor(
     private eventBus: EventBus,
     private app: Application,
-    private scoreId: string = "score",
   ) {
     // Bind methods to preserve context
     this.boundHandlePointer = this.handlePointer.bind(this);
@@ -34,24 +33,26 @@ export class PixiInputAdapter {
     document.addEventListener("keydown", this.boundHandleKeydown);
   }
 
-  private handlePointer(): void {
-    this.incrementScore();
+  private handlePointer(e: PointerEvent): void {
+    this.eventBus.dispatch({
+      type: "MOUSE_CLICK",
+      payload: {
+        x: e.clientX,
+        y: e.clientY,
+      },
+    });
   }
 
   private handleKeydown(e: KeyboardEvent): void {
     if (e.key === " " || e.code === "Space") {
       e.preventDefault(); // Prevent page scroll
-      this.incrementScore();
+      this.eventBus.dispatch({
+        type: "KEY_DOWN",
+        payload: {
+          key: "Space",
+        },
+      });
     }
-  }
-
-  private incrementScore(): void {
-    this.eventBus.dispatch({
-      type: "INCREMENT_SCORE",
-      payload: {
-        id: this.scoreId,
-      },
-    });
   }
 
   destroy(): void {

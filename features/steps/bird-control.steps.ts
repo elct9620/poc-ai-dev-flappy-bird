@@ -18,8 +18,8 @@ Given(
 );
 
 Given("the bird is falling", (world: GameWorld) => {
-  // Make bird fall by advancing time
-  world.engine.tick({ deltaTime: 0.5 });
+  // Make bird fall by advancing time (0.5 seconds = 30 frames at 60fps)
+  world.engine.tick({ deltaTime: 0.5 * 60 });
 });
 
 Given("the bird is killed", (world: GameWorld) => {
@@ -33,7 +33,10 @@ Given("the bird is killed", (world: GameWorld) => {
 When(
   "the game advances by {float} second(s)",
   (world: GameWorld, seconds: number) => {
-    world.engine.tick({ deltaTime: seconds });
+    // Convert seconds to frames for PixiJS deltaTime (60fps = 1.0 deltaTime per frame)
+    // At 60fps, 1 second = 60 frames
+    const deltaTime = seconds * 60;
+    world.engine.tick({ deltaTime });
   },
 );
 

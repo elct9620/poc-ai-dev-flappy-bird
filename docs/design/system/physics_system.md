@@ -71,11 +71,11 @@ Removes a Bird from the game state's entities record and notifies the adapter to
 
 The PhysicsSystem uses the following constants for realistic bird movement:
 
-- **Gravity**: 0.8 pixels/frame² (downward acceleration, equivalent to ~48 pixels/second² at 60fps)
-- **Flap Velocity**: -5 pixels/frame (upward velocity applied on flap, equivalent to ~-300 pixels/second at 60fps)
+- **Gravity**: 0.08 pixels/frame² (downward acceleration, equivalent to ~4.8 pixels/second² at 60fps)
+- **Flap Velocity**: -3 pixels/frame (upward velocity applied on flap, equivalent to ~-180 pixels/second at 60fps)
 - **Max Rotation Down**: 90 degrees (maximum downward tilt when falling)
 - **Max Rotation Up**: -25 degrees (maximum upward tilt when rising)
-- **Terminal Velocity**: 10 pixels/frame (maximum falling speed, equivalent to ~600 pixels/second at 60fps)
+- **Terminal Velocity**: 1 pixels/frame (maximum falling speed, equivalent to ~60 pixels/second at 60fps)
 
 ### Implementation Note: DeltaTime Units
 
@@ -89,13 +89,13 @@ The values above are specified in **frame-based units** to match PixiJS conventi
 
 ### Rationale for Current Values
 
-The original design specified larger values (Gravity: 800, Flap: -300, Terminal: 400) that assumed deltaTime was in seconds. However, empirical testing revealed these values caused the bird to fall too quickly to be playable. The corrected values above provide:
+The original design specified larger values (Gravity: 800, Flap: -300, Terminal: 400) that assumed deltaTime was in seconds. However, empirical testing revealed these values caused the bird to fall too quickly to be playable. After multiple iterations of testing, the corrected values above provide:
 
-1. **Gravity (0.8)**: Slow enough for players to react, fast enough to feel realistic
-2. **Flap Velocity (-5)**: Strong enough to gain altitude, not so strong that control is difficult
-3. **Terminal Velocity (10)**: Prevents unrealistic acceleration while maintaining game challenge
+1. **Gravity (0.08)**: Very slow downward acceleration allowing players ample reaction time
+2. **Flap Velocity (-3)**: Gentle upward boost that provides precise control without overshooting
+3. **Terminal Velocity (1)**: Slow maximum falling speed that keeps the bird visible and controllable
 
-These values were validated through manual gameplay testing and provide appropriate difficulty for human reaction times.
+These values were validated through manual gameplay testing and provide appropriate difficulty for human reaction times. The slower physics make the game more accessible while maintaining challenge through obstacle navigation.
 
 ## Adapter Interface
 

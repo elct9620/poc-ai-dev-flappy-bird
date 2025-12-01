@@ -1,4 +1,3 @@
-import type { ScoreEntity } from "@/entity/GameState";
 import { Given, Then, When } from "quickpickle";
 import { expect } from "vitest";
 import type { GameWorld } from "../support/world";
@@ -108,7 +107,7 @@ Then(
   "the score {string} should have value {int}",
   (world: GameWorld, id: string, value: number) => {
     const state = world.getState();
-    const entity = state.entities[id] as ScoreEntity;
+    const entity = state.entities[id] as Score;
     expect(entity).toBeDefined();
     expect(entity.value).toBe(value);
   },
@@ -118,7 +117,7 @@ Then(
   "the score {string} should have position \\({int}, {int})",
   (world: GameWorld, id: string, x: number, y: number) => {
     const state = world.getState();
-    const entity = state.entities[id] as ScoreEntity;
+    const entity = state.entities[id] as Score;
     expect(entity).toBeDefined();
     expect(entity.position.x).toBe(x);
     expect(entity.position.y).toBe(y);
@@ -129,7 +128,7 @@ Then(
   "the score {string} should have scale {float}",
   (world: GameWorld, id: string, scale: number) => {
     const state = world.getState();
-    const entity = state.entities[id] as ScoreEntity;
+    const entity = state.entities[id] as Score;
     expect(entity).toBeDefined();
     expect(entity.scale).toBe(scale);
   },
@@ -139,7 +138,7 @@ Then(
   "the score {string} should have spacing {int}",
   (world: GameWorld, id: string, spacing: number) => {
     const state = world.getState();
-    const entity = state.entities[id] as ScoreEntity;
+    const entity = state.entities[id] as Score;
     expect(entity).toBeDefined();
     expect(entity.spacing).toBe(spacing);
   },
@@ -149,7 +148,7 @@ Then(
   "the score {string} should have {string} alignment",
   (world: GameWorld, id: string, alignment: string) => {
     const state = world.getState();
-    const entity = state.entities[id] as ScoreEntity;
+    const entity = state.entities[id] as Score;
     expect(entity).toBeDefined();
     expect(entity.alignment).toBe(alignment);
   },

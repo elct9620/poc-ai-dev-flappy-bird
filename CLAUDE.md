@@ -65,10 +65,10 @@ The architecture separates concerns into distinct layers:
    - **Command Execution**: Pure functions update state immutably
    - **API**: `dispatch(event)`, `tick(ticker)`, `getState()`
 
-2. **Entity** (`src/entity/GameState.ts`): Immutable game state definitions
+2. **Entity** (`src/entity/`): Immutable game state definitions
    - GameState contains `entities` record keyed by ID
    - Entities updated via pure functions (never mutated)
-   - Example: `ScoreEntity` with position, scale, alignment, value
+   - Example: `Score` (`src/entity/Score.ts`) with position, scale, alignment, value
 
 3. **Systems** (`src/systems/`): Pure event processors
    - **Signature**: `(state: State, event: Event) => Command[]`
@@ -153,7 +153,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
         ...state,
         entities: {
           ...state.entities,
-          [event.payload.id]: createScoreEntity(event.payload)
+          [event.payload.id]: createScore(event.payload)
         }
       })];
     }
@@ -168,7 +168,7 @@ Components reconcile state changes via `sync()`:
 
 ```typescript
 class Score extends Container {
-  sync(entity: ScoreEntity) {
+  sync(entity: Score) {
     // Update visual representation based on entity state
     this.updateDigits(entity.value);
     this.position.set(entity.position.x, entity.position.y);

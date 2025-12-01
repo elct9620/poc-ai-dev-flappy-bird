@@ -1,11 +1,11 @@
-import type { ScoreEntity } from "@/entity/GameState";
+import type { Score } from "@/entity/Score";
 import type { StageAdapter } from "@/systems/ScoreSystem";
 
 export class MockStageAdapter implements StageAdapter {
-  public updateScoreCalls: ScoreEntity[] = [];
+  public updateScoreCalls: Score[] = [];
   public removeEntityCalls: string[] = [];
 
-  updateScore(entity: ScoreEntity): void {
+  updateScore(entity: Score): void {
     this.updateScoreCalls.push(entity);
   }
 

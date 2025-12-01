@@ -1,6 +1,6 @@
 # Score
 
-The Score component is a PixiJS Container that displays a numeric score value using sprite-based digit rendering. It handles layout, alignment, and synchronization with the ScoreEntity state.
+The Score component is a PixiJS Container that displays a numeric score value using sprite-based digit rendering. It handles layout, alignment, and synchronization with the Score state.
 
 ## Properties
 
@@ -22,11 +22,11 @@ Container (Score)
 
 - Each digit in the score value is represented by a separate Sprite instance
 - Sprites are positioned horizontally with configurable spacing
-- The entire container can be positioned and scaled via ScoreEntity properties
+- The entire container can be positioned and scaled via Score properties
 
 ## Synchronization
 
-The `sync(entity: ScoreEntity)` method reconciles the component's visual state with the entity:
+The `sync(entity: Score)` method reconciles the component's visual state with the entity:
 
 1. **Position & Scale**: Updates the container's position and scale immediately
 2. **Value Change Detection**: Compares `entity.value` with cached `currentValue`

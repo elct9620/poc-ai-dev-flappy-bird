@@ -1,7 +1,7 @@
 import type { Application, Container, Texture } from "pixi.js";
 
-import { Score } from "@/components/Score";
-import type { ScoreEntity } from "@/entity/GameState";
+import { Score as ScoreComponent } from "@/components/Score";
+import type { Score } from "@/entity/Score";
 import type { StageAdapter } from "@/systems/ScoreSystem";
 
 export class PixiStageAdapter implements StageAdapter {
@@ -14,17 +14,17 @@ export class PixiStageAdapter implements StageAdapter {
     this.textures = textures;
   }
 
-  updateScore(entity: ScoreEntity): void {
+  updateScore(entity: Score): void {
     // Get or create Score component
     let component = this.components[entity.id];
     if (!component) {
-      component = new Score(this.textures);
+      component = new ScoreComponent(this.textures);
       this.components[entity.id] = component;
       this.app.stage.addChild(component);
     }
 
     // Sync component with entity
-    (component as Score).sync(entity);
+    (component as ScoreComponent).sync(entity);
   }
 
   removeEntity(id: string): void {

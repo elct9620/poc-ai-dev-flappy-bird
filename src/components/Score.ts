@@ -1,6 +1,6 @@
 import { Container, Sprite, Texture } from "pixi.js";
 
-import type { ScoreEntity } from "@/entity/GameState";
+import type { Score as ScoreEntity } from "@/entity/Score";
 
 export class Score extends Container {
   private textures: Record<string, Texture>;

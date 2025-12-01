@@ -46,25 +46,25 @@ Removes a score entity from the game state.
 
 ### Create Score Entity Command
 
-Adds a new ScoreEntity to the game state's entities record and notifies the adapter to create the visual representation. Returns a new state with the entity added immutably.
+Adds a new Score to the game state's entities record and notifies the adapter to create the visual representation. Returns a new state with the entity added immutably.
 
 ### Update Score Entity Command
 
-Updates the value property of an existing ScoreEntity and notifies the adapter to sync the visual representation. Returns a new state with the updated entity.
+Updates the value property of an existing Score and notifies the adapter to sync the visual representation. Returns a new state with the updated entity.
 
 ### Increment Score Entity Command
 
-Increases the value property of an existing ScoreEntity by 1 and notifies the adapter. This is implemented as a specialized update that reads the current value and increments it.
+Increases the value property of an existing Score by 1 and notifies the adapter. This is implemented as a specialized update that reads the current value and increments it.
 
 ### Remove Score Entity Command
 
-Removes a ScoreEntity from the game state's entities record and notifies the adapter to destroy the visual representation. Returns a new state with the entity removed immutably.
+Removes a Score from the game state's entities record and notifies the adapter to destroy the visual representation. Returns a new state with the entity removed immutably.
 
 ## Adapter Interface
 
 The ScoreSystem depends on a `StageAdapter` interface for rendering coordination:
 
-- `updateScore(entity: ScoreEntity): void` - Create or update visual representation
+- `updateScore(entity: Score): void` - Create or update visual representation
 - `removeEntity(id: string): void` - Destroy visual representation
 
 This follows the dependency inversion principle, allowing the system to remain framework-agnostic while coordinating with PixiJS through adapters.

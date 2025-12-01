@@ -4,7 +4,9 @@
       "Bash(pnpm test:*)",
       "Bash(pnpm build:*)",
       "Bash(pnpm tsc:*)",
-      "Bash(pnpm prettier:*)"
+      "Bash(pnpm prettier:*)",
+      "SlashCommand(/design)",
+      "SlashCommand(/implement)"
     ]
   },
   "hooks": {

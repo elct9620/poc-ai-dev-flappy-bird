@@ -28,11 +28,9 @@ body:
   - type: input
     id: design_document_path
     attributes:
-      label: Design Document Path
-      description: Path to the existing design document that needs clarification
+      label: Design Document Path (Optional)
+      description: Path to the existing design document that needs clarification. Leave empty for Claude to infer from feature name.
       placeholder: "e.g., docs/design/entity/bird.md"
-    validations:
-      required: true
 
   - type: textarea
     id: clarification_needed

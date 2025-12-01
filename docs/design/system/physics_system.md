@@ -25,9 +25,9 @@ Triggers the bird to flap its wings and fly upward. This event is dispatched by 
 
 The main game loop event that triggers physics calculations every frame.
 
-| Name      | Type   | Description                                |
-|-----------|--------|--------------------------------------------|
-| deltaTime | number | Time elapsed since last frame (in seconds) |
+| Name      | Type   | Description                                                                  |
+|-----------|--------|------------------------------------------------------------------------------|
+| deltaTime | number | Frame time multiplier (1.0 = 60fps target frame). From PixiJS Ticker.deltaTime |
 
 ### REMOVE_BIRD
 
@@ -45,11 +45,11 @@ Adds a new Bird to the game state's entities record with initial physics values 
 
 ### Apply Flap Force Command
 
-When BIRD_FLAP is received, applies an upward velocity to the bird by setting its y-velocity to a negative value (e.g., -300 pixels/second). This gives the bird an instant upward boost. The command also triggers an animation frame advance to show wing flapping.
+When BIRD_FLAP is received, applies an upward velocity to the bird by setting its y-velocity to a negative value (e.g., -5 pixels/frame). This gives the bird an instant upward boost. The command also triggers an animation frame advance to show wing flapping.
 
 ### Apply Gravity Command
 
-During each TICK event, increases the bird's y-velocity by the gravity constant multiplied by deltaTime (e.g., +800 pixels/second²). This simulates continuous downward acceleration. This command is only applied if the bird is alive.
+During each TICK event, increases the bird's y-velocity by the gravity constant multiplied by deltaTime (e.g., +0.8 pixels/frame²). This simulates continuous downward acceleration. This command is only applied if the bird is alive.
 
 ### Update Position Command
 
@@ -71,11 +71,31 @@ Removes a Bird from the game state's entities record and notifies the adapter to
 
 The PhysicsSystem uses the following constants for realistic bird movement:
 
-- **Gravity**: 800 pixels/second² (downward acceleration)
-- **Flap Velocity**: -300 pixels/second (upward velocity applied on flap)
+- **Gravity**: 0.8 pixels/frame² (downward acceleration, equivalent to ~48 pixels/second² at 60fps)
+- **Flap Velocity**: -5 pixels/frame (upward velocity applied on flap, equivalent to ~-300 pixels/second at 60fps)
 - **Max Rotation Down**: 90 degrees (maximum downward tilt when falling)
 - **Max Rotation Up**: -25 degrees (maximum upward tilt when rising)
-- **Terminal Velocity**: 400 pixels/second (maximum falling speed)
+- **Terminal Velocity**: 10 pixels/frame (maximum falling speed, equivalent to ~600 pixels/second at 60fps)
+
+### Implementation Note: DeltaTime Units
+
+The physics calculations must account for the rendering framework's deltaTime units:
+
+- **PixiJS Ticker**: `deltaTime` is a frame multiplier where 1.0 represents the target 60fps frame duration
+- **Conversion**: To use real-world units (pixels/second), convert deltaTime to seconds: `const dt = deltaTime / 60`
+- **Alternative**: Use frame-based units directly (as specified above) and apply deltaTime as a multiplier without conversion
+
+The values above are specified in **frame-based units** to match PixiJS conventions and provide human-perceptible physics. This approach keeps the constants simple and avoids large numbers that need deltaTime conversion.
+
+### Rationale for Current Values
+
+The original design specified larger values (Gravity: 800, Flap: -300, Terminal: 400) that assumed deltaTime was in seconds. However, empirical testing revealed these values caused the bird to fall too quickly to be playable. The corrected values above provide:
+
+1. **Gravity (0.8)**: Slow enough for players to react, fast enough to feel realistic
+2. **Flap Velocity (-5)**: Strong enough to gain altitude, not so strong that control is difficult
+3. **Terminal Velocity (10)**: Prevents unrealistic acceleration while maintaining game challenge
+
+These values were validated through manual gameplay testing and provide appropriate difficulty for human reaction times.
 
 ## Adapter Interface
 

@@ -77,6 +77,10 @@ body:
       value: |
         ---
 
+        ## Claude Command
+
+        This issue will trigger: `/implement [feature name]`
+
         ## Next Steps
 
         After submitting this issue:

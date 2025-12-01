@@ -114,6 +114,10 @@ body:
       value: |
         ---
 
+        ## Claude Command
+
+        This issue will trigger: `/design [feature name]`
+
         ## Next Steps
 
         After submitting this issue:

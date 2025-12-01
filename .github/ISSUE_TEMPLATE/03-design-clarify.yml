@@ -82,6 +82,10 @@ body:
       value: |
         ---
 
+        ## Claude Command
+
+        This issue will trigger: `/design [feature name] clarify`
+
         ## Next Steps
 
         After submitting this issue:

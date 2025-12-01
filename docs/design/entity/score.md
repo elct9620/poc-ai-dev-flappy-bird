@@ -9,7 +9,7 @@ The Score entity represents the state of a numeric score display in the game. It
 | id        | string                         | Unique identifier for this score entity              |
 | type      | "score"                        | Type annotation indicating this is a score entity    |
 | value     | number                         | The numeric score value to display                   |
-| position  | { x: number; y: number }       | Screen position for rendering the score              |
+| position  | [Vector](./vector.md)          | Screen position for rendering the score              |
 | scale     | number                         | Scale multiplier for the score display               |
 | spacing   | number                         | Horizontal spacing (in pixels) between digit sprites |
 | alignment | "left" \| "center" \| "right"  | Horizontal alignment of the digit string             |

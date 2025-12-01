@@ -31,6 +31,16 @@ root/
 │   ├── main.ts                 # Entry point of the application
 ├── features/                   # Gherkin feature files for behavior-driven development
 │   ├── steps/                  # Step definitions for Gherkin features
+│   ├── support/                # Support files for testing, e.g., Cucumber World, mocks
+├── docs/                       # Documentation files
+│   ├── design/                 # Game design documents
+│   │   ├── entity/             # Entity design documents
+│   │   ├── system/             # System design documents
+│   │   ├── component/          # Component design documents
+│   ├── ARCHITECTURE.md         # This architecture document
+│   ├── entities.md             # Entity index and descriptions
+│   ├── systems.md              # System index and descriptions
+│   ├── components.md           # Component index and descriptions
 ├── public/                     # Public assets served directly
 ├── index.html                  # Main HTML file
 ├── vite.config.ts              # Vite configuration file

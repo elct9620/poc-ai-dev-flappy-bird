@@ -1,6 +1,8 @@
 import { Engine } from "@/engine/engine";
 import { EventBus } from "@/engine/eventbus";
 import { createGameState, type GameState } from "@/entity/GameState";
+import { InputSystem } from "@/systems/InputSystem";
+import { PhysicsSystem } from "@/systems/PhysicsSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import { QuickPickleWorld } from "quickpickle";
 import type { TestContext } from "vitest";
@@ -23,7 +25,11 @@ export class GameWorld extends QuickPickleWorld {
     this.adapter = new MockStageAdapter();
     const state = createGameState();
     this.eventBus = new EventBus();
-    this.engine = new Engine(state, this.eventBus, [ScoreSystem(this.adapter)]);
+    this.engine = new Engine(state, this.eventBus, [
+      ScoreSystem(this.adapter),
+      PhysicsSystem(this.adapter),
+      InputSystem(this.eventBus, "bird"),
+    ]);
   }
 
   /**

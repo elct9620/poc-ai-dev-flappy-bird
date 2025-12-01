@@ -7,8 +7,10 @@ import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
 import { EventBus } from "@/engine/eventbus";
 import { createGameState } from "@/entity/GameState";
+import { InputSystem } from "@/systems/InputSystem";
+import { PhysicsSystem } from "@/systems/PhysicsSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
-import { loadNumberAssets } from "@/utils/AssetLoader";
+import { loadBirdAssets, loadNumberAssets } from "@/utils/AssetLoader";
 import "./style.css";
 
 // Create PIXI application
@@ -26,12 +28,14 @@ document.querySelector<HTMLDivElement>("#app")!.appendChild(app.canvas);
 
 // Load assets
 const numberTextures = await loadNumberAssets();
+const birdTextures = await loadBirdAssets();
 
 // Create adapter
-const stageAdapter = new PixiStageAdapter(app, numberTextures);
+const stageAdapter = new PixiStageAdapter(app, numberTextures, birdTextures);
 
-// Create system with adapter
+// Create systems with adapter
 const scoreSystem = ScoreSystem(stageAdapter);
+const physicsSystem = PhysicsSystem(stageAdapter);
 
 // Create initial state
 const initialState = createGameState();
@@ -39,8 +43,15 @@ const initialState = createGameState();
 // Create event bus
 const eventBus = new EventBus();
 
-// Initialize engine
-const engine = new Engine(initialState, eventBus, [scoreSystem]);
+// Create input system (needs event bus to dispatch BIRD_FLAP)
+const inputSystem = InputSystem(eventBus, "bird");
+
+// Initialize engine with all systems
+const engine = new Engine(initialState, eventBus, [
+  scoreSystem,
+  physicsSystem,
+  inputSystem,
+]);
 
 // Connect to PixiJS ticker
 app.ticker.add(engine.tick);
@@ -51,7 +62,7 @@ engine.dispatch({
   type: "CREATE_SCORE",
   payload: {
     id: "score",
-    value: 42,
+    value: 0,
     position: { x: window.innerWidth / 2, y: 100 },
     scale: 2,
     spacing: 4,
@@ -59,5 +70,14 @@ engine.dispatch({
   },
 });
 
+// Create the bird
+engine.dispatch({
+  type: "CREATE_BIRD",
+  payload: {
+    id: "bird",
+    position: { x: window.innerWidth / 4, y: window.innerHeight / 2 },
+  },
+});
+
 // Setup input handling
-new PixiInputAdapter(eventBus, app, "score");
+new PixiInputAdapter(eventBus, app);

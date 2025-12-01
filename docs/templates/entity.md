@@ -12,11 +12,14 @@ Brief description of the entity and its state representation.
 ## Properties
 
 <!--
-  Entity Type
+  Properties
   ===
+
+  The properties is flatten data structure that represents the state of the entity, if nested is necessary it usually means that another entity or value object should be created.
 
   - When entity is "entity", the "id" is required.
   - When entity is "value object", do not include "id".
+  - Use "type" property as annotation that indicates the visual type of the entity.
 
   All entity are designed to be immutable and use mutation functions to update their state.
 -->

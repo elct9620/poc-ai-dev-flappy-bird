@@ -72,16 +72,21 @@ When(
   },
 );
 
-When(
-  "I update the score {string} to value {int}",
-  (world: GameWorld, id: string, value: number) => {
-    world.engine.dispatch({
-      type: "UPDATE_SCORE",
-      payload: { id, value },
-    });
-    world.engine.tick({ deltaTime: 0 });
-  },
-);
+When("I reset the score {string}", (world: GameWorld, id: string) => {
+  world.engine.dispatch({
+    type: "RESET_SCORE",
+    payload: { id },
+  });
+  world.engine.tick({ deltaTime: 0 });
+});
+
+When("I increment the score {string}", (world: GameWorld, id: string) => {
+  world.engine.dispatch({
+    type: "INCREMENT_SCORE",
+    payload: { id },
+  });
+  world.engine.tick({ deltaTime: 0 });
+});
 
 When("I remove the score {string}", (world: GameWorld, id: string) => {
   world.engine.dispatch({

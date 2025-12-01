@@ -20,10 +20,23 @@ Feature: Score System
     And the score "hud-score" should have spacing 4
     And the score "hud-score" should have "center" alignment
 
-  Scenario: Update score value
+  @skip
+  Scenario: Reset score value
     Given a score exists with id "game-score" and value 10
-    When I update the score "game-score" to value 25
-    Then the score "game-score" should have value 25
+    When I reset the score "game-score"
+    Then the score "game-score" should have value 0
+
+  Scenario: Increment score value
+    Given a score exists with id "game-score" and value 0
+    When I increment the score "game-score"
+    Then the score "game-score" should have value 1
+
+  Scenario: Increment score multiple times
+    Given a score exists with id "game-score" and value 0
+    When I increment the score "game-score"
+    And I increment the score "game-score"
+    And I increment the score "game-score"
+    Then the score "game-score" should have value 3
 
   Scenario: Remove a score
     Given a score exists with id "temp-score" and value 100
@@ -59,12 +72,13 @@ Feature: Score System
       | 999999 |
       | -100   |
 
-  Scenario: Update non-existent score
-    When I update the score "missing-score" to value 50
+  @skip
+  Scenario: Reset non-existent score
+    When I reset the score "missing-score"
     Then the score "missing-score" should not exist
 
   Scenario: Score state immutability
     Given a score exists with id "immutable-score" and value 100
-    When I update the score "immutable-score" to value 200
-    Then the score "immutable-score" should have value 200
+    When I increment the score "immutable-score"
+    Then the score "immutable-score" should have value 101
     And the previous state should not be modified

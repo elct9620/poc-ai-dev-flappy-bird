@@ -2,6 +2,15 @@
 
 The InputSystem is responsible for handling user input events (mouse clicks and keyboard presses) and translating them into game events. It listens for player actions and dispatches appropriate events to trigger bird control.
 
+## Existing Implementation
+
+**Note**: The codebase already has a `PixiInputAdapter` (`src/adapters/PixiInputAdapter.ts`) that handles:
+- Mouse clicks via PixiJS stage pointer events (`pointerdown`)
+- Space key presses via document keyboard events
+- Currently dispatches `INCREMENT_SCORE` events
+
+When implementing the InputSystem, the existing `PixiInputAdapter` should be refactored to support bird control events (e.g., `BIRD_FLAP`) instead of creating duplicate input handling infrastructure.
+
 ## Events
 
 ### MOUSE_CLICK

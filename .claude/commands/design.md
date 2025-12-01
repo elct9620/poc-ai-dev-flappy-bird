@@ -1,6 +1,6 @@
 ---
-allowed-tools: Glob, Grep, Read, Task, Write, Edit, LS, WebSearch
-argument-hint: mechanic or feature name [clarify instructions]
+allowed-tools: Glob, Grep, Read, Task, TodoWrite, Write, Edit, WebSearch
+argument-hint: mechanic or feature description [clarify instructions]
 description: Create or edit the design documents for specified game mechanics or features.
 ---
 

@@ -1,0 +1,123 @@
+name: Design New Feature
+description: Create design documents for a new game mechanic or feature (for non-developers)
+title: "[Design] "
+labels: ["design"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Design New Feature
+
+        This template helps you describe **what** you want and **why** you need it. Focus on the desired behavior and user value - Claude will handle all technical decisions.
+
+        **You don't need to know:**
+        - Which architecture layers to use (Entity/System/Component)
+        - How many design documents to create
+        - Technical implementation details
+
+        **Just describe:**
+        - What you want the feature to do
+        - Why users need it
+        - How it should behave (using scenarios)
+
+  - type: input
+    id: feature_name
+    attributes:
+      label: Feature Name
+      description: Short name for this feature (e.g., "Bird Physics", "Collision Detection")
+      placeholder: "e.g., Bird Physics"
+    validations:
+      required: true
+
+  - type: input
+    id: user_story_role
+    attributes:
+      label: User Story - Role
+      description: "As a [role]"
+      placeholder: "e.g., game player"
+    validations:
+      required: true
+
+  - type: input
+    id: user_story_goal
+    attributes:
+      label: User Story - Goal
+      description: "I want [feature]"
+      placeholder: "e.g., the bird to fall when I don't tap"
+    validations:
+      required: true
+
+  - type: input
+    id: user_story_benefit
+    attributes:
+      label: User Story - Benefit
+      description: "So that [benefit]"
+      placeholder: "e.g., the game feels realistic and challenging"
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: Feature Description
+      description: Detailed explanation of the desired behavior. Focus on WHAT it should do, not HOW.
+      placeholder: |
+        Describe what you want this feature to do. For example:
+        - What should happen when the user interacts?
+        - What should the visual/audio feedback be?
+        - What should the game state changes be?
+    validations:
+      required: true
+
+  - type: textarea
+    id: bdd_scenarios
+    attributes:
+      label: BDD Scenarios
+      description: Describe the expected behavior using Given/When/Then format (see example below)
+      placeholder: |
+        Scenario: Bird falls due to gravity
+          Given the game has started
+          And the bird is in the air
+          When no input is received
+          Then the bird should accelerate downward
+          And the bird's vertical position should decrease
+
+        Scenario: Bird jumps when tapped
+          Given the game is running
+          And the bird is falling
+          When the player taps the screen
+          Then the bird should move upward
+          And the falling speed should reset
+      value: |
+        Scenario: [Scenario name]
+          Given [precondition]
+          When [action]
+          Then [expected result]
+    validations:
+      required: true
+
+  - type: input
+    id: related_issues
+    attributes:
+      label: Related Issues (Optional)
+      description: Reference related issues for additional context
+      placeholder: "#123, #456"
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context (Optional)
+      description: Any other information, constraints, or examples that might help
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## Next Steps
+
+        After submitting this issue:
+        1. Add a comment with `@claude` to trigger the design process
+        2. Claude will analyze your requirements and BDD scenarios
+        3. Claude will automatically create the appropriate design documents in `docs/design/`
+        4. You'll receive a summary of what was created

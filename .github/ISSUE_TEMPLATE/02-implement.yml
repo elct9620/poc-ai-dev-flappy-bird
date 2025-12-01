@@ -1,0 +1,87 @@
+name: Implement Feature
+description: Implement a feature based on existing design documents
+title: "[Implementation] "
+labels: ["implementation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Implement Feature
+
+        This template is for implementing features. Claude Code will automatically find related design documents if they exist.
+
+        **You can:**
+        - Specify design document paths if you know them
+        - Let Claude find the design documents based on feature name
+        - Request implementation even without formal design (Claude will use best practices)
+
+  - type: input
+    id: feature_name
+    attributes:
+      label: Feature Name
+      description: Name of the feature to implement
+      placeholder: "e.g., Bird Physics"
+    validations:
+      required: true
+
+  - type: input
+    id: design_reference
+    attributes:
+      label: Design Document Reference (Optional)
+      description: Path(s) to the design document(s) in `docs/design/`. Leave empty for Claude to infer.
+      placeholder: "e.g., docs/design/entity/bird.md, docs/design/system/physics.md"
+
+  - type: textarea
+    id: implementation_scope
+    attributes:
+      label: Implementation Scope
+      description: What specifically should be implemented? (if implementing everything, say "Full implementation")
+      placeholder: |
+        Describe what to implement:
+        - Which entities/systems/components?
+        - Are there any parts to exclude?
+        - Any specific priorities or ordering?
+      value: "Full implementation of all design documents"
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will we know this implementation is complete and correct?
+      placeholder: |
+        - [ ] All entities are implemented with correct properties
+        - [ ] Systems handle all events specified in design
+        - [ ] Components render correctly
+        - [ ] All BDD scenarios pass
+        - [ ] Code follows project conventions
+    validations:
+      required: true
+
+  - type: input
+    id: related_issues
+    attributes:
+      label: Related Issues (Optional)
+      description: Reference related issues for additional context
+      placeholder: "#123, #456"
+
+  - type: textarea
+    id: additional_notes
+    attributes:
+      label: Additional Notes (Optional)
+      description: Any implementation constraints, preferences, or special considerations
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## Next Steps
+
+        After submitting this issue:
+        1. Add a comment with `@claude` to trigger the implementation
+        2. Claude will search for related design documents based on feature name
+        3. Claude will implement the feature following the architecture
+        4. Claude will create/update BDD tests
+        5. You'll receive a summary of what was implemented

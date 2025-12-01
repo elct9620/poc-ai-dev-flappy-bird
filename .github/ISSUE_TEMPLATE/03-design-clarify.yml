@@ -1,0 +1,94 @@
+name: Clarify Design
+description: Update or clarify an existing design document
+title: "[Clarification] "
+labels: ["clarification", "design"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Clarify Design
+
+        Use this template when an existing design document needs clarification, updates, or additional details.
+
+        **Common reasons for clarification:**
+        - Requirements were ambiguous or incomplete
+        - New edge cases discovered during implementation
+        - User feedback requires design adjustments
+        - Missing scenarios or behavior definitions
+
+  - type: input
+    id: feature_name
+    attributes:
+      label: Feature Name
+      description: Name of the feature to clarify
+      placeholder: "e.g., Bird Physics"
+    validations:
+      required: true
+
+  - type: input
+    id: design_document_path
+    attributes:
+      label: Design Document Path
+      description: Path to the existing design document that needs clarification
+      placeholder: "e.g., docs/design/entity/bird.md"
+    validations:
+      required: true
+
+  - type: textarea
+    id: clarification_needed
+    attributes:
+      label: What Needs Clarification
+      description: Specific questions or unclear requirements. Be as specific as possible.
+      placeholder: |
+        Describe what's unclear or needs updating:
+        - Which part of the design is ambiguous?
+        - What questions came up during implementation?
+        - What new requirements emerged?
+        - What behavior is undefined?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason for Clarification
+      description: Why is this clarification needed? What problem does it solve?
+      placeholder: |
+        Examples:
+        - "During implementation, we discovered the design doesn't specify what happens when..."
+        - "User testing revealed that the current design doesn't handle..."
+        - "The original requirements were ambiguous about..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_bdd_scenarios
+    attributes:
+      label: Additional BDD Scenarios (Optional)
+      description: If new scenarios are needed to clarify behavior, add them here
+      placeholder: |
+        Scenario: [New scenario that clarifies behavior]
+          Given [precondition]
+          When [action]
+          Then [expected result that wasn't clear before]
+
+  - type: input
+    id: related_issues
+    attributes:
+      label: Related Issues (Optional)
+      description: Reference related issues for additional context
+      placeholder: "#123, #456"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## Next Steps
+
+        After submitting this issue:
+        1. Add a comment with `@claude` to trigger the clarification process
+        2. Claude will review the existing design document
+        3. Claude will update the design with clarifications
+        4. Claude will add any new BDD scenarios if needed
+        5. You'll receive a summary of what was updated

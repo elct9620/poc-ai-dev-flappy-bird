@@ -1,3 +1,7 @@
+# This feature is related to:
+# - docs/design/entity/bird.md
+# - docs/design/system/physics_system.md
+# - docs/design/system/audio_system.md (for audio feedback)
 Feature: Bird Control
   As a player
   I want to control the player character
@@ -56,3 +60,8 @@ Feature: Bird Control
   Scenario: Remove a bird
     When the bird is removed
     Then the bird should not exist in the game state
+
+  @skip
+  Scenario: Player hears wing sound effect when flapping
+    When the player clicks the mouse
+    Then the wing sound effect should play

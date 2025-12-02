@@ -5,6 +5,11 @@
         "name": "Document Index Files",
         "pattern": "docs/(entities|systems|events|components)\\.md$",
         "path": "docs/rubrics/document_index.md"
+      },
+      {
+        "name": "General TypeScript Implementation",
+        "pattern": "src/.*\\.ts$",
+        "path": "docs/rubrics/general.md"
       }
     ]
   }

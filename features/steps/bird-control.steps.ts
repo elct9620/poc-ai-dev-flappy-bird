@@ -168,3 +168,7 @@ Then("the bird should not exist in the game state", (world: GameWorld) => {
   const state = world.getState();
   expect(state.entities["bird"]).toBeUndefined();
 });
+
+Then("the wing sound effect should play", (world: GameWorld) => {
+  expect(world.audioAdapter.playedSounds).toContain("wing");
+});

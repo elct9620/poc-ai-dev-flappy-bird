@@ -1,6 +1,7 @@
 import type { Application } from "pixi.js";
 
 import type { EventBus } from "@/engine/eventbus";
+import { SystemEventType } from "@/events";
 
 /**
  * PixiInputAdapter handles user input events and translates them to game events
@@ -35,7 +36,7 @@ export class PixiInputAdapter {
 
   private handlePointer(e: PointerEvent): void {
     this.eventBus.dispatch({
-      type: "MOUSE_CLICK",
+      type: SystemEventType.MouseClick,
       payload: {
         x: e.clientX,
         y: e.clientY,
@@ -47,7 +48,7 @@ export class PixiInputAdapter {
     if (e.key === " " || e.code === "Space") {
       e.preventDefault(); // Prevent page scroll
       this.eventBus.dispatch({
-        type: "KEY_DOWN",
+        type: SystemEventType.KeyDown,
         payload: {
           key: "Space",
         },

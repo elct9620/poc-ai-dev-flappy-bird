@@ -1,3 +1,4 @@
+import { GameEventType } from "@/events";
 import { Given, Then, When } from "quickpickle";
 import { expect } from "vitest";
 import type { GameWorld } from "../support/world";
@@ -12,7 +13,7 @@ Given(
   "a score exists with id {string} and value {int}",
   (world: GameWorld, id: string, value: number) => {
     world.engine.dispatch({
-      type: "CREATE_SCORE",
+      type: GameEventType.CreateScore,
       payload: {
         id,
         value,
@@ -31,7 +32,7 @@ When(
   "I create a score with id {string} and value {int}",
   (world: GameWorld, id: string, value: number) => {
     world.engine.dispatch({
-      type: "CREATE_SCORE",
+      type: GameEventType.CreateScore,
       payload: {
         id,
         value,
@@ -58,7 +59,7 @@ When(
     alignment: string,
   ) => {
     world.engine.dispatch({
-      type: "CREATE_SCORE",
+      type: GameEventType.CreateScore,
       payload: {
         id,
         value,
@@ -74,7 +75,7 @@ When(
 
 When("I reset the score {string}", (world: GameWorld, id: string) => {
   world.engine.dispatch({
-    type: "RESET_SCORE",
+    type: GameEventType.ResetScore,
     payload: { id },
   });
   world.engine.tick({ deltaTime: 0 });
@@ -82,7 +83,7 @@ When("I reset the score {string}", (world: GameWorld, id: string) => {
 
 When("I increment the score {string}", (world: GameWorld, id: string) => {
   world.engine.dispatch({
-    type: "INCREMENT_SCORE",
+    type: GameEventType.IncrementScore,
     payload: { id },
   });
   world.engine.tick({ deltaTime: 0 });
@@ -90,7 +91,7 @@ When("I increment the score {string}", (world: GameWorld, id: string) => {
 
 When("I remove the score {string}", (world: GameWorld, id: string) => {
   world.engine.dispatch({
-    type: "REMOVE_SCORE",
+    type: GameEventType.RemoveScore,
     payload: { id },
   });
   world.engine.tick({ deltaTime: 0 });

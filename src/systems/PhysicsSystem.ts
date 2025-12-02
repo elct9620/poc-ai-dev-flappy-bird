@@ -1,7 +1,8 @@
-import type { Command, Event, System } from "@/engine/engine";
+import type { Command, System } from "@/engine/engine";
 import type { Bird } from "@/entity/Bird";
 import { createBird } from "@/entity/Bird";
 import type { GameState } from "@/entity/GameState";
+import { GameEventType, SystemEventType, type Event } from "@/events";
 
 // Physics constants (per design document: docs/design/system/physics_system.md)
 // Values in frame-based units for PixiJS deltaTime (1.0 = one frame at 60fps)
@@ -22,7 +23,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
     const gameState = state as GameState;
     const commands: Command[] = [];
 
-    if (event.type === "CREATE_BIRD") {
+    if (event.type === GameEventType.CreateBird) {
       commands.push((state) => {
         const currentState = state as GameState;
         const newEntity = createBird(event.payload.id, event.payload.position);
@@ -40,7 +41,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
       });
     }
 
-    if (event.type === "BIRD_FLAP") {
+    if (event.type === GameEventType.BirdFlap) {
       const entity = gameState.entities[event.payload.id];
       if (entity && entity.type === "bird") {
         const bird = entity as Bird;
@@ -69,7 +70,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
       }
     }
 
-    if (event.type === "TICK") {
+    if (event.type === SystemEventType.Tick) {
       const deltaTime = event.payload.deltaTime;
 
       // Apply physics to all birds
@@ -131,7 +132,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
       }
     }
 
-    if (event.type === "KILL_BIRD") {
+    if (event.type === GameEventType.KillBird) {
       const entity = gameState.entities[event.payload.id];
       if (entity && entity.type === "bird") {
         commands.push((state) => {
@@ -156,7 +157,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
       }
     }
 
-    if (event.type === "REMOVE_BIRD") {
+    if (event.type === GameEventType.RemoveBird) {
       commands.push((state) => {
         const currentState = state as GameState;
         const { [event.payload.id]: removed, ...remaining } =

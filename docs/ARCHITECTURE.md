@@ -210,14 +210,14 @@ Located in `src/events/`, events represent occurrences that systems can respond 
 // src/events/InputEvents.ts
 
 export interface KeyPressEvent {
-    type: 'KEY_PRESS';
+    type: SystemEventType.KeyPress; # Reference to an enum defining event types
     payload: {
         key: string;
     };
 }
 
 export interface MouseClickEvent {
-    type: 'MOUSE_CLICK';
+    type: SystemEventType.MouseClick;
     payload: {
         x: number;
         y: number;

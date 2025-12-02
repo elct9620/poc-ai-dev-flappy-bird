@@ -7,6 +7,7 @@ import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
 import { EventBus } from "@/engine/eventbus";
 import { createGameState } from "@/entity/GameState";
+import { GameEventType } from "@/events";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
@@ -59,7 +60,7 @@ app.start();
 
 // Demo: Create a score display
 engine.dispatch({
-  type: "CREATE_SCORE",
+  type: GameEventType.CreateScore,
   payload: {
     id: "score",
     value: 0,
@@ -72,7 +73,7 @@ engine.dispatch({
 
 // Create the bird
 engine.dispatch({
-  type: "CREATE_BIRD",
+  type: GameEventType.CreateBird,
   payload: {
     id: "bird",
     position: { x: window.innerWidth / 4, y: window.innerHeight / 2 },

@@ -1,3 +1,4 @@
+import { SystemEventType, type Event } from "@/events";
 import { EventBus } from "./eventbus";
 
 export interface Entity {
@@ -6,11 +7,6 @@ export interface Entity {
 
 export interface State {
   entities: Record<string, Entity>;
-}
-
-export interface Event {
-  type: string;
-  payload?: any;
 }
 
 export type Command = (state: State) => State;
@@ -44,7 +40,7 @@ export class Engine {
   tick = (ticker: { deltaTime: number }) => {
     // Generate TICK event
     this.eventBus.dispatch({
-      type: "TICK",
+      type: SystemEventType.Tick,
       payload: { deltaTime: ticker.deltaTime },
     });
 

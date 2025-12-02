@@ -1,4 +1,5 @@
 import type { Bird } from "@/entity/Bird";
+import { GameEventType, SystemEventType } from "@/events";
 import { Given, Then, When } from "quickpickle";
 import { expect } from "vitest";
 import type { GameWorld } from "../support/world";
@@ -7,7 +8,7 @@ Given(
   "a bird is created at position \\({int}, {int}\\)",
   (world: GameWorld, x: number, y: number) => {
     world.engine.dispatch({
-      type: "CREATE_BIRD",
+      type: GameEventType.CreateBird,
       payload: {
         id: "bird",
         position: { x, y },
@@ -24,7 +25,7 @@ Given("the bird is falling", (world: GameWorld) => {
 
 Given("the bird is killed", (world: GameWorld) => {
   world.engine.dispatch({
-    type: "KILL_BIRD",
+    type: GameEventType.KillBird,
     payload: { id: "bird" },
   });
   world.engine.tick({ deltaTime: 0 });
@@ -42,7 +43,7 @@ When(
 
 When("the player clicks the mouse", (world: GameWorld) => {
   world.engine.dispatch({
-    type: "MOUSE_CLICK",
+    type: SystemEventType.MouseClick,
     payload: { x: 0, y: 0 },
   });
   world.engine.tick({ deltaTime: 0 });
@@ -52,7 +53,7 @@ When("the player clicks the mouse", (world: GameWorld) => {
 
 When('the player presses the "{word}" key', (world: GameWorld, key: string) => {
   world.engine.dispatch({
-    type: "KEY_DOWN",
+    type: SystemEventType.KeyDown,
     payload: { key },
   });
   world.engine.tick({ deltaTime: 0 });
@@ -72,7 +73,7 @@ When(
 
 When("the bird is removed", (world: GameWorld) => {
   world.engine.dispatch({
-    type: "REMOVE_BIRD",
+    type: GameEventType.RemoveBird,
     payload: { id: "bird" },
   });
   world.engine.tick({ deltaTime: 0 });

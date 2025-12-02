@@ -1,6 +1,7 @@
-import type { Command, Event, System } from "@/engine/engine";
+import type { Command, System } from "@/engine/engine";
 import type { GameState } from "@/entity/GameState";
 import type { Score } from "@/entity/Score";
+import { GameEventType, type Event } from "@/events";
 
 // Adapter interface defined in system (dependency inversion principle)
 export interface StageAdapter {
@@ -13,7 +14,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
     const gameState = state as GameState;
     const commands: Command[] = [];
 
-    if (event.type === "CREATE_SCORE") {
+    if (event.type === GameEventType.CreateScore) {
       commands.push((state) => {
         const currentState = state as GameState;
         const newEntity: Score = {
@@ -39,7 +40,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
       });
     }
 
-    if (event.type === "RESET_SCORE") {
+    if (event.type === GameEventType.ResetScore) {
       const entity = gameState.entities[event.payload.id];
       if (entity && entity.type === "score") {
         commands.push((state) => {
@@ -63,7 +64,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
       }
     }
 
-    if (event.type === "INCREMENT_SCORE") {
+    if (event.type === GameEventType.IncrementScore) {
       const entity = gameState.entities[event.payload.id];
       if (entity && entity.type === "score") {
         commands.push((state) => {
@@ -88,7 +89,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
       }
     }
 
-    if (event.type === "REMOVE_SCORE") {
+    if (event.type === GameEventType.RemoveScore) {
       commands.push((state) => {
         const currentState = state as GameState;
         const { [event.payload.id]: removed, ...remaining } =

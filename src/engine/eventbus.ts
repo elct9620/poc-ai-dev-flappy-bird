@@ -1,4 +1,4 @@
-import type { Event } from "./engine";
+import type { Event } from "@/events";
 
 /**
  * EventBus manages the event queue for the game engine

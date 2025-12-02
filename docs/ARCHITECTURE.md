@@ -25,6 +25,7 @@ root/
 │   ├── entity/                 # Game state definitions and management
 │   ├── systems/                # Systems that process events and update state
 │   ├── components/             # PixiJS components for rendering and interaction
+│   ├── events/                 # Event definitions
 │   ├── adapters/               # Adapters for external systems (e.g., PixiJS)
 │   │   ├── pixiStageAdapter.ts # Adapter for PixiJS stage
 │   ├── utils/                  # Utility functions and helpers
@@ -199,6 +200,29 @@ export const SoundEffectSystem = (soundAdapter: SoundAdapter): System => {
         return commands;
     };
 };
+```
+
+## Events
+
+Located in `src/events/`, events represent occurrences that systems can respond to.
+
+```typescript
+// src/events/InputEvents.ts
+
+export interface KeyPressEvent {
+    type: 'KEY_PRESS';
+    payload: {
+        key: string;
+    };
+}
+
+export interface MouseClickEvent {
+    type: 'MOUSE_CLICK';
+    payload: {
+        x: number;
+        y: number;
+    };
+}
 ```
 
 ## Adapters

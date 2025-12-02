@@ -1,12 +1,12 @@
 # Document Index Rubric
 
-This document outlines the criteria for evaluating the quality of index documentation for entities, systems, and components. We assert at least 80% of the criteria must be met to pass.
+This document outlines the criteria for evaluating the quality of index documentation for entities, systems, events, and components. We assert at least 80% of the criteria must be met to pass.
 
 ## Criteria
 
 ### Index File Structure (1 point)
 
-> Each architectural layer (entities, systems, components) must have an index file that provides an overview and links to detailed design documents.
+> Each architectural layer (entities, systems, events, components) must have an index file that provides an overview and links to detailed design documents.
 
 ```markdown
 # [Layer Name]
@@ -20,7 +20,7 @@ This document provides an overview of the [layer type] used in the game and thei
 | [Item](./design/[layer]/[item].md) | [Brief description] |
 ```
 
-- Index files should be named after the layer: `entities.md`, `systems.md`, `components.md`
+- Index files should be named after the layer: `entities.md`, `systems.md`, `events.md`, `components.md`
 - Must include a header with layer name
 - Must include an overview sentence explaining the layer's purpose
 - Must use a table format with Name and Description columns

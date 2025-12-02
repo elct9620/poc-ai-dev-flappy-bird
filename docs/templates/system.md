@@ -9,48 +9,35 @@
 
 Brief description of the system and its responsibilities within the game engine.
 
-## Events
+## Side Effects
 
 <!--
-  Event
+  Side Effects
   ===
 
-  The events that the system is interested in processing. e.g. PlayerMovedEvent, EnemySpawnedEvent, ScoreUpdatedEvent, etc.
--->
+  The side effects produced by the system when processing events and generating commands. e.g. updating player position, spawning entities, playing sound effects, etc.
 
-### [Event Name 1]
-
-Brief description of the event and its payload is used by the system.
-
-| Name        | Type    | Description              |
-|-------------|---------|--------------------------|
-| [Property1] | [Type1] | Description of Property1 |
-| [Property2] | [Type2] | Description of Property2 |
-| ...         | ...     | ...                      |
-
-### [Event Name 2]
-
-Brief description of the event and its payload is used by the system.
-
-| Name        | Type    | Description              |
-|-------------|---------|--------------------------|
-| [Property1] | [Type1] | Description of Property1 |
-| [Property2] | [Type2] | Description of Property2 |
-| ...         | ...     | ...                      |
-
-## Commands
-
-<!--
-  Command
-  ===
-
-  The commands that the system can execute to perform and cause side effects in the game engine. e.g. MovePlayerCommand, SpawnEnemyCommand, UpdateScoreCommand, etc.
+  Each side effect should contains the following details:
+  - Event Triggered: The event that triggers the side effect, use `[Event Name](../events/[event-file].md)` to link to the event documentation.
+  - Description: Explanation of the side effect and its impact on the game state. e.g. calculate new player position, spawn new entities in the game world, play sound effects, etc.
 -->
 
 ### [Command Name 1]
 
+| Event Triggered | Description                     |
+|-----------------|---------------------------------|
+| [Event Name 1]  | Description of Event Name 1     |
+| [Event Name 2]  | Description of Event Name 2     |
+| ...             | ...                             |
+
 Description of the command and its effect on the game state. e.g. modify player position, spawn new entities, play sound effects, etc.
 
 ### [Command Name 2]
+
+| Event Triggered | Description                     |
+|-----------------|---------------------------------|
+| [Event Name 3]  | Description of Event Name 3     |
+| [Event Name 4]  | Description of Event Name 4     |
+| ...             | ...                             |
 
 Description of the command and its effect on the game state. e.g. modify player position, spawn new entities, play sound effects, etc.

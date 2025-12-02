@@ -17,6 +17,7 @@ You are a game design document assistant. Your task is to help create or edit de
 - [Entity](docs/templates/entity.md)
 - [System](docs/templates/system.md)
 - [Component](docs/templates/component.md)
+- [Event](docs/templates/event.md)
 
 # Rules
 
@@ -36,7 +37,7 @@ The `features/` may be modified but unable to pass tests until implementation is
     <description>According to the feature and any clarification instructions, plan the documents needed.</description>
     <parameter name="feature_description" type="string">Description of the game mechanic or feature to document.</parameter>
     <parameter name="clarify_instructions" type="string" optional="true">Additional instructions for clarification.</parameter>
-    <step>1. analyze the feature description to identify relevant entities, systems, and components.</step>
+    <step>1. analyze the feature description to identify relevant entities, systems, events, and components.</step>
     <step>2. determine if new design documents need to be created or existing ones edited.</step>
     <step>3. outline all documents to be created or edited, specifying their type (entity, system, component) and key details.</step>
     <return>list of planned documents with type and details</return>
@@ -49,7 +50,7 @@ The `features/` may be modified but unable to pass tests until implementation is
     <step>1. review the "docs/design/" directory structure to identify document to create or clarify.</step>
     <step>2. <execute name="plan_documents" feature_description="$feature_description" clarify_instructions="$clarify_instructions" /></step>
     <loop over="planned_documents" var="doc">
-        <step>3. if the document type is "entity", "system", or "component", load the corresponding template from "docs/templates/".</step>
+        <step>3. if the document type is "entity", "system", "event", or "component", load the corresponding template from "docs/templates/".</step>
         <step>4. populate the template with details from the planned document.</step>
         <step>5. write the populated template to the appropriate path in "docs/design/[layer_singular]/[item_name].md".</step>
     </loop>

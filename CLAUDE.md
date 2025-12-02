@@ -176,6 +176,61 @@ class Score extends Container {
 }
 ```
 
+### Event Definitions
+
+Events are defined with enum types in `src/events/`:
+
+```typescript
+export enum ScoreEventType {
+  CREATE_SCORE = "CREATE_SCORE",
+  UPDATE_SCORE = "UPDATE_SCORE",
+  REMOVE_SCORE = "REMOVE_SCORE",
+}
+
+export interface CreateScoreEvent {
+  type: ScoreEventType.CREATE_SCORE;
+  payload: {
+    id: string;
+    value: number;
+    // ... other properties
+  };
+}
+```
+
+### Design Document References
+
+All game-related implementations must include TSDoc comments referencing design documents:
+
+```typescript
+/**
+ * Implements the scoring system as defined in the design document.
+ * @see {@link ../../docs/design/system/score_system.md|Score System Design Document}
+ */
+export const ScoreSystem = (adapter: StageAdapter): System => {
+  // implementation
+};
+```
+
+## Code Quality Standards
+
+This project enforces quality standards through rubrics in `docs/rubrics/`:
+
+**General Coding Standards** (`docs/rubrics/general.md`):
+- Use `@/` path alias for all absolute imports (not relative imports)
+- Reference design documents with TSDoc comments in implementation files
+- Maintain consistency between implementation and design documents
+- Follow YAGNI principle - avoid implementing unused features
+- Follow Single Responsibility Principle - one clear purpose per module
+
+**Testing Standards** (`docs/rubrics/testing.md`):
+- Reuse existing Gherkin steps when possible
+- Write tests from user's perspective (user interactions, not technical actions)
+- Each scenario verifies one specific outcome
+- All tests must align with design documents
+- No skipped tests (except design-only changes with `@skip` annotation)
+- Use scenario outlines with Examples for multiple data sets
+- Reference design documents in feature file comments
+
 ## Important Notes
 
 - This project uses `rolldown-vite@7.2.5` as a Vite replacement (specified in pnpm overrides)
@@ -211,16 +266,6 @@ Implements or refactors features based on design documents:
 2. Review and clarify design with stakeholders
 3. Use `/implement` to build the feature according to design specs
 4. Verify all BDD tests pass
-
-## Important Notes
-
-- This project uses `rolldown-vite@7.2.5` as a Vite replacement (specified in pnpm overrides)
-- TypeScript uses strict mode with bundler module resolution
-- Experimental decorators enabled for tsyringe dependency injection
-- Entry point: `index.html` → `src/main.ts`
-- Prettier configured with `organize-imports` plugin
-- Path alias `@/*` maps to `src/*` for clean imports
-- Full architecture documented in `docs/ARCHITECTURE.md`
 
 ## GitHub Actions Integration
 

@@ -54,6 +54,12 @@ jobs:
           additional_permissions: |
             actions: read
 
+          plugin_marketplaces: |
+            https://github.com/elct9620/claudekit.git
+
+          plugins: |
+            rubric@claudekit
+
           # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
           # prompt: 'Update the pull request description to include a summary of changes.'
 

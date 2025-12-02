@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 import { Application } from "pixi.js";
 
+import { BrowserAudioAdapter } from "@/adapters/BrowserAudioAdapter";
 import { PixiInputAdapter } from "@/adapters/PixiInputAdapter";
 import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";

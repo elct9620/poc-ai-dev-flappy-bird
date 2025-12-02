@@ -10,6 +10,11 @@
         "name": "General TypeScript Implementation",
         "pattern": "src/.*\\.ts$",
         "path": "docs/rubrics/general.md"
+      },
+      {
+        "name": "Testing Guidelines",
+        "pattern": "features/.*\\.(feature|ts)$",
+        "path": "docs/rubrics/testing.md"
       }
     ]
   }

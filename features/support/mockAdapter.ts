@@ -1,3 +1,4 @@
+import type { AudioAdapter } from "@/adapters/AudioAdapter";
 import type { Bird } from "@/entity/Bird";
 import type { Score } from "@/entity/Score";
 import type { StageAdapter } from "@/systems/ScoreSystem";
@@ -23,5 +24,35 @@ export class MockStageAdapter implements StageAdapter {
     this.updateScoreCalls = [];
     this.updateBirdCalls = [];
     this.removeEntityCalls = [];
+  }
+}
+
+export class MockAudioAdapter implements AudioAdapter {
+  public preloadedSounds: string[] = [];
+  public playedSounds: string[] = [];
+  public stoppedSounds: string[] = [];
+  public volumeSettings: Map<string, number> = new Map();
+
+  async preloadSound(name: string, _path: string): Promise<void> {
+    this.preloadedSounds.push(name);
+  }
+
+  playSound(name: string): void {
+    this.playedSounds.push(name);
+  }
+
+  stopSound(name: string): void {
+    this.stoppedSounds.push(name);
+  }
+
+  setVolume(name: string, volume: number): void {
+    this.volumeSettings.set(name, volume);
+  }
+
+  reset(): void {
+    this.preloadedSounds = [];
+    this.playedSounds = [];
+    this.stoppedSounds = [];
+    this.volumeSettings.clear();
   }
 }

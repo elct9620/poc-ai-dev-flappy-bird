@@ -2,12 +2,14 @@ import "reflect-metadata";
 
 import { Application } from "pixi.js";
 
+import { PixiAudioAdapter } from "@/adapters/PixiAudioAdapter";
 import { PixiInputAdapter } from "@/adapters/PixiInputAdapter";
 import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
 import { EventBus } from "@/engine/eventbus";
 import { createGameState } from "@/entity/GameState";
 import { GameEventType } from "@/events";
+import { AudioSystem } from "@/systems/AudioSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
@@ -31,12 +33,17 @@ document.querySelector<HTMLDivElement>("#app")!.appendChild(app.canvas);
 const numberTextures = await loadNumberAssets();
 const birdTextures = await loadBirdAssets();
 
-// Create adapter
+// Create adapters
 const stageAdapter = new PixiStageAdapter(app, numberTextures, birdTextures);
+const audioAdapter = new PixiAudioAdapter();
 
-// Create systems with adapter
+// Preload sound effects
+await audioAdapter.preloadSound("wing", "src/assets/soundEffects/wing.ogg");
+
+// Create systems with adapters
 const scoreSystem = ScoreSystem(stageAdapter);
 const physicsSystem = PhysicsSystem(stageAdapter);
+const audioSystem = AudioSystem(audioAdapter);
 
 // Create initial state
 const initialState = createGameState();
@@ -52,6 +59,7 @@ const engine = new Engine(initialState, eventBus, [
   scoreSystem,
   physicsSystem,
   inputSystem,
+  audioSystem,
 ]);
 
 // Connect to PixiJS ticker

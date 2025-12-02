@@ -56,3 +56,7 @@ Feature: Bird Control
   Scenario: Remove a bird
     When the bird is removed
     Then the bird should not exist in the game state
+
+  Scenario: Player hears wing sound effect when flapping
+    When the player clicks the mouse
+    Then the wing sound effect should play

@@ -1,6 +1,6 @@
-import type { AudioAdapter } from "@/adapters/AudioAdapter";
 import type { Bird } from "@/entity/Bird";
 import type { Score } from "@/entity/Score";
+import type { AudioAdapter } from "@/systems/AudioAdapter";
 import type { StageAdapter } from "@/systems/ScoreSystem";
 
 export class MockStageAdapter implements StageAdapter {

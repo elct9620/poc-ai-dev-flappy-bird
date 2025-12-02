@@ -2,7 +2,6 @@ import "reflect-metadata";
 
 import { Application } from "pixi.js";
 
-import { PixiAudioAdapter } from "@/adapters/PixiAudioAdapter";
 import { PixiInputAdapter } from "@/adapters/PixiInputAdapter";
 import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
@@ -35,7 +34,7 @@ const birdTextures = await loadBirdAssets();
 
 // Create adapters
 const stageAdapter = new PixiStageAdapter(app, numberTextures, birdTextures);
-const audioAdapter = new PixiAudioAdapter();
+const audioAdapter = new BrowserAudioAdapter();
 
 // Preload sound effects
 await audioAdapter.preloadSound("wing", "src/assets/soundEffects/wing.ogg");

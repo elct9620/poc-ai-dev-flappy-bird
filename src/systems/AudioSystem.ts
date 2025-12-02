@@ -1,7 +1,7 @@
-import type { AudioAdapter } from "@/adapters/AudioAdapter";
 import type { Command, System } from "@/engine/engine";
 import type { GameState } from "@/entity/GameState";
 import { GameEventType, type Event } from "@/events";
+import type { AudioAdapter } from "@/systems/AudioAdapter";
 
 /**
  * AudioSystem

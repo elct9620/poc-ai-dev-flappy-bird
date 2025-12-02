@@ -11,33 +11,6 @@ The InputSystem is responsible for handling user input events (mouse clicks and 
 
 When implementing the InputSystem, the existing `PixiInputAdapter` should be refactored to support bird control events (e.g., `BIRD_FLAP`) instead of creating duplicate input handling infrastructure.
 
-## Events
-
-### MOUSE_CLICK
-
-Triggered when the player clicks the mouse anywhere on the game canvas.
-
-| Name | Type   | Description                               |
-|------|--------|-------------------------------------------|
-| x    | number | X coordinate of the mouse click position  |
-| y    | number | Y coordinate of the mouse click position  |
-
-### KEY_DOWN
-
-Triggered when the player presses a key on the keyboard.
-
-| Name | Type   | Description                                        |
-|------|--------|----------------------------------------------------|
-| key  | string | The key code or name (e.g., "Space", "Enter")      |
-
-### GAME_STARTED
-
-Triggered when the game begins. This event initializes the input system to start listening for player input.
-
-### GAME_OVER
-
-Triggered when the game ends. This event stops the input system from processing player input.
-
 ## Commands
 
 ### Trigger Bird Flap Command

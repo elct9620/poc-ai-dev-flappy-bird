@@ -2,41 +2,6 @@
 
 The PhysicsSystem is responsible for managing the bird's physics, including gravity, flapping mechanics, position updates, and rotation based on velocity. It processes physics-related events and generates commands that update the bird entity's state.
 
-## Events
-
-### CREATE_BIRD
-
-Creates a new bird entity in the game state with initial physics properties.
-
-| Name     | Type                          | Description                              |
-|----------|-------------------------------|------------------------------------------|
-| id       | string                        | Unique identifier for the new bird       |
-| position | [Vector](../entity/vector.md) | Initial spawn position of the bird       |
-
-### BIRD_FLAP
-
-Triggers the bird to flap its wings and fly upward. This event is dispatched by the InputSystem when the player clicks or presses the space key.
-
-| Name | Type   | Description                        |
-|------|--------|------------------------------------|
-| id   | string | Identifier of the bird to flap     |
-
-### TICK
-
-The main game loop event that triggers physics calculations every frame.
-
-| Name      | Type   | Description                                                                  |
-|-----------|--------|------------------------------------------------------------------------------|
-| deltaTime | number | Frame time multiplier (1.0 = 60fps target frame). From PixiJS Ticker.deltaTime |
-
-### REMOVE_BIRD
-
-Removes a bird entity from the game state.
-
-| Name | Type   | Description                        |
-|------|--------|------------------------------------|
-| id   | string | Identifier of the bird to remove   |
-
 ## Commands
 
 ### Create Bird Entity Command

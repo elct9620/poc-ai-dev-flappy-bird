@@ -65,6 +65,10 @@ body:
         - [ ] Components render correctly
         - [ ] All BDD scenarios pass
         - [ ] Code follows project conventions
+      value: |
+        - [ ] Pass all tests
+        - [ ] No skipped tests
+        - [ ] Build success
     validations:
       required: true
 

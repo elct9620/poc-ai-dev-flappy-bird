@@ -78,6 +78,7 @@ body:
           Given [precondition]
           When [action]
           Then [expected result that wasn't clear before]
+      render: gherkin
 
   - type: input
     id: related_issues
@@ -85,6 +86,12 @@ body:
       label: Related Issues (Optional)
       description: Reference related issues for additional context
       placeholder: "#123, #456"
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context (Optional)
+      description: Any other information, constraints, or examples that might help clarify the design
 
   - type: markdown
     attributes:

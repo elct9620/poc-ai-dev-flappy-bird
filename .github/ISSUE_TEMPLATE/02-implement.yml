@@ -76,9 +76,9 @@ body:
       placeholder: "#123, #456"
 
   - type: textarea
-    id: additional_notes
+    id: additional_context
     attributes:
-      label: Additional Notes (Optional)
+      label: Additional Context (Optional)
       description: Any implementation constraints, preferences, or special considerations
 
   - type: markdown

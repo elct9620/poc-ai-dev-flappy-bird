@@ -98,10 +98,13 @@ body:
           Then the bird should move upward
           And the falling speed should reset
       value: |
+        ```gherkin
         Scenario: [Scenario name]
           Given [precondition]
           When [action]
           Then [expected result]
+        ```
+      render: gherkin
     validations:
       required: true
 

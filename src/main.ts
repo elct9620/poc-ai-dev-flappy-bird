@@ -38,7 +38,10 @@ const stageAdapter = new PixiStageAdapter(app, numberTextures, birdTextures);
 const audioAdapter = new BrowserAudioAdapter();
 
 // Preload sound effects
-await audioAdapter.preloadSound("wing", "src/assets/soundEffects/wing.ogg");
+// Use Vite's asset URL handling to get the correct bundled path
+const wingAudioUrl = new URL("./assets/soundEffects/wing.ogg", import.meta.url)
+  .href;
+await audioAdapter.preloadSound("wing", wingAudioUrl);
 
 // Create systems with adapters
 const scoreSystem = ScoreSystem(stageAdapter);

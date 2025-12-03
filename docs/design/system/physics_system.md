@@ -62,7 +62,7 @@ These values were validated through manual gameplay testing and provide appropri
 
 The PhysicsSystem depends on a `StageAdapter` interface for rendering coordination:
 
-- `updateBird(entity: Bird): void` - Create or update visual representation
+- `updateBird(entity: Bird, deltaTime: number): void` - Create or update visual representation with deltaTime for animation timing
 - `removeEntity(id: string): void` - Destroy visual representation
 
-This follows the dependency inversion principle, allowing the system to remain framework-agnostic while coordinating with PixiJS through adapters.
+This follows the dependency inversion principle, allowing the system to remain framework-agnostic while coordinating with PixiJS through adapters. The `deltaTime` parameter is passed to allow components to manage time-based animations internally.

@@ -1,4 +1,4 @@
-import { Container, Sprite, Texture } from "pixi.js";
+import { AnimatedSprite, Container, Texture } from "pixi.js";
 
 import type { Bird as BirdEntity } from "@/entity/Bird";
 
@@ -7,26 +7,27 @@ import type { Bird as BirdEntity } from "@/entity/Bird";
  * using animated sprites. It displays the bird with appropriate position, rotation,
  * and wing flapping animation based on the bird entity's state.
  *
- * The component manages its own animation state internally, cycling through
- * wing flapping frames continuously without relying on entity state.
+ * The component uses PixiJS AnimatedSprite to manage wing flapping animation
+ * internally, cycling through frames continuously without relying on entity state.
  *
  * @see {@link ../../docs/design/component/bird.md|Bird Component Design Document}
  */
 export class Bird extends Container {
-  private textures: Texture[];
-  private sprite: Sprite;
-  private currentFrame: number = 0;
-  private frameCounter: number = 0;
-  private static readonly ANIMATION_FRAME_DURATION = 8; // ticks per frame (~133ms at 60fps)
+  private sprite: AnimatedSprite;
 
   constructor(textures: Texture[]) {
     super();
-    this.textures = textures;
 
-    // Create sprite with the first texture (frame 0)
-    this.sprite = new Sprite(textures[0]);
+    // Create AnimatedSprite with all three frames
+    this.sprite = new AnimatedSprite(textures);
     // Set anchor to center for proper rotation
     this.sprite.anchor.set(0.5, 0.5);
+    // Set animation speed: 8 ticks per frame at 60fps = 0.133 frames per tick
+    // AnimationSpeed is in frames per tick, so 1/8 ≈ 0.125
+    this.sprite.animationSpeed = 0.125;
+    // Start playing the animation loop
+    this.sprite.play();
+
     this.addChild(this.sprite);
   }
 
@@ -37,16 +38,11 @@ export class Bird extends Container {
     // Update rotation
     this.rotation = entity.rotation;
 
-    // Update animation continuously while bird is alive
-    if (entity.isAlive) {
-      this.frameCounter += deltaTime;
-
-      // Advance frame when counter reaches duration
-      if (this.frameCounter >= Bird.ANIMATION_FRAME_DURATION) {
-        this.currentFrame = (this.currentFrame + 1) % 3;
-        this.sprite.texture = this.textures[this.currentFrame];
-        this.frameCounter -= Bird.ANIMATION_FRAME_DURATION;
-      }
+    // Control animation based on alive status
+    if (entity.isAlive && !this.sprite.playing) {
+      this.sprite.play();
+    } else if (!entity.isAlive && this.sprite.playing) {
+      this.sprite.stop();
     }
 
     // Update visibility based on isAlive

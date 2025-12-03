@@ -10,7 +10,7 @@ Adds a new Bird to the game state's entities record with initial physics values 
 
 ### Apply Flap Force Command
 
-When BIRD_FLAP is received, applies an upward velocity to the bird by setting its y-velocity to a negative value (e.g., -5 pixels/frame). This gives the bird an instant upward boost. The command also triggers an animation frame advance to show wing flapping.
+When BIRD_FLAP is received, applies an upward velocity to the bird by setting its y-velocity to a negative value (e.g., -5 pixels/frame). This gives the bird an instant upward boost.
 
 ### Apply Gravity Command
 
@@ -23,10 +23,6 @@ During each TICK event, updates the bird's position by adding its velocity multi
 ### Update Rotation Command
 
 During each TICK event, calculates and updates the bird's rotation angle based on its current y-velocity. When moving upward (negative velocity), the bird tilts up (negative rotation, e.g., -25°). When falling (positive velocity), the bird tilts down (positive rotation, e.g., +90° max). This provides visual feedback of the bird's movement state.
-
-### Advance Animation Frame Command
-
-Periodically increments the bird's animation frame to cycle through wing flapping sprites (0 → 1 → 2 → 0). This is triggered on BIRD_FLAP events and optionally on TICK events to create a continuous flapping animation.
 
 ### Remove Bird Entity Command
 

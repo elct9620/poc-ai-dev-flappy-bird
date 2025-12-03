@@ -61,6 +61,7 @@ jobs:
             rubric@claudekit
 
           # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
+          track_progress: true
           prompt: |
             REPO: ${{ github.repository }}
             Comment: ${{ github.event.comment.body }}

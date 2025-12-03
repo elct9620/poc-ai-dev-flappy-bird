@@ -44,7 +44,7 @@ The animation cycles through these frames (0 → 1 → 2 → 0) continuously dur
 
 ### Sync Method
 
-The `sync(entity: Bird, deltaTime: number)` method reconciles the component's visual state with the bird entity:
+The `sync(entity: Bird)` method reconciles the component's visual state with the bird entity:
 
 1. **Position Update**: Sets the container's position to match `entity.position`
 2. **Rotation Update**: Sets the container's rotation to match `entity.rotation`

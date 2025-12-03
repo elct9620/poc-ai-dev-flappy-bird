@@ -1,6 +1,7 @@
 import type { Command, System } from "@/engine/engine";
 import type { GameState } from "@/entity/GameState";
 import type { Score } from "@/entity/Score";
+import { createScore, updateScoreValue } from "@/entity/Score";
 import { GameEventType, type Event } from "@/events";
 
 // Adapter interface defined in system (dependency inversion principle)
@@ -9,6 +10,33 @@ export interface StageAdapter {
   removeEntity(id: string): void;
 }
 
+/**
+ * Utility function to build a Score entity from event payload.
+ */
+function buildScoreEntity(payload: {
+  id: string;
+  value: number;
+  position: { x: number; y: number };
+  scale: number;
+  spacing: number;
+  alignment: "left" | "center" | "right";
+}): Score {
+  return createScore(
+    payload.id,
+    payload.value,
+    payload.position,
+    payload.scale,
+    payload.spacing,
+    payload.alignment,
+  );
+}
+
+/**
+ * ScoreSystem manages score entity lifecycle and value updates.
+ * Handles CREATE_SCORE, RESET_SCORE, INCREMENT_SCORE, REMOVE_SCORE events.
+ *
+ * @see {@link ../../docs/design/system/score_system.md|Score System Design Document}
+ */
 export const ScoreSystem = (adapter: StageAdapter): System => {
   return (state, event: Event): Command[] => {
     const gameState = state as GameState;
@@ -17,15 +45,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
     if (event.type === GameEventType.CreateScore) {
       commands.push((state) => {
         const currentState = state as GameState;
-        const newEntity: Score = {
-          type: "score",
-          id: event.payload.id,
-          value: event.payload.value,
-          position: event.payload.position,
-          scale: event.payload.scale,
-          spacing: event.payload.spacing,
-          alignment: event.payload.alignment,
-        };
+        const newEntity = buildScoreEntity(event.payload);
 
         // Update adapter immediately after state update
         adapter.updateScore(newEntity);
@@ -45,10 +65,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
       if (entity && entity.type === "score") {
         commands.push((state) => {
           const currentState = state as GameState;
-          const updatedEntity: Score = {
-            ...(entity as Score),
-            value: 0,
-          };
+          const updatedEntity = updateScoreValue(entity as Score, 0);
 
           // Update adapter immediately
           adapter.updateScore(updatedEntity);
@@ -70,10 +87,10 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
         commands.push((state) => {
           const currentState = state as GameState;
           const scoreEntity = entity as Score;
-          const updatedEntity: Score = {
-            ...scoreEntity,
-            value: scoreEntity.value + 1,
-          };
+          const updatedEntity = updateScoreValue(
+            scoreEntity,
+            scoreEntity.value + 1,
+          );
 
           // Update adapter immediately
           adapter.updateScore(updatedEntity);

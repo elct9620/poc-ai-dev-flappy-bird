@@ -1,6 +1,13 @@
 import type { Command, System } from "@/engine/engine";
 import type { Bird } from "@/entity/Bird";
-import { createBird } from "@/entity/Bird";
+import {
+  createBird,
+  setBirdAlive,
+  updateBirdFrame,
+  updateBirdPosition,
+  updateBirdRotation,
+  updateBirdVelocity,
+} from "@/entity/Bird";
 import type { GameState } from "@/entity/GameState";
 import { GameEventType, SystemEventType, type Event } from "@/events";
 
@@ -49,11 +56,14 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
         if (bird.isAlive) {
           commands.push((state) => {
             const currentState = state as GameState;
-            const updatedEntity: Bird = {
-              ...bird,
-              velocity: { x: bird.velocity.x, y: FLAP_VELOCITY },
-              animationFrame: (bird.animationFrame + 1) % 3,
-            };
+            let updatedEntity = updateBirdVelocity(bird, {
+              x: bird.velocity.x,
+              y: FLAP_VELOCITY,
+            });
+            updatedEntity = updateBirdFrame(
+              updatedEntity,
+              (bird.animationFrame + 1) % 3,
+            );
 
             // Update adapter immediately
             adapter.updateBird(updatedEntity);
@@ -109,12 +119,12 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
                 newRotation = rotationRatio * MAX_ROTATION_DOWN;
               }
 
-              const updatedEntity: Bird = {
-                ...bird,
-                velocity: { x: bird.velocity.x, y: newVelocityY },
-                position: newPosition,
-                rotation: newRotation,
-              };
+              let updatedEntity = updateBirdVelocity(bird, {
+                x: bird.velocity.x,
+                y: newVelocityY,
+              });
+              updatedEntity = updateBirdPosition(updatedEntity, newPosition);
+              updatedEntity = updateBirdRotation(updatedEntity, newRotation);
 
               // Update adapter immediately
               adapter.updateBird(updatedEntity);
@@ -138,10 +148,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
         commands.push((state) => {
           const currentState = state as GameState;
           const bird = entity as Bird;
-          const updatedEntity: Bird = {
-            ...bird,
-            isAlive: false,
-          };
+          const updatedEntity = setBirdAlive(bird, false);
 
           // Update adapter immediately
           adapter.updateBird(updatedEntity);

@@ -4,6 +4,8 @@
  *
  * Vector is immutable - any operations that modify a vector should return a new Vector
  * instance rather than mutating the existing one.
+ *
+ * @see {@link ../../docs/design/entity/vector.md|Vector Entity Design Document}
  */
 export interface Vector {
   x: number;

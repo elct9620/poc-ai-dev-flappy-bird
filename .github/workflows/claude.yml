@@ -63,9 +63,6 @@ jobs:
           # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
           track_progress: true
           prompt: |
-            REPO: ${{ github.repository }}
-            Comment: ${{ github.event.comment.body }}
-
             You are working on design or implementation tasks as requested by the user in the comment above.
             Use `/design` or `/implement` commands to process user's requests based on the comment above.
 

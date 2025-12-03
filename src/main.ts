@@ -8,7 +8,7 @@ import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
 import { EventBus } from "@/engine/eventbus";
 import { createGameState } from "@/entity/GameState";
-import { GameEventType } from "@/events";
+import { GameEventType, SystemEventType } from "@/events";
 import { AudioSystem } from "@/systems/AudioSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
@@ -91,5 +91,20 @@ engine.dispatch({
   },
 });
 
-// Setup input handling
-new PixiInputAdapter(eventBus, app);
+// Setup input handling with callback pattern
+const inputAdapter = new PixiInputAdapter(app);
+
+// Register callbacks that dispatch events to EventBus
+inputAdapter.onMouseClick((x, y) => {
+  eventBus.dispatch({
+    type: SystemEventType.MouseClick,
+    payload: { x, y },
+  });
+});
+
+inputAdapter.onKeyDown((key) => {
+  eventBus.dispatch({
+    type: SystemEventType.KeyDown,
+    payload: { key },
+  });
+});

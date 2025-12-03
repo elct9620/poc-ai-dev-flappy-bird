@@ -1,24 +1,24 @@
 import type { Application } from "pixi.js";
 
-import type { EventBus } from "@/engine/eventbus";
-import { SystemEventType } from "@/events";
-
 /**
- * PixiInputAdapter handles user input events and translates them to game events
+ * PixiInputAdapter handles browser input events using PixiJS and DOM APIs.
+ * Provides callback-based interface for loose coupling with input systems.
  *
  * Responsibilities:
  * - Listen to PixiJS stage pointer events for clicks
  * - Listen to document keyboard events for spacebar
- * - Dispatch MOUSE_CLICK and KEY_DOWN events for game systems to handle
+ * - Invoke registered callbacks when events occur
+ * - Provide cleanup method to remove all listeners
+ *
+ * @see {@link ../../docs/design/system/input_system.md|Input System Design Document}
  */
 export class PixiInputAdapter {
   private boundHandlePointer: (e: PointerEvent) => void;
   private boundHandleKeydown: (e: KeyboardEvent) => void;
+  private mouseClickCallback?: (x: number, y: number) => void;
+  private keyDownCallback?: (key: string) => void;
 
-  constructor(
-    private eventBus: EventBus,
-    private app: Application,
-  ) {
+  constructor(private app: Application) {
     // Bind methods to preserve context
     this.boundHandlePointer = this.handlePointer.bind(this);
     this.boundHandleKeydown = this.handleKeydown.bind(this);
@@ -34,30 +34,37 @@ export class PixiInputAdapter {
     document.addEventListener("keydown", this.boundHandleKeydown);
   }
 
+  onMouseClick(callback: (x: number, y: number) => void): void {
+    this.mouseClickCallback = callback;
+  }
+
+  onKeyDown(callback: (key: string) => void): void {
+    this.keyDownCallback = callback;
+  }
+
+  removeListeners(): void {
+    this.app.stage.off("pointerdown", this.boundHandlePointer);
+    document.removeEventListener("keydown", this.boundHandleKeydown);
+    this.mouseClickCallback = undefined;
+    this.keyDownCallback = undefined;
+  }
+
   private handlePointer(e: PointerEvent): void {
-    this.eventBus.dispatch({
-      type: SystemEventType.MouseClick,
-      payload: {
-        x: e.clientX,
-        y: e.clientY,
-      },
-    });
+    if (this.mouseClickCallback) {
+      this.mouseClickCallback(e.clientX, e.clientY);
+    }
   }
 
   private handleKeydown(e: KeyboardEvent): void {
     if (e.key === " " || e.code === "Space") {
       e.preventDefault(); // Prevent page scroll
-      this.eventBus.dispatch({
-        type: SystemEventType.KeyDown,
-        payload: {
-          key: "Space",
-        },
-      });
+      if (this.keyDownCallback) {
+        this.keyDownCallback("Space");
+      }
     }
   }
 
   destroy(): void {
-    this.app.stage.off("pointerdown", this.boundHandlePointer);
-    document.removeEventListener("keydown", this.boundHandleKeydown);
+    this.removeListeners();
   }
 }

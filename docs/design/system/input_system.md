@@ -27,10 +27,12 @@ When GAME_OVER is received, removes all input event listeners to prevent the pla
 
 ## Adapter Interface
 
-The InputSystem depends on an `InputAdapter` interface for capturing browser/platform input:
+The InputSystem depends on an InputAdapter with the following methods:
 
 - `onMouseClick(callback: (x: number, y: number) => void): void` - Register mouse click handler
 - `onKeyDown(callback: (key: string) => void): void` - Register keyboard handler
 - `removeListeners(): void` - Clean up all event listeners
 
-This follows the dependency inversion principle, allowing the system to remain platform-agnostic while working with browser DOM events through adapters.
+**Note**: A formal TypeScript `interface` declaration is not required. Adapters implement these methods directly on the class, following the dependency inversion principle while keeping the implementation pragmatic.
+
+**Implementation Pattern**: The adapter registers callbacks and invokes them when browser events occur. The callbacks typically dispatch events to the EventBus, maintaining the event-driven architecture.

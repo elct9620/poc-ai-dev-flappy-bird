@@ -7,12 +7,17 @@ import type { Bird as BirdEntity } from "@/entity/Bird";
  * using animated sprites. It displays the bird with appropriate position, rotation,
  * and wing flapping animation based on the bird entity's state.
  *
+ * The component manages its own animation state internally, cycling through
+ * wing flapping frames continuously without relying on entity state.
+ *
  * @see {@link ../../docs/design/component/bird.md|Bird Component Design Document}
  */
 export class Bird extends Container {
   private textures: Texture[];
   private sprite: Sprite;
-  private currentFrame: number = -1;
+  private currentFrame: number = 0;
+  private frameCounter: number = 0;
+  private static readonly ANIMATION_FRAME_DURATION = 8; // ticks per frame (~133ms at 60fps)
 
   constructor(textures: Texture[]) {
     super();
@@ -25,17 +30,23 @@ export class Bird extends Container {
     this.addChild(this.sprite);
   }
 
-  sync(entity: BirdEntity): void {
+  sync(entity: BirdEntity, deltaTime: number): void {
     // Update position
     this.position.set(entity.position.x, entity.position.y);
 
     // Update rotation
     this.rotation = entity.rotation;
 
-    // Update animation frame
-    if (this.currentFrame !== entity.animationFrame) {
-      this.sprite.texture = this.textures[entity.animationFrame];
-      this.currentFrame = entity.animationFrame;
+    // Update animation continuously while bird is alive
+    if (entity.isAlive) {
+      this.frameCounter += deltaTime;
+
+      // Advance frame when counter reaches duration
+      if (this.frameCounter >= Bird.ANIMATION_FRAME_DURATION) {
+        this.currentFrame = (this.currentFrame + 1) % 3;
+        this.sprite.texture = this.textures[this.currentFrame];
+        this.frameCounter -= Bird.ANIMATION_FRAME_DURATION;
+      }
     }
 
     // Update visibility based on isAlive

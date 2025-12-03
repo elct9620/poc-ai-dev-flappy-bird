@@ -47,7 +47,7 @@ export class PixiStageAdapter implements StageAdapter {
     }
   }
 
-  updateBird(entity: Bird): void {
+  updateBird(entity: Bird, deltaTime: number): void {
     try {
       // Get or create Bird component
       let component = this.components[entity.id];
@@ -58,7 +58,7 @@ export class PixiStageAdapter implements StageAdapter {
       }
 
       // Sync component with entity
-      (component as BirdComponent).sync(entity);
+      (component as BirdComponent).sync(entity, deltaTime);
     } catch (error) {
       console.error(`Error updating bird ${entity.id}:`, error);
     }

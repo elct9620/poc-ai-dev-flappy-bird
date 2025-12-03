@@ -58,6 +58,7 @@ export class PixiStageAdapter implements StageAdapter {
       }
 
       // Sync component with entity
+      // AnimatedSprite manages its own animation timing internally
       (component as BirdComponent).sync(entity);
     } catch (error) {
       console.error(`Error updating bird ${entity.id}:`, error);

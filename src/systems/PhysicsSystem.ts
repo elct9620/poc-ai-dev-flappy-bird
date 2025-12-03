@@ -3,7 +3,6 @@ import type { Bird } from "@/entity/Bird";
 import {
   createBird,
   setBirdAlive,
-  updateBirdFrame,
   updateBirdPosition,
   updateBirdRotation,
   updateBirdVelocity,
@@ -56,14 +55,10 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
         if (bird.isAlive) {
           commands.push((state) => {
             const currentState = state as GameState;
-            let updatedEntity = updateBirdVelocity(bird, {
+            const updatedEntity = updateBirdVelocity(bird, {
               x: bird.velocity.x,
               y: FLAP_VELOCITY,
             });
-            updatedEntity = updateBirdFrame(
-              updatedEntity,
-              (bird.animationFrame + 1) % 3,
-            );
 
             // Update adapter immediately
             adapter.updateBird(updatedEntity);

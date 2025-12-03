@@ -12,7 +12,7 @@ export class MockStageAdapter implements StageAdapter {
     this.updateScoreCalls.push(entity);
   }
 
-  updateBird(entity: Bird, deltaTime: number): void {
+  updateBird(entity: Bird): void {
     this.updateBirdCalls.push(entity);
   }
 

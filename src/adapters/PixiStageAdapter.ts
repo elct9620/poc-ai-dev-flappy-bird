@@ -47,7 +47,7 @@ export class PixiStageAdapter implements StageAdapter {
     }
   }
 
-  updateBird(entity: Bird, _deltaTime: number): void {
+  updateBird(entity: Bird): void {
     try {
       // Get or create Bird component
       let component = this.components[entity.id];
@@ -58,8 +58,7 @@ export class PixiStageAdapter implements StageAdapter {
       }
 
       // Sync component with entity
-      // Note: deltaTime is kept in the interface for potential future use
-      // but AnimatedSprite manages its own animation timing internally
+      // AnimatedSprite manages its own animation timing internally
       (component as BirdComponent).sync(entity);
     } catch (error) {
       console.error(`Error updating bird ${entity.id}:`, error);

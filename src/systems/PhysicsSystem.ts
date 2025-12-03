@@ -20,7 +20,7 @@ const TERMINAL_VELOCITY = 1; // pixels/frame (maximum falling speed)
 
 // Adapter interface defined in system (dependency inversion principle)
 export interface StageAdapter {
-  updateBird(entity: Bird, deltaTime: number): void;
+  updateBird(entity: Bird): void;
   removeEntity(id: string): void;
 }
 
@@ -35,7 +35,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
         const newEntity = createBird(event.payload.id, event.payload.position);
 
         // Update adapter immediately after state update
-        adapter.updateBird(newEntity, 0);
+        adapter.updateBird(newEntity);
 
         return {
           ...currentState,
@@ -61,7 +61,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
             });
 
             // Update adapter immediately
-            adapter.updateBird(updatedEntity, 0);
+            adapter.updateBird(updatedEntity);
 
             return {
               ...currentState,
@@ -122,7 +122,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
               updatedEntity = updateBirdRotation(updatedEntity, newRotation);
 
               // Update adapter immediately
-              adapter.updateBird(updatedEntity, deltaTime);
+              adapter.updateBird(updatedEntity);
 
               return {
                 ...currentState,
@@ -146,7 +146,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
           const updatedEntity = setBirdAlive(bird, false);
 
           // Update adapter immediately
-          adapter.updateBird(updatedEntity, 0);
+          adapter.updateBird(updatedEntity);
 
           return {
             ...currentState,

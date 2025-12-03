@@ -43,16 +43,18 @@ This project follows an **event-driven architecture with adapters** pattern for 
 **Implemented:**
 - Core event-driven Engine (`src/engine/engine.ts`) - Singleton managing game loop, event routing, and state updates
 - Score system with full CRUD operations - Complete with BDD tests (9 scenarios in `features/score.feature`)
+- Bird entity and control system - Complete with BDD tests (`features/bird-control.feature`)
+- Physics system - Gravity and flap mechanics for bird movement
+- Input system - Handles keyboard and click events
+- Audio system with BrowserAudioAdapter - Sound effect playback (wing flap)
 - PixiJS integration via PixiStageAdapter - Manages rendering and component lifecycle
+- PixiInputAdapter - Callback pattern for input handling
 - Score component - Renders digit sprites with alignment and spacing
 - Asset loading system - Async preload of game sprites and sounds
 
 **Not Yet Implemented:**
-- Bird/Player entity and physics
 - Pipe generation and movement
 - Collision detection
-- Input handling
-- Sound playback
 - Game state (menu, playing, game over)
 
 ### Architecture Layers
@@ -74,6 +76,9 @@ The architecture separates concerns into distinct layers:
    - **Signature**: `(state: State, event: Event) => Command[]`
    - Example: `ScoreSystem` handles CREATE_SCORE, UPDATE_SCORE, REMOVE_SCORE
    - Can accept adapters as dependencies for side effects
+   - **Two implementation patterns**:
+     - Plain system: `export const System: System = (state, event) => Command[]`
+     - Factory with adapter: `export const System = (adapter: Adapter): System => (state, event) => Command[]`
 
 4. **Adapters** (`src/adapters/`): External system interfaces
    - Bridge between pure engine and PixiJS rendering
@@ -103,6 +108,7 @@ User/Timer → Events → Engine → Systems → Commands → State Updates → 
 
 **Current Coverage:**
 - `features/score.feature`: 9 scenarios testing Score system
+- `features/bird-control.feature`: Tests bird control, physics, and audio
 - Tests state immutability, CRUD operations, alignments, boundary values
 
 **No unit tests folder**: E2E testing by humans; integration via Gherkin
@@ -230,6 +236,24 @@ This project enforces quality standards through rubrics in `docs/rubrics/`:
 - No skipped tests (except design-only changes with `@skip` annotation)
 - Use scenario outlines with Examples for multiple data sets
 - Reference design documents in feature file comments
+
+**Entity Standards** (`docs/rubrics/entity.md`):
+- Pure data structures as immutable states with type annotations
+- Pure functions for manipulation (no side effects, return new instances)
+- Factory functions for creation to ensure consistency
+
+**System Standards** (`docs/rubrics/system.md`):
+- Implement as pure functions producing commands
+- No direct dependencies on external modules (use adapter interfaces)
+- Use utility functions for readability
+- Filter relevant events, generate commands for state updates
+- Split adapter interfaces into standalone files for reusability
+
+**Adapter Standards** (`docs/rubrics/adapter.md`):
+- Clear naming conventions (e.g., PixiStageAdapter, BrowserAudioAdapter, PixiInputAdapter)
+- Must implement defined interfaces from systems
+- No business logic (translation/bridge layer only)
+- Robust error handling for external interactions
 
 ## Important Notes
 

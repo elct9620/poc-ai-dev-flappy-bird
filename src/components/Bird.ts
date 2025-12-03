@@ -31,7 +31,7 @@ export class Bird extends Container {
     this.addChild(this.sprite);
   }
 
-  sync(entity: BirdEntity, deltaTime: number): void {
+  sync(entity: BirdEntity): void {
     // Update position
     this.position.set(entity.position.x, entity.position.y);
 

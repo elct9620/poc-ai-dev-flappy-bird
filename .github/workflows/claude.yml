@@ -63,10 +63,15 @@ jobs:
           # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
           track_progress: true
           prompt: |
-            You are working on design or implementation tasks as requested by the user in the comment above.
-            Use `/design` or `/implement` commands to process user's requests based on the comment above.
+            Use Traditional Chinese (Taiwan) when updating or replying to the user.
 
-            Consider to use Traditional Chinese (Taiwan) when updating or replying to the user.
+            Your action is use `/design` or `/implement` commands to process the tasks assigned to you.
+            Make sure to follow the commands otherwise:
+            - Fix typos and grammatical errors in user's requests.
+            - The requests is clearly enough and no need to use `/design` or `/implement` commands.
+
+            Do not clarify with the user because you are in headless mode. If the request cannot be processed, explain and make comments to the user and stop processing.
+            Follow the progress tracking instructions strictly.
 
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md

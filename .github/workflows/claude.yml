@@ -61,7 +61,15 @@ jobs:
             rubric@claudekit
 
           # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          # prompt: 'Update the pull request description to include a summary of changes.'
+          prompt: |
+            REPO: ${{ github.repository }}
+            Comment: ${{ github.event.comment.body }}
+
+            You are working on design or implementation tasks as requested by the user in the comment above.
+            Use `/design` or `/implement` commands to process user's requests based on the comment above.
+
+            Consider to use Traditional Chinese (Taiwan) when updating or replying to the user.
+
 
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md

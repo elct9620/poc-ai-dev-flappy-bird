@@ -70,7 +70,6 @@ jobs:
 
             Consider to use Traditional Chinese (Taiwan) when updating or replying to the user.
 
-
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://docs.claude.com/en/docs/claude-code/cli-reference for available options

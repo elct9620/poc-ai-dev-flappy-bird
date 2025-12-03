@@ -11,7 +11,6 @@ The Bird entity represents the player-controlled character in the game. It is a 
 | position      | [Vector](./vector.md) | Current position of the bird on the screen                      |
 | velocity      | [Vector](./vector.md) | Current velocity vector (speed and direction of movement)       |
 | rotation      | number                | Current rotation angle in radians (for tilting during movement) |
-| animationFrame| number                | Current animation frame index (0-2 for wing flapping). Cycles continuously during gameplay. |
 | isAlive       | boolean               | Whether the bird is currently alive (false when game over)      |
 
 ## Mutations
@@ -35,10 +34,6 @@ Updates the bird's position based on its current velocity. This is typically app
 ### Update Rotation
 
 Updates the bird's rotation angle based on its current velocity. When moving upward, the bird tilts up; when falling, it tilts down.
-
-### Advance Animation
-
-Increments the animation frame index to cycle through wing flapping sprites (0 → 1 → 2 → 0). This mutation is triggered by the AnimationSystem on a timed interval (every 8 ticks) to create continuous wing flapping during gameplay.
 
 ### Kill Bird
 

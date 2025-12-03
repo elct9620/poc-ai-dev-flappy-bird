@@ -122,11 +122,11 @@ Then("the bird should tilt downward", (world: GameWorld) => {
   expect(bird.rotation).toBeGreaterThan(0);
 });
 
-Then("the bird's animation frame should advance", (world: GameWorld) => {
+Then("the bird's animation should be playing", (world: GameWorld) => {
   const state = world.getState();
   const bird = state.entities["bird"] as Bird;
   expect(bird).toBeDefined();
-  // Frame should have advanced from 0 to 1 or 2
+  // Animation should have advanced from initial frame 0
   expect(bird.animationFrame).toBeGreaterThan(0);
 });
 

@@ -6,6 +6,8 @@ import type { Bird as BirdEntity } from "@/entity/Bird";
  * Bird component is responsible for visually representing the player character
  * using animated sprites. It displays the bird with appropriate position, rotation,
  * and wing flapping animation based on the bird entity's state.
+ *
+ * @see {@link ../../docs/design/component/bird.md|Bird Component Design Document}
  */
 export class Bird extends Container {
   private textures: Texture[];

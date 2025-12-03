@@ -14,6 +14,7 @@ export interface Bird extends Entity {
   velocity: Vector;
   rotation: number;
   animationFrame: number;
+  animationFrameCounter: number; // Tracks ticks for continuous animation
   isAlive: boolean;
 }
 
@@ -30,6 +31,7 @@ export function createBird(id: string, position: Vector): Bird {
     velocity: { x: 0, y: 0 },
     rotation: 0,
     animationFrame: 0,
+    animationFrameCounter: 0,
     isAlive: true,
   };
 }
@@ -60,6 +62,17 @@ export function updateBirdRotation(bird: Bird, rotation: number): Bird {
  */
 export function updateBirdFrame(bird: Bird, animationFrame: number): Bird {
   return { ...bird, animationFrame };
+}
+
+/**
+ * Update bird animation state (frame and counter) immutably.
+ */
+export function updateBirdAnimation(
+  bird: Bird,
+  animationFrame: number,
+  animationFrameCounter: number,
+): Bird {
+  return { ...bird, animationFrame, animationFrameCounter };
 }
 
 /**

@@ -3,7 +3,7 @@ import type { Bird } from "@/entity/Bird";
 import {
   createBird,
   setBirdAlive,
-  updateBirdFrame,
+  updateBirdAnimation,
   updateBirdPosition,
   updateBirdRotation,
   updateBirdVelocity,
@@ -18,6 +18,9 @@ const FLAP_VELOCITY = -3; // pixels/frame (upward velocity applied on flap)
 const MAX_ROTATION_DOWN = Math.PI / 2; // 90 degrees (maximum downward tilt)
 const MAX_ROTATION_UP = -Math.PI / 7.2; // -25 degrees (maximum upward tilt)
 const TERMINAL_VELOCITY = 1; // pixels/frame (maximum falling speed)
+
+// Animation constants (per design document: docs/design/component/bird.md)
+const ANIMATION_FRAME_DURATION = 8; // ticks per frame (~133ms at 60fps)
 
 // Adapter interface defined in system (dependency inversion principle)
 export interface StageAdapter {
@@ -56,14 +59,10 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
         if (bird.isAlive) {
           commands.push((state) => {
             const currentState = state as GameState;
-            let updatedEntity = updateBirdVelocity(bird, {
+            const updatedEntity = updateBirdVelocity(bird, {
               x: bird.velocity.x,
               y: FLAP_VELOCITY,
             });
-            updatedEntity = updateBirdFrame(
-              updatedEntity,
-              (bird.animationFrame + 1) % 3,
-            );
 
             // Update adapter immediately
             adapter.updateBird(updatedEntity);
@@ -119,12 +118,28 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
                 newRotation = rotationRatio * MAX_ROTATION_DOWN;
               }
 
+              // Update animation continuously
+              const newFrameCounter = bird.animationFrameCounter + deltaTime;
+              let newAnimationFrame = bird.animationFrame;
+              let finalFrameCounter = newFrameCounter;
+
+              // Advance frame when counter reaches duration
+              if (newFrameCounter >= ANIMATION_FRAME_DURATION) {
+                newAnimationFrame = (bird.animationFrame + 1) % 3;
+                finalFrameCounter = newFrameCounter - ANIMATION_FRAME_DURATION;
+              }
+
               let updatedEntity = updateBirdVelocity(bird, {
                 x: bird.velocity.x,
                 y: newVelocityY,
               });
               updatedEntity = updateBirdPosition(updatedEntity, newPosition);
               updatedEntity = updateBirdRotation(updatedEntity, newRotation);
+              updatedEntity = updateBirdAnimation(
+                updatedEntity,
+                newAnimationFrame,
+                finalFrameCounter,
+              );
 
               // Update adapter immediately
               adapter.updateBird(updatedEntity);

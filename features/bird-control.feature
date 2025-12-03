@@ -32,9 +32,9 @@ Feature: Bird Control
     Then the bird should have positive vertical velocity
     And the bird should tilt downward
 
-  Scenario: Bird animation changes during flapping
-    When the player clicks the mouse
-    Then the bird's animation frame should advance
+  Scenario: Bird animation runs continuously
+    When the game advances by 0.15 seconds
+    Then the bird's animation should be playing
 
   Scenario: Bird can flap multiple times
     When the player clicks the mouse

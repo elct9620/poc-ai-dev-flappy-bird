@@ -15,6 +15,21 @@
         "name": "Testing Guidelines",
         "pattern": "features/.*\\.(feature|ts)$",
         "path": "docs/rubrics/testing.md"
+      },
+      {
+        "name": "Entity",
+        "pattern": "src/entity/.*\\.ts$",
+        "path": "docs/rubrics/entity.md"
+      },
+      {
+        "name": "System",
+        "pattern": "src/systems/.*\\.ts$",
+        "path": "docs/rubrics/system.md"
+      },
+      {
+        "name": "Adapter",
+        "pattern": "src/adapters/.*\\.ts$",
+        "path": "docs/rubrics/adapter.md"
       }
     ]
   }

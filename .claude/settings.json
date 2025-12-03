@@ -20,6 +20,17 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm tsc"
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {

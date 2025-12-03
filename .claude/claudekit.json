@@ -2,12 +2,12 @@
   "rubric": {
     "rules": [
       {
-        "name": "Document Index Files",
+        "name": "Document Index",
         "pattern": "docs/(entities|systems|events|components)\\.md$",
         "path": "docs/rubrics/document_index.md"
       },
       {
-        "name": "General TypeScript Implementation",
+        "name": "General TypeScript",
         "pattern": "src/.*\\.ts$",
         "path": "docs/rubrics/general.md"
       },

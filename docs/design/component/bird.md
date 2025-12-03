@@ -8,7 +8,7 @@ The Bird component is responsible for visually representing the player character
 |---------------|-------------------------------|-------------------------------------------------------|
 | position      | [Vector](../entity/vector.md) | Screen position where the bird is rendered            |
 | rotation      | number                        | Rotation angle in radians for tilting the bird        |
-| animationFrame| number                        | Current frame index (0-2) for wing flapping animation |
+| animationFrame| number                        | Current frame index (0-2) for wing flapping animation (cycles continuously) |
 
 ## Structure
 
@@ -32,7 +32,7 @@ The bird uses three sprite assets for animation:
 2. **Frame 1** (`yellowbird-midflap.png`): Wings in middle position
 3. **Frame 2** (`yellowbird-upflap.png`): Wings in upward position
 
-The animation cycles through these frames (0 → 1 → 2 → 0) to create a smooth flapping effect.
+The animation cycles through these frames (0 → 1 → 2 → 0) continuously during gameplay to create a smooth flapping effect. The frame changes are managed by the AnimationSystem, which updates the `animationFrame` property at regular intervals.
 
 ## Behavior
 

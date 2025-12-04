@@ -10,13 +10,11 @@ Feature: Scene System
   Background:
     Given the game has started
 
-  @skip
   Scenario: Player sees background when game starts
     When a scene is created with id "background"
     Then the scene "background" should exist in the game state
     And the scene "background" should have type "scene"
 
-  @skip
   Scenario: Background is removed when scene is destroyed
     Given a scene exists with id "background"
     When the scene "background" is removed

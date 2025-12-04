@@ -19,6 +19,8 @@ export enum GameEventType {
   BirdFlap = "BIRD_FLAP",
   KillBird = "KILL_BIRD",
   RemoveBird = "REMOVE_BIRD",
+  CreateScene = "CREATE_SCENE",
+  RemoveScene = "REMOVE_SCENE",
 }
 
 // ============================================================================
@@ -149,6 +151,37 @@ export interface RemoveBirdEvent {
   };
 }
 
+// ============================================================================
+// Scene Events
+// ============================================================================
+
+/**
+ * CREATE_SCENE event
+ *
+ * Creates a new scene entity in the game state.
+ * The scene represents a background that provides visual context for gameplay.
+ */
+export interface CreateSceneEvent {
+  type: GameEventType.CreateScene;
+  payload: {
+    /** Unique identifier for the new scene entity */
+    id: string;
+  };
+}
+
+/**
+ * REMOVE_SCENE event
+ *
+ * Removes a scene entity from the game state.
+ */
+export interface RemoveSceneEvent {
+  type: GameEventType.RemoveScene;
+  payload: {
+    /** Identifier of the scene to remove */
+    id: string;
+  };
+}
+
 /**
  * Union type of all game events
  */
@@ -160,4 +193,6 @@ export type GameEvent =
   | CreateBirdEvent
   | BirdFlapEvent
   | KillBirdEvent
-  | RemoveBirdEvent;
+  | RemoveBirdEvent
+  | CreateSceneEvent
+  | RemoveSceneEvent;

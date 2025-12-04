@@ -8,12 +8,9 @@ import type { Ground as GroundEntity } from "@/entity/Ground";
  */
 export class Ground extends Container {
   private tilingSprite: TilingSprite;
-  private screenHeight: number;
 
   constructor(texture: Texture, screenWidth: number, screenHeight: number) {
     super();
-
-    this.screenHeight = screenHeight;
 
     // Calculate scale to maintain aspect ratio
     // Use screenHeight / textureHeight to ensure proper proportions

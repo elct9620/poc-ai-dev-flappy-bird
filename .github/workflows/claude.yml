@@ -65,10 +65,7 @@ jobs:
           prompt: |
             Use Traditional Chinese (Taiwan) when updating or replying to the user.
 
-            Your action is use `/design` or `/implement` commands to process the tasks assigned to you.
-            Make sure to follow the commands otherwise:
-            - Fix typos and grammatical errors in user's requests.
-            - The requests is clearly enough and no need to use `/design` or `/implement` commands.
+            Your mission is use `/design` or `/implement` slash commands to process provided in the context.
 
             Do not clarify with the user because you are in headless mode. If the request cannot be processed, explain and make comments to the user and stop processing.
             Follow the progress tracking instructions strictly.

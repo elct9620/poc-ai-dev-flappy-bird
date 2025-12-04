@@ -2,14 +2,10 @@
 
 **Type:** `GameEvent`
 
-Creates a new scene entity in the game state to display a tiled background.
+Creates a new scene entity in the game state to display a tiled background. The entity contains minimal state, as all rendering details are handled by the Component layer.
 
 ## Payload
 
-| Field       | Type                          | Description                                    |
-|-------------|-------------------------------|------------------------------------------------|
-| id          | string                        | Unique identifier for the new scene entity     |
-| texturePath | string                        | Path to the background texture asset           |
-| position    | [Vector](../entity/vector.md) | Screen position for rendering the scene        |
-| width       | number                        | Width of a single background tile              |
-| height      | number                        | Height of a single background tile             |
+| Field | Type   | Description                                |
+|-------|--------|--------------------------------------------|
+| id    | string | Unique identifier for the new scene entity |

@@ -1,43 +1,45 @@
 # Scene
 
-The Scene component is a visual element that displays a tiled background image. It automatically repeats the background texture horizontally to fill the screen width and adapts to different screen sizes.
+The Scene component is a visual element that displays a tiled background image using PixiJS TilingSprite. It automatically repeats the background texture to fill the screen and adapts to different screen sizes.
 
 ## Properties
 
-| Name          | Type    | Description                                              |
-|---------------|---------|----------------------------------------------------------|
-| texture       | Texture | The background image texture loaded from assets          |
-| tiles         | Sprite[]| Array of sprite instances for horizontal repetition      |
-| screenWidth   | number  | Current screen width to determine number of tiles needed |
-| screenHeight  | number  | Current screen height for vertical positioning           |
+| Name    | Type    | Description                                    |
+|---------|---------|------------------------------------------------|
+| texture | Texture | The background image texture loaded from assets|
 
 ## Structure
 
 ```markdown
 Container (Scene)
-    ├── Sprite (tile 0)
-    ├── Sprite (tile 1)
-    ├── Sprite (tile 2)
-    └── ... (variable number based on screen width)
+    └── TilingSprite
 ```
 
-- Each background tile is represented by a separate Sprite instance
-- Tiles are positioned horizontally edge-to-edge to create seamless tiling
-- The number of tiles is calculated based on screen width divided by tile width
-- All tiles use the same background texture
+- Uses PixiJS TilingSprite for efficient texture repetition
+- TilingSprite automatically handles seamless tiling in both horizontal and vertical directions
+- The sprite dimensions are set to match the screen size for full coverage
 
-## Synchronization
+## Behavior
 
-The `sync(entity: Scene)` method reconciles the component's visual state with the entity:
+### Sync Method
 
-1. **Position**: Updates the container's position based on entity position
-2. **Tile Count Calculation**: Determines how many tiles are needed to fill the screen width
-3. **Tile Creation/Update**: Creates or removes tile sprites as needed when screen size changes
-4. **Seamless Tiling**: Positions each tile sprite horizontally to create continuous background
+The `sync(entity: Scene)` method reconciles the component's visual state with the entity. Since the Scene entity contains minimal state (only `id` and `type`), the sync method has minimal work:
 
-## Adaptive Behavior
+1. **Visibility**: Ensures the component is visible when the entity exists
+2. **Screen Adaptation**: Updates TilingSprite dimensions to match current screen size if changed
 
-- Monitors screen size changes to adjust the number of background tiles
-- Adds additional tiles when screen width increases
-- Removes excess tiles when screen width decreases
-- Maintains seamless horizontal repetition regardless of screen dimensions
+### Initialization
+
+When created, the component:
+
+1. Receives the background texture as a parameter
+2. Creates a TilingSprite with the texture
+3. Sets the TilingSprite dimensions to match the screen size
+4. Positions the TilingSprite at the origin (0, 0)
+5. Adds the TilingSprite to the container
+
+### Adaptive Behavior
+
+- TilingSprite automatically handles texture repetition without manual tile management
+- Adapts to screen size changes by updating the TilingSprite width and height
+- Maintains seamless tiling in both directions regardless of screen dimensions

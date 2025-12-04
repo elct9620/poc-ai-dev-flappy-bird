@@ -1,21 +1,22 @@
 # Scene System
 
-The Scene System is responsible for managing background scene entities in the game. It handles the creation and removal of scene backgrounds that provide visual context for gameplay.
+The Scene System is responsible for managing background scene entities in the game. It handles the creation and removal of scene backgrounds that provide visual context for gameplay. The system works with minimal entity state, delegating all rendering details to the Component layer.
 
-## Side Effects
+## Commands
 
-### Create Scene
+### Create Scene Entity Command
 
-| Event Triggered                                  | Description                                           |
-|--------------------------------------------------|-------------------------------------------------------|
-| [CREATE_SCENE](../event/create_scene.md)         | Creates a new scene entity with texture and position  |
+Adds a new Scene entity to the game state with minimal properties (only `id` and `type`). The adapter is notified to create the visual representation using PixiJS TilingSprite. Returns a new state with the entity added immutably.
 
-Adds a new scene entity to the game state with the specified background texture, position, and dimensions. The scene will be rendered as a horizontally tiled background that adapts to screen size.
+### Remove Scene Entity Command
 
-### Remove Scene
+Removes a Scene entity from the game state and notifies the adapter to destroy the visual representation. Returns a new state with the entity removed immutably. This is typically used when transitioning between different game states or changing the visual theme.
 
-| Event Triggered                                  | Description                              |
-|--------------------------------------------------|------------------------------------------|
-| [REMOVE_SCENE](../event/remove_scene.md)         | Removes an existing scene entity         |
+## Adapter Interface
 
-Removes a scene entity from the game state, cleaning up the background display. This is typically used when transitioning between different game states or changing the visual theme.
+The Scene System depends on a `StageAdapter` interface for rendering coordination:
+
+- `updateScene(entity: Scene): void` - Create or update visual representation
+- `removeEntity(id: string): void` - Destroy visual representation
+
+This follows the dependency inversion principle, allowing the system to remain framework-agnostic while coordinating with PixiJS through adapters.

@@ -66,6 +66,8 @@ jobs:
             Use Traditional Chinese (Taiwan) when updating or replying to the user.
 
             Your mission is use `/design` or `/implement` slash commands to process provided in the context.
+            - MUST use slash commands to process the request.
+            - Consider code review feedback to keep improving the code.
 
             Do not clarify with the user because you are in headless mode. If the request cannot be processed, explain and make comments to the user and stop processing.
             Follow the progress tracking instructions strictly.

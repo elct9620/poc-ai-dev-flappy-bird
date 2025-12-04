@@ -22,14 +22,13 @@ export class Scene extends Container {
     // Position at origin
     this.tilingSprite.position.set(0, 0);
 
-    // Calculate uniform scale to maintain aspect ratio
-    // Use the larger scale factor to ensure full screen coverage while preserving proportions
-    const scaleX = screenWidth / texture.width;
-    const scaleY = screenHeight / texture.height;
-    const uniformScale = Math.max(scaleX, scaleY);
+    // Calculate scale to fit screen height while maintaining aspect ratio
+    // Background should fill the height and tile horizontally (X-axis only)
+    const scale = screenHeight / texture.height;
 
-    // Apply uniform scaling to both axes for aspect-ratio-preserving tiling
-    this.tilingSprite.tileScale.set(uniformScale, uniformScale);
+    // Apply the same scale to both axes to maintain aspect ratio
+    // This makes each tile's height match screen height, and width scales proportionally
+    this.tilingSprite.tileScale.set(scale, scale);
 
     this.addChild(this.tilingSprite);
   }

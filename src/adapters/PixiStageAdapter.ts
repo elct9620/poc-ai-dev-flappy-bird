@@ -1,10 +1,12 @@
 import type { Application, Container, Texture } from "pixi.js";
 
 import { Bird as BirdComponent } from "@/components/Bird";
+import { Scene as SceneComponent } from "@/components/Scene";
 import { Score as ScoreComponent } from "@/components/Score";
 import type { Bird } from "@/entity/Bird";
+import type { Scene } from "@/entity/Scene";
 import type { Score } from "@/entity/Score";
-import type { StageAdapter } from "@/systems/ScoreSystem";
+import type { StageAdapter } from "@/systems/StageAdapter";
 
 /**
  * PixiStageAdapter bridges game entities with PixiJS rendering.
@@ -19,15 +21,18 @@ export class PixiStageAdapter implements StageAdapter {
   private components: Record<string, Container> = {};
   private numberTextures: Record<string, Texture>;
   private birdTextures: Texture[];
+  private backgroundTexture: Texture;
 
   constructor(
     app: Application,
     numberTextures: Record<string, Texture>,
     birdTextures: Texture[],
+    backgroundTexture: Texture,
   ) {
     this.app = app;
     this.numberTextures = numberTextures;
     this.birdTextures = birdTextures;
+    this.backgroundTexture = backgroundTexture;
   }
 
   updateScore(entity: Score): void {
@@ -62,6 +67,28 @@ export class PixiStageAdapter implements StageAdapter {
       (component as BirdComponent).sync(entity);
     } catch (error) {
       console.error(`Error updating bird ${entity.id}:`, error);
+    }
+  }
+
+  updateScene(entity: Scene): void {
+    try {
+      // Get or create Scene component
+      let component = this.components[entity.id];
+      if (!component) {
+        component = new SceneComponent(
+          this.backgroundTexture,
+          this.app.screen.width,
+          this.app.screen.height,
+        );
+        this.components[entity.id] = component;
+        // Add scene at the back (index 0) so it renders behind everything
+        this.app.stage.addChildAt(component, 0);
+      }
+
+      // Sync component with entity
+      (component as SceneComponent).sync(entity);
+    } catch (error) {
+      console.error(`Error updating scene ${entity.id}:`, error);
     }
   }
 

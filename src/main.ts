@@ -12,8 +12,13 @@ import { GameEventType, SystemEventType } from "@/events";
 import { AudioSystem } from "@/systems/AudioSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
+import { SceneSystem } from "@/systems/SceneSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
-import { loadBirdAssets, loadNumberAssets } from "@/utils/AssetLoader";
+import {
+  loadBackgroundAssets,
+  loadBirdAssets,
+  loadNumberAssets,
+} from "@/utils/AssetLoader";
 import "./style.css";
 
 // Create PIXI application
@@ -22,7 +27,7 @@ const app = new Application();
 // Initialize and mount
 await app.init({
   resizeTo: window,
-  background: "#1099bb",
+  background: "#6ebfc8",
   antialias: true,
   autoStart: false,
 });
@@ -32,9 +37,15 @@ document.querySelector<HTMLDivElement>("#app")!.appendChild(app.canvas);
 // Load assets
 const numberTextures = await loadNumberAssets();
 const birdTextures = await loadBirdAssets();
+const backgroundTexture = await loadBackgroundAssets();
 
 // Create adapters
-const stageAdapter = new PixiStageAdapter(app, numberTextures, birdTextures);
+const stageAdapter = new PixiStageAdapter(
+  app,
+  numberTextures,
+  birdTextures,
+  backgroundTexture,
+);
 const audioAdapter = new BrowserAudioAdapter();
 
 // Preload sound effects
@@ -44,6 +55,7 @@ const wingAudioUrl = new URL("./assets/soundEffects/wing.ogg", import.meta.url)
 await audioAdapter.preloadSound("wing", wingAudioUrl);
 
 // Create systems with adapters
+const sceneSystem = SceneSystem(stageAdapter);
 const scoreSystem = ScoreSystem(stageAdapter);
 const physicsSystem = PhysicsSystem(stageAdapter);
 const audioSystem = AudioSystem(audioAdapter);
@@ -59,6 +71,7 @@ const inputSystem = InputSystem(eventBus, "bird");
 
 // Initialize engine with all systems
 const engine = new Engine(initialState, eventBus, [
+  sceneSystem,
   scoreSystem,
   physicsSystem,
   inputSystem,
@@ -68,6 +81,14 @@ const engine = new Engine(initialState, eventBus, [
 // Connect to PixiJS ticker
 app.ticker.add(engine.tick);
 app.start();
+
+// Create the background scene
+engine.dispatch({
+  type: GameEventType.CreateScene,
+  payload: {
+    id: "background",
+  },
+});
 
 // Demo: Create a score display
 engine.dispatch({

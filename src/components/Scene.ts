@@ -22,10 +22,10 @@ export class Scene extends Container {
     // Position at origin
     this.tilingSprite.position.set(0, 0);
 
-    // Scale texture to fit screen width (no X-axis tiling)
-    // Only tile vertically (Y-axis) for scrolling background
-    const scaleX = screenWidth / texture.width;
-    this.tilingSprite.tileScale.set(scaleX, 1);
+    // Scale texture to fit screen height (no Y-axis tiling)
+    // Only tile horizontally (X-axis) for scrolling background
+    const scaleY = screenHeight / texture.height;
+    this.tilingSprite.tileScale.set(1, scaleY);
 
     this.addChild(this.tilingSprite);
   }

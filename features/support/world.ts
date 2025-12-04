@@ -4,6 +4,7 @@ import { createGameState, type GameState } from "@/entity/GameState";
 import { AudioSystem } from "@/systems/AudioSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
+import { SceneSystem } from "@/systems/SceneSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import { QuickPickleWorld } from "quickpickle";
 import type { TestContext } from "vitest";
@@ -30,6 +31,7 @@ export class GameWorld extends QuickPickleWorld {
     this.eventBus = new EventBus();
     this.engine = new Engine(state, this.eventBus, [
       ScoreSystem(this.adapter),
+      SceneSystem(this.adapter),
       PhysicsSystem(this.adapter),
       InputSystem(this.eventBus, "bird"),
       AudioSystem(this.audioAdapter),

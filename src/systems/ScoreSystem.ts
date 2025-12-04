@@ -3,12 +3,7 @@ import type { GameState } from "@/entity/GameState";
 import type { Score } from "@/entity/Score";
 import { createScore, updateScoreValue } from "@/entity/Score";
 import { GameEventType, type Event } from "@/events";
-
-// Adapter interface defined in system (dependency inversion principle)
-export interface StageAdapter {
-  updateScore(entity: Score): void;
-  removeEntity(id: string): void;
-}
+import type { StageAdapter } from "@/systems/StageAdapter";
 
 /**
  * Utility function to build a Score entity from event payload.

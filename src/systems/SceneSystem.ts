@@ -1,14 +1,8 @@
 import type { Command, System } from "@/engine/engine";
 import type { GameState } from "@/entity/GameState";
-import type { Scene } from "@/entity/Scene";
 import { createScene } from "@/entity/Scene";
 import { GameEventType, type Event } from "@/events";
-
-// Adapter interface defined in system (dependency inversion principle)
-export interface StageAdapter {
-  updateScene(entity: Scene): void;
-  removeEntity(id: string): void;
-}
+import type { StageAdapter } from "@/systems/StageAdapter";
 
 /**
  * SceneSystem manages scene entity lifecycle.

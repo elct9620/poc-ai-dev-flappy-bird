@@ -17,6 +17,7 @@ export default {
       "features/support/mockAdapter.ts",
       "features/steps/score.steps.ts",
       "features/steps/bird-control.steps.ts",
+      "features/steps/scene.steps.ts",
     ],
   },
 };

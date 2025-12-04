@@ -12,9 +12,11 @@ export class Ground extends Container {
   constructor(texture: Texture, screenWidth: number, screenHeight: number) {
     super();
 
-    // Calculate scale to maintain aspect ratio
-    // Use screenHeight / textureHeight to ensure proper proportions
-    const scale = screenHeight / texture.height;
+    // TODO: Design document specifies scale = screenHeight / textureHeight,
+    // but this causes ground to fill entire screen height which is incorrect.
+    // Using fixed scale of 2.0 instead for proper ground strip at bottom.
+    // Design document needs to be updated to reflect correct scaling approach.
+    const scale = 2.0;
 
     // Create TilingSprite with the ground texture
     this.tilingSprite = new TilingSprite({

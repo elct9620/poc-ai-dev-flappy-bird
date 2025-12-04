@@ -5,6 +5,9 @@
       "Bash(pnpm build:*)",
       "Bash(pnpm tsc:*)",
       "Bash(pnpm prettier:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
       "SlashCommand(/design)",
       "SlashCommand(/implement)"
     ]

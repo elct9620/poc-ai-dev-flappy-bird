@@ -10,13 +10,11 @@ Feature: Ground System
   Background:
     Given the game has started
 
-  @skip
   Scenario: Player sees ground when game starts
     When a ground is created with id "ground"
     Then the ground "ground" should exist in the game state
     And the ground "ground" should have type "ground"
 
-  @skip
   Scenario: Ground is removed when destroyed
     Given a ground exists with id "ground"
     When the ground "ground" is removed

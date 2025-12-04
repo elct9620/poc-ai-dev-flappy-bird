@@ -1,6 +1,7 @@
 import { Assets, Texture } from "pixi.js";
 
 import backgroundDay from "@/assets/gameObjects/background-day.png";
+import base from "@/assets/gameObjects/base.png";
 import birdDownflap from "@/assets/gameObjects/yellowbird-downflap.png";
 import birdMidflap from "@/assets/gameObjects/yellowbird-midflap.png";
 import birdUpflap from "@/assets/gameObjects/yellowbird-upflap.png";
@@ -50,4 +51,8 @@ export async function loadBirdAssets(): Promise<Texture[]> {
 
 export async function loadBackgroundAssets(): Promise<Texture> {
   return await Assets.load<Texture>(backgroundDay);
+}
+
+export async function loadGroundAssets(): Promise<Texture> {
+  return await Assets.load<Texture>(base);
 }

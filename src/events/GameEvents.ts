@@ -21,6 +21,8 @@ export enum GameEventType {
   RemoveBird = "REMOVE_BIRD",
   CreateBackground = "CREATE_BACKGROUND",
   RemoveBackground = "REMOVE_BACKGROUND",
+  CreateGround = "CREATE_GROUND",
+  RemoveGround = "REMOVE_GROUND",
 }
 
 // ============================================================================
@@ -182,6 +184,37 @@ export interface RemoveBackgroundEvent {
   };
 }
 
+// ============================================================================
+// Ground Events
+// ============================================================================
+
+/**
+ * CREATE_GROUND event
+ *
+ * Creates a new ground entity in the game state.
+ * The ground represents the base visual element at the bottom of the screen.
+ */
+export interface CreateGroundEvent {
+  type: GameEventType.CreateGround;
+  payload: {
+    /** Unique identifier for the new ground entity */
+    id: string;
+  };
+}
+
+/**
+ * REMOVE_GROUND event
+ *
+ * Removes a ground entity from the game state.
+ */
+export interface RemoveGroundEvent {
+  type: GameEventType.RemoveGround;
+  payload: {
+    /** Identifier of the ground to remove */
+    id: string;
+  };
+}
+
 /**
  * Union type of all game events
  */
@@ -195,4 +228,6 @@ export type GameEvent =
   | KillBirdEvent
   | RemoveBirdEvent
   | CreateBackgroundEvent
-  | RemoveBackgroundEvent;
+  | RemoveBackgroundEvent
+  | CreateGroundEvent
+  | RemoveGroundEvent;

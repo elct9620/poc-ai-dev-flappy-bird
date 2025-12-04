@@ -11,12 +11,14 @@ import { createGameState } from "@/entity/GameState";
 import { GameEventType, SystemEventType } from "@/events";
 import { AudioSystem } from "@/systems/AudioSystem";
 import { BackgroundSystem } from "@/systems/BackgroundSystem";
+import { GroundSystem } from "@/systems/GroundSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import {
   loadBackgroundAssets,
   loadBirdAssets,
+  loadGroundAssets,
   loadNumberAssets,
 } from "@/utils/AssetLoader";
 import "./style.css";
@@ -38,6 +40,7 @@ document.querySelector<HTMLDivElement>("#app")!.appendChild(app.canvas);
 const numberTextures = await loadNumberAssets();
 const birdTextures = await loadBirdAssets();
 const backgroundTexture = await loadBackgroundAssets();
+const groundTexture = await loadGroundAssets();
 
 // Create adapters
 const stageAdapter = new PixiStageAdapter(
@@ -45,6 +48,7 @@ const stageAdapter = new PixiStageAdapter(
   numberTextures,
   birdTextures,
   backgroundTexture,
+  groundTexture,
 );
 const audioAdapter = new BrowserAudioAdapter();
 
@@ -56,6 +60,7 @@ await audioAdapter.preloadSound("wing", wingAudioUrl);
 
 // Create systems with adapters
 const backgroundSystem = BackgroundSystem(stageAdapter);
+const groundSystem = GroundSystem(stageAdapter);
 const scoreSystem = ScoreSystem(stageAdapter);
 const physicsSystem = PhysicsSystem(stageAdapter);
 const audioSystem = AudioSystem(audioAdapter);
@@ -72,6 +77,7 @@ const inputSystem = InputSystem(eventBus, "bird");
 // Initialize engine with all systems
 const engine = new Engine(initialState, eventBus, [
   backgroundSystem,
+  groundSystem,
   scoreSystem,
   physicsSystem,
   inputSystem,
@@ -87,6 +93,14 @@ engine.dispatch({
   type: GameEventType.CreateBackground,
   payload: {
     id: "background",
+  },
+});
+
+// Create the ground
+engine.dispatch({
+  type: GameEventType.CreateGround,
+  payload: {
+    id: "ground",
   },
 });
 

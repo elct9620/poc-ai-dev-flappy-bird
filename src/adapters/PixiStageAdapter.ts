@@ -2,9 +2,11 @@ import type { Application, Container, Texture } from "pixi.js";
 
 import { Background as BackgroundComponent } from "@/components/Background";
 import { Bird as BirdComponent } from "@/components/Bird";
+import { Ground as GroundComponent } from "@/components/Ground";
 import { Score as ScoreComponent } from "@/components/Score";
 import type { Background } from "@/entity/Background";
 import type { Bird } from "@/entity/Bird";
+import type { Ground } from "@/entity/Ground";
 import type { Score } from "@/entity/Score";
 import type { StageAdapter } from "@/systems/StageAdapter";
 
@@ -22,17 +24,20 @@ export class PixiStageAdapter implements StageAdapter {
   private numberTextures: Record<string, Texture>;
   private birdTextures: Texture[];
   private backgroundTexture: Texture;
+  private groundTexture: Texture;
 
   constructor(
     app: Application,
     numberTextures: Record<string, Texture>,
     birdTextures: Texture[],
     backgroundTexture: Texture,
+    groundTexture: Texture,
   ) {
     this.app = app;
     this.numberTextures = numberTextures;
     this.birdTextures = birdTextures;
     this.backgroundTexture = backgroundTexture;
+    this.groundTexture = groundTexture;
   }
 
   updateScore(entity: Score): void {
@@ -89,6 +94,28 @@ export class PixiStageAdapter implements StageAdapter {
       (component as BackgroundComponent).sync(entity);
     } catch (error) {
       console.error(`Error updating background ${entity.id}:`, error);
+    }
+  }
+
+  updateGround(entity: Ground): void {
+    try {
+      // Get or create Ground component
+      let component = this.components[entity.id];
+      if (!component) {
+        component = new GroundComponent(
+          this.groundTexture,
+          this.app.screen.width,
+          this.app.screen.height,
+        );
+        this.components[entity.id] = component;
+        // Add ground above background but below other elements (index 1)
+        this.app.stage.addChildAt(component, 1);
+      }
+
+      // Sync component with entity
+      (component as GroundComponent).sync(entity);
+    } catch (error) {
+      console.error(`Error updating ground ${entity.id}:`, error);
     }
   }
 

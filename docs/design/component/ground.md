@@ -17,8 +17,9 @@ Container (Ground)
 
 - Uses PixiJS TilingSprite for efficient texture repetition with aspect-ratio-preserving scaling
 - Ground tiles horizontally (X-axis) to create continuous ground effect
-- Scale factor is calculated as `screenHeight / textureHeight` to maintain proper proportions
+- Scale factor is fixed at 2.0 to create a ground strip at the bottom (not fill entire screen)
 - Both axes use the same scale to maintain aspect ratio and prevent distortion
+- The TilingSprite height is set to the scaled texture height (texture.height × scale)
 - The sprite is positioned at the bottom of the screen
 
 ## Behavior
@@ -36,9 +37,9 @@ The `sync(entity: Ground)` method reconciles the component's visual state with t
 When created, the component:
 
 1. Receives the ground texture as a parameter
-2. Creates a TilingSprite with the texture
-3. Sets the TilingSprite width to match the screen width
-4. Calculates the appropriate scale to maintain aspect ratio
+2. Calculates the ground height using a fixed scale factor (2.0)
+3. Creates a TilingSprite with the texture, setting its display area to screen width and scaled height
+4. Applies the scale factor to the tile scale to maintain aspect ratio
 5. Positions the TilingSprite at the bottom of the screen (y = screenHeight - groundHeight)
 6. Adds the TilingSprite to the container
 
@@ -46,13 +47,13 @@ When created, the component:
 
 - TilingSprite handles texture repetition horizontally (X-axis) to create continuous ground effect
 - The ground texture tiles along the X-axis while maintaining its original height proportions
-- Uniform scaling factor (`screenHeight / textureHeight`) ensures the texture maintains its original aspect ratio without distortion
-- Same scale applied to both axes prevents stretching or compression
+- Fixed scaling factor (2.0) ensures consistent ground appearance across different screen sizes
+- Same scale applied to both tile axes prevents stretching or compression of individual tiles
+- The TilingSprite's display area height is set to the scaled texture height for proper rendering
 - Works correctly across different screen aspect ratios:
-  - **Horizontal screens (16:9, 16:10)**: Ground tiles horizontally, maintains height
-  - **Vertical screens (9:16)**: Ground tiles horizontally, maintains height
+  - **Horizontal screens (16:9, 16:10)**: Ground tiles horizontally as a strip at bottom
+  - **Vertical screens (9:16)**: Ground tiles horizontally as a strip at bottom
   - **Small screens**: Tiles repeat more frequently, maintains aspect ratio
   - **Large screens**: Tiles repeat less frequently, maintains aspect ratio
-- Adapts to screen size changes by updating the TilingSprite width and repositioning to bottom
 - Always anchored to the bottom of the screen regardless of screen height changes
 - Scaling approach prevents texture stretching while maintaining visual quality

@@ -1,6 +1,6 @@
-# Scene
+# Background
 
-The Scene component is a visual element that displays a tiled background image using PixiJS TilingSprite. It automatically repeats the background texture to fill the screen and adapts to different screen sizes.
+The Background component is a visual element that displays a tiled background image using PixiJS TilingSprite. It automatically repeats the background texture to fill the screen and adapts to different screen sizes.
 
 ## Properties
 
@@ -11,7 +11,7 @@ The Scene component is a visual element that displays a tiled background image u
 ## Structure
 
 ```markdown
-Container (Scene)
+Container (Background)
     └── TilingSprite
 ```
 
@@ -25,7 +25,7 @@ Container (Scene)
 
 ### Sync Method
 
-The `sync(entity: Scene)` method reconciles the component's visual state with the entity. Since the Scene entity contains minimal state (only `id` and `type`), the sync method has minimal work:
+The `sync(entity: Background)` method reconciles the component's visual state with the entity. Since the Background entity contains minimal state (only `id` and `type`), the sync method has minimal work:
 
 1. **Visibility**: Ensures the component is visible when the entity exists
 2. **Screen Adaptation**: Updates TilingSprite dimensions to match current screen size if changed

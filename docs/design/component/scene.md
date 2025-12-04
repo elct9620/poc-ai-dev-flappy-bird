@@ -15,9 +15,9 @@ Container (Scene)
     └── TilingSprite
 ```
 
-- Uses PixiJS TilingSprite for efficient texture repetition
-- TilingSprite handles horizontal tiling (X-axis) to create a scrolling background effect
-- The sprite height matches the screen height without vertical tiling to prevent distortion
+- Uses PixiJS TilingSprite for efficient texture repetition with aspect-ratio-preserving scaling
+- Both horizontal (X-axis) and vertical (Y-axis) tiling use uniform scale to maintain texture proportions
+- Scale factor is calculated as `max(screenWidth/textureWidth, screenHeight/textureHeight)` to ensure full coverage
 - The sprite dimensions are set to match the screen size for full coverage
 
 ## Behavior
@@ -41,8 +41,9 @@ When created, the component:
 
 ### Adaptive Behavior
 
-- TilingSprite automatically handles horizontal texture repetition for smooth scrolling
-- The background texture tiles horizontally (X-axis) to create an infinite scrolling effect
-- Vertical dimension (Y-axis) is scaled to match screen height without tiling to maintain proper aspect ratio
+- TilingSprite handles texture repetition in both directions with uniform scaling
+- The background texture tiles in both X and Y axes to create a seamless infinite background
+- Uniform scaling factor ensures the texture maintains its original aspect ratio without distortion
+- The scale is calculated as the maximum of (screenWidth/textureWidth) and (screenHeight/textureHeight) to ensure full screen coverage
 - Adapts to screen size changes by updating the TilingSprite width and height
-- Scaling is calculated to prevent texture distortion while maintaining visual quality
+- Scaling approach prevents texture stretching while maintaining visual quality

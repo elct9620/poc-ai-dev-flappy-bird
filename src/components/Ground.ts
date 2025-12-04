@@ -12,24 +12,23 @@ export class Ground extends Container {
   constructor(texture: Texture, screenWidth: number, screenHeight: number) {
     super();
 
-    // TODO: Design document specifies scale = screenHeight / textureHeight,
-    // but this causes ground to fill entire screen height which is incorrect.
-    // Using fixed scale of 2.0 instead for proper ground strip at bottom.
-    // Design document needs to be updated to reflect correct scaling approach.
+    // Ground should be a strip at the bottom, not fill entire screen
+    // Use a fixed scale factor for consistent appearance across screen sizes
     const scale = 2.0;
+    const groundHeight = texture.height * scale;
 
-    // Create TilingSprite with the ground texture
+    // Create TilingSprite with scaled dimensions
+    // The sprite's display area should be the scaled size
     this.tilingSprite = new TilingSprite({
       texture,
       width: screenWidth,
-      height: texture.height,
+      height: groundHeight,
     });
 
-    // Apply the same scale to both axes to maintain aspect ratio
+    // Apply the same scale to both tile axes to maintain aspect ratio
     this.tilingSprite.tileScale.set(scale, scale);
 
     // Position at the bottom of the screen
-    const groundHeight = texture.height * scale;
     this.tilingSprite.position.set(0, screenHeight - groundHeight);
 
     this.addChild(this.tilingSprite);

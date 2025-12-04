@@ -4,11 +4,12 @@ This document provides an overview of the entities used in the game and their de
 
 ## Entity
 
-| Name                              | Description                                 |
-|-----------------------------------|---------------------------------------------|
-| [Bird](./design/entity/bird.md)   | The player-controlled character in the game |
-| [Scene](./design/entity/scene.md) | The background scene in the game            |
-| [Score](./design/entity/score.md) | The score information in the game.          |
+| Name                                | Description                                 |
+|-------------------------------------|---------------------------------------------|
+| [Bird](./design/entity/bird.md)     | The player-controlled character in the game |
+| [Ground](./design/entity/ground.md) | The ground element at the bottom of screen  |
+| [Scene](./design/entity/scene.md)   | The background scene in the game            |
+| [Score](./design/entity/score.md)   | The score information in the game.          |
 
 ## Value Objects
 

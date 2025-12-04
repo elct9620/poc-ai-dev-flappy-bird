@@ -30,6 +30,11 @@
         "name": "Adapter",
         "pattern": "src/adapters/.*\\.ts$",
         "path": "docs/rubrics/adapter.md"
+      },
+      {
+        "name": "Design Document",
+        "pattern": "docs/design/.*\\.md$",
+        "path": "docs/rubrics/design.md"
       }
     ]
   }

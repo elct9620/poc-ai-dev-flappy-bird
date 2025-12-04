@@ -6,7 +6,7 @@ import { Score as ScoreComponent } from "@/components/Score";
 import type { Bird } from "@/entity/Bird";
 import type { Scene } from "@/entity/Scene";
 import type { Score } from "@/entity/Score";
-import type { StageAdapter } from "@/systems/ScoreSystem";
+import type { StageAdapter } from "@/systems/StageAdapter";
 
 /**
  * PixiStageAdapter bridges game entities with PixiJS rendering.

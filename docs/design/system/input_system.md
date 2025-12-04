@@ -11,17 +11,30 @@ The InputSystem is responsible for handling user input events (mouse clicks and 
 
 When implementing the InputSystem, the existing `PixiInputAdapter` should be refactored to support bird control events (e.g., `BIRD_FLAP`) instead of creating duplicate input handling infrastructure.
 
-## Commands
+## Side Effects
 
 ### Trigger Bird Flap Command
+
+| Event Triggered | Description |
+|-----------------|-------------|
+| MOUSE_CLICK | Player clicks the mouse to make the bird flap |
+| KEY_DOWN | Player presses space key to make the bird flap |
 
 When a MOUSE_CLICK or KEY_DOWN (Space) event is received during active gameplay, dispatches a BIRD_FLAP event to the PhysicsSystem. This command validates that the game is in a playable state before triggering the flap action.
 
 ### Initialize Input Listeners Command
 
+| Event Triggered | Description |
+|-----------------|-------------|
+| GAME_STARTED | Game starts and input listeners need to be activated |
+
 When GAME_STARTED is received, sets up event listeners on the game canvas for mouse clicks and keyboard events. This ensures input is only captured when the game is active.
 
 ### Remove Input Listeners Command
+
+| Event Triggered | Description |
+|-----------------|-------------|
+| GAME_OVER | Game ends and input listeners need to be deactivated |
 
 When GAME_OVER is received, removes all input event listeners to prevent the player from interacting with a finished game.
 

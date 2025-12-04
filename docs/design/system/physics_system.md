@@ -2,29 +2,53 @@
 
 The PhysicsSystem is responsible for managing the bird's physics, including gravity, flapping mechanics, position updates, and rotation based on velocity. It processes physics-related events and generates commands that update the bird entity's state.
 
-## Commands
+## Side Effects
 
 ### Create Bird Entity Command
+
+| Event Triggered | Description |
+|-----------------|-------------|
+| CREATE_BIRD | Creates a new bird entity with initial physics properties |
 
 Adds a new Bird to the game state's entities record with initial physics values (zero velocity, upright rotation, first animation frame). Returns a new state with the entity added immutably.
 
 ### Apply Flap Force Command
 
+| Event Triggered | Description |
+|-----------------|-------------|
+| BIRD_FLAP | Player triggers bird to flap and apply upward force |
+
 When BIRD_FLAP is received, applies an upward velocity to the bird by setting its y-velocity to a negative value (e.g., -5 pixels/frame). This gives the bird an instant upward boost.
 
 ### Apply Gravity Command
+
+| Event Triggered | Description |
+|-----------------|-------------|
+| TICK | Each frame applies downward gravity acceleration to the bird |
 
 During each TICK event, increases the bird's y-velocity by the gravity constant multiplied by deltaTime (e.g., +0.8 pixels/frame²). This simulates continuous downward acceleration. This command is only applied if the bird is alive.
 
 ### Update Position Command
 
+| Event Triggered | Description |
+|-----------------|-------------|
+| TICK | Each frame updates bird position based on current velocity |
+
 During each TICK event, updates the bird's position by adding its velocity multiplied by deltaTime. This moves the bird according to its current speed and direction. Position updates are applied every frame for smooth movement.
 
 ### Update Rotation Command
 
+| Event Triggered | Description |
+|-----------------|-------------|
+| TICK | Each frame updates bird rotation based on velocity direction |
+
 During each TICK event, calculates and updates the bird's rotation angle based on its current y-velocity. When moving upward (negative velocity), the bird tilts up (negative rotation, e.g., -25°). When falling (positive velocity), the bird tilts down (positive rotation, e.g., +90° max). This provides visual feedback of the bird's movement state.
 
 ### Remove Bird Entity Command
+
+| Event Triggered | Description |
+|-----------------|-------------|
+| REMOVE_BIRD | Removes a bird entity from the game state |
 
 Removes a Bird from the game state's entities record and notifies the adapter to destroy the visual representation. Returns a new state with the entity removed immutably.
 

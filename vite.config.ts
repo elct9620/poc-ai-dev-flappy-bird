@@ -15,6 +15,7 @@ export default {
       "features/support/setup.ts",
       "features/support/world.ts",
       "features/support/mockAdapter.ts",
+      "features/steps/entity.steps.ts",
       "features/steps/score.steps.ts",
       "features/steps/bird-control.steps.ts",
       "features/steps/background.steps.ts",

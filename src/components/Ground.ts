@@ -14,8 +14,8 @@ export class Ground extends Container {
 
     // Ground should be a strip at the bottom, not fill entire screen
     // Use a fixed scale factor for consistent appearance across screen sizes
-    const scale = 2.0;
-    const groundHeight = texture.height * scale;
+    const GROUND_SCALE_FACTOR = 2.0;
+    const groundHeight = texture.height * GROUND_SCALE_FACTOR;
 
     // Create TilingSprite with scaled dimensions
     // The sprite's display area should be the scaled size
@@ -26,7 +26,7 @@ export class Ground extends Container {
     });
 
     // Apply the same scale to both tile axes to maintain aspect ratio
-    this.tilingSprite.tileScale.set(scale, scale);
+    this.tilingSprite.tileScale.set(GROUND_SCALE_FACTOR, GROUND_SCALE_FACTOR);
 
     // Position at the bottom of the screen
     this.tilingSprite.position.set(0, screenHeight - groundHeight);
@@ -38,7 +38,7 @@ export class Ground extends Container {
     // Ensure visibility when entity exists
     this.visible = true;
 
-    // Update TilingSprite dimensions if screen size changed
-    // (In a real implementation, we might get screen size from a global source)
+    // Note: Screen dimensions are currently fixed at construction time.
+    // Future: Add resize handler if dynamic screen size changes are needed.
   }
 }

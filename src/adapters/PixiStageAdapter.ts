@@ -1,10 +1,10 @@
 import type { Application, Container, Texture } from "pixi.js";
 
+import { Background as BackgroundComponent } from "@/components/Background";
 import { Bird as BirdComponent } from "@/components/Bird";
-import { Scene as SceneComponent } from "@/components/Scene";
 import { Score as ScoreComponent } from "@/components/Score";
+import type { Background } from "@/entity/Background";
 import type { Bird } from "@/entity/Bird";
-import type { Scene } from "@/entity/Scene";
 import type { Score } from "@/entity/Score";
 import type { StageAdapter } from "@/systems/StageAdapter";
 
@@ -70,25 +70,25 @@ export class PixiStageAdapter implements StageAdapter {
     }
   }
 
-  updateScene(entity: Scene): void {
+  updateBackground(entity: Background): void {
     try {
-      // Get or create Scene component
+      // Get or create Background component
       let component = this.components[entity.id];
       if (!component) {
-        component = new SceneComponent(
+        component = new BackgroundComponent(
           this.backgroundTexture,
           this.app.screen.width,
           this.app.screen.height,
         );
         this.components[entity.id] = component;
-        // Add scene at the back (index 0) so it renders behind everything
+        // Add background at the back (index 0) so it renders behind everything
         this.app.stage.addChildAt(component, 0);
       }
 
       // Sync component with entity
-      (component as SceneComponent).sync(entity);
+      (component as BackgroundComponent).sync(entity);
     } catch (error) {
-      console.error(`Error updating scene ${entity.id}:`, error);
+      console.error(`Error updating background ${entity.id}:`, error);
     }
   }
 

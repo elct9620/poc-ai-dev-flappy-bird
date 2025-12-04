@@ -10,9 +10,9 @@ import { EventBus } from "@/engine/eventbus";
 import { createGameState } from "@/entity/GameState";
 import { GameEventType, SystemEventType } from "@/events";
 import { AudioSystem } from "@/systems/AudioSystem";
+import { BackgroundSystem } from "@/systems/BackgroundSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
-import { SceneSystem } from "@/systems/SceneSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import {
   loadBackgroundAssets,
@@ -55,7 +55,7 @@ const wingAudioUrl = new URL("./assets/soundEffects/wing.ogg", import.meta.url)
 await audioAdapter.preloadSound("wing", wingAudioUrl);
 
 // Create systems with adapters
-const sceneSystem = SceneSystem(stageAdapter);
+const backgroundSystem = BackgroundSystem(stageAdapter);
 const scoreSystem = ScoreSystem(stageAdapter);
 const physicsSystem = PhysicsSystem(stageAdapter);
 const audioSystem = AudioSystem(audioAdapter);
@@ -71,7 +71,7 @@ const inputSystem = InputSystem(eventBus, "bird");
 
 // Initialize engine with all systems
 const engine = new Engine(initialState, eventBus, [
-  sceneSystem,
+  backgroundSystem,
   scoreSystem,
   physicsSystem,
   inputSystem,
@@ -82,9 +82,9 @@ const engine = new Engine(initialState, eventBus, [
 app.ticker.add(engine.tick);
 app.start();
 
-// Create the background scene
+// Create the background
 engine.dispatch({
-  type: GameEventType.CreateScene,
+  type: GameEventType.CreateBackground,
   payload: {
     id: "background",
   },

@@ -1,12 +1,12 @@
 import { Container, Texture, TilingSprite } from "pixi.js";
 
-import type { Scene as SceneEntity } from "@/entity/Scene";
+import type { Background as BackgroundEntity } from "@/entity/Background";
 
 /**
- * Scene component displays a tiled background using PixiJS TilingSprite.
- * @see {@link ../../docs/design/component/scene.md|Scene Component Design Document}
+ * Background component displays a tiled background using PixiJS TilingSprite.
+ * @see {@link ../../docs/design/component/background.md|Background Component Design Document}
  */
-export class Scene extends Container {
+export class Background extends Container {
   private tilingSprite: TilingSprite;
 
   constructor(texture: Texture, screenWidth: number, screenHeight: number) {
@@ -33,7 +33,7 @@ export class Scene extends Container {
     this.addChild(this.tilingSprite);
   }
 
-  sync(_entity: SceneEntity): void {
+  sync(_entity: BackgroundEntity): void {
     // Ensure visibility when entity exists
     this.visible = true;
 

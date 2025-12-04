@@ -1,12 +1,12 @@
+import type { Background } from "@/entity/Background";
 import type { Bird } from "@/entity/Bird";
-import type { Scene } from "@/entity/Scene";
 import type { Score } from "@/entity/Score";
 import type { AudioAdapter } from "@/systems/AudioAdapter";
 import type { StageAdapter } from "@/systems/StageAdapter";
 
 export class MockStageAdapter implements StageAdapter {
   public updateScoreCalls: Score[] = [];
-  public updateSceneCalls: Scene[] = [];
+  public updateBackgroundCalls: Background[] = [];
   public updateBirdCalls: Bird[] = [];
   public removeEntityCalls: string[] = [];
 
@@ -14,8 +14,8 @@ export class MockStageAdapter implements StageAdapter {
     this.updateScoreCalls.push(entity);
   }
 
-  updateScene(entity: Scene): void {
-    this.updateSceneCalls.push(entity);
+  updateBackground(entity: Background): void {
+    this.updateBackgroundCalls.push(entity);
   }
 
   updateBird(entity: Bird): void {
@@ -28,7 +28,7 @@ export class MockStageAdapter implements StageAdapter {
 
   reset(): void {
     this.updateScoreCalls = [];
-    this.updateSceneCalls = [];
+    this.updateBackgroundCalls = [];
     this.updateBirdCalls = [];
     this.removeEntityCalls = [];
   }

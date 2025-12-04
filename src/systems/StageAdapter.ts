@@ -1,5 +1,5 @@
+import type { Background } from "@/entity/Background";
 import type { Bird } from "@/entity/Bird";
-import type { Scene } from "@/entity/Scene";
 import type { Score } from "@/entity/Score";
 
 /**
@@ -11,7 +11,7 @@ import type { Score } from "@/entity/Score";
  */
 export interface StageAdapter {
   updateScore(entity: Score): void;
-  updateScene(entity: Scene): void;
+  updateBackground(entity: Background): void;
   updateBird(entity: Bird): void;
   removeEntity(id: string): void;
 }

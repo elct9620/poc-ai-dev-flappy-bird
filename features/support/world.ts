@@ -2,12 +2,13 @@ import { Engine } from "@/engine/engine";
 import { EventBus } from "@/engine/eventbus";
 import { createGameState, type GameState } from "@/entity/GameState";
 import { AudioSystem } from "@/systems/AudioSystem";
+import { BackgroundSystem } from "@/systems/BackgroundSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
-import { SceneSystem } from "@/systems/SceneSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import { QuickPickleWorld } from "quickpickle";
 import type { TestContext } from "vitest";
+
 import { MockAudioAdapter, MockStageAdapter } from "./mockAdapter";
 
 /**
@@ -31,7 +32,7 @@ export class GameWorld extends QuickPickleWorld {
     this.eventBus = new EventBus();
     this.engine = new Engine(state, this.eventBus, [
       ScoreSystem(this.adapter),
-      SceneSystem(this.adapter),
+      BackgroundSystem(this.adapter),
       PhysicsSystem(this.adapter),
       InputSystem(this.eventBus, "bird"),
       AudioSystem(this.audioAdapter),

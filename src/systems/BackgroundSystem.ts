@@ -1,26 +1,26 @@
 import type { Command, System } from "@/engine/engine";
+import { createBackground } from "@/entity/Background";
 import type { GameState } from "@/entity/GameState";
-import { createScene } from "@/entity/Scene";
 import { GameEventType, type Event } from "@/events";
 import type { StageAdapter } from "@/systems/StageAdapter";
 
 /**
- * SceneSystem manages scene entity lifecycle.
- * Handles CREATE_SCENE and REMOVE_SCENE events.
+ * BackgroundSystem manages background entity lifecycle.
+ * Handles CREATE_BACKGROUND and REMOVE_BACKGROUND events.
  *
- * @see {@link ../../docs/design/system/scene_system.md|Scene System Design Document}
+ * @see {@link ../../docs/design/system/background_system.md|Background System Design Document}
  */
-export const SceneSystem = (adapter: StageAdapter): System => {
+export const BackgroundSystem = (adapter: StageAdapter): System => {
   return (_state, event: Event): Command[] => {
     const commands: Command[] = [];
 
-    if (event.type === GameEventType.CreateScene) {
+    if (event.type === GameEventType.CreateBackground) {
       commands.push((state) => {
         const currentState = state as GameState;
-        const newEntity = createScene(event.payload.id);
+        const newEntity = createBackground(event.payload.id);
 
         // Update adapter immediately after state update
-        adapter.updateScene(newEntity);
+        adapter.updateBackground(newEntity);
 
         return {
           ...currentState,
@@ -32,7 +32,7 @@ export const SceneSystem = (adapter: StageAdapter): System => {
       });
     }
 
-    if (event.type === GameEventType.RemoveScene) {
+    if (event.type === GameEventType.RemoveBackground) {
       commands.push((state) => {
         const currentState = state as GameState;
         const { [event.payload.id]: removed, ...remaining } =

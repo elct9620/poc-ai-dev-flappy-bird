@@ -8,8 +8,8 @@
       "Bash(gh issue view:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr diff:*)",
-      "SlashCommand(/design)",
-      "SlashCommand(/implement)"
+      "SlashCommand(/design:*)",
+      "SlashCommand(/implement:*)"
     ]
   },
   "hooks": {

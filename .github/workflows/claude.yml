@@ -65,11 +65,26 @@ jobs:
           prompt: |
             Use Traditional Chinese (Taiwan) when updating or replying to the user.
 
-            Your mission is use `/design` or `/implement` slash commands to process provided in the context.
-            - MUST use slash commands to process the request.
-            - Consider code review feedback to keep improving the code.
+            Mission:
+            - Use `/design` to process design-related tasks, the implementation not updated is expected to be minimal and focused on demonstrating the design.
+            - Use `/implement` to process implementation-related or refactor-related tasks, must ensure the related design is fully implemented.
 
-            Do not clarify with the user because you are in headless mode. If the request cannot be processed, explain and make comments to the user and stop processing.
+            Verification:
+            - Use `pnpm tsc` to verify there is no type error.
+            - Use `pnpm test` to verify all tests pass.`
+
+            Tools:
+            - Use `gh pr view` or `gh issue view` to get details of the PR or issue if needed.
+            - Use `gh pr diff` to get the code diff of the PR if needed.
+            - Use `gh pr checks` to get CI results of the PR if needed.
+
+            Code Review:
+            Before starting mission, consider the code review comments in the context for this mission.
+
+            Clarifications:
+            You are in headless mode, do not ask for clarifications. Just stop and explain if the instructions are not clear.
+
+            Progress Tracking:
             Follow the progress tracking instructions strictly.
 
           # Optional: Add claude_args to customize behavior and configuration

@@ -7,14 +7,9 @@ import { PixiInputAdapter } from "@/adapters/PixiInputAdapter";
 import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
 import { EventBus } from "@/engine/eventbus";
-import type { Pipe } from "@/entity/Pipe";
 import { GameEventType, SystemEventType } from "@/events";
-import { Background as BackgroundRenderer } from "@/renderers/Background";
-import { Bird as BirdRenderer } from "@/renderers/Bird";
-import { Ground as GroundRenderer } from "@/renderers/Ground";
-import { Pipe as PipeRenderer } from "@/renderers/Pipe";
+import { registerRenderers } from "@/renderers";
 import { RendererFactory } from "@/renderers/RendererFactory";
-import { Score as ScoreRenderer } from "@/renderers/Score";
 import { AudioSystem } from "@/systems/AudioSystem";
 import { BackgroundSystem } from "@/systems/BackgroundSystem";
 import { GroundSystem } from "@/systems/GroundSystem";
@@ -69,46 +64,7 @@ const rendererFactory = new RendererFactory(
 );
 
 // Register all entity types with their renderer configs
-rendererFactory.register("score", {
-  create: () =>
-    new ScoreRenderer(
-      rendererFactory.getNumberTextures(),
-      rendererFactory.getScaleCalculator(),
-    ),
-});
-
-rendererFactory.register("bird", {
-  create: () =>
-    new BirdRenderer(
-      rendererFactory.getBirdTextures(),
-      rendererFactory.getScaleCalculator(),
-    ),
-});
-
-rendererFactory.register("background", {
-  create: () =>
-    new BackgroundRenderer(
-      rendererFactory.getBackgroundTexture(),
-      rendererFactory.getScaleCalculator(),
-    ),
-});
-
-rendererFactory.register("ground", {
-  create: () =>
-    new GroundRenderer(
-      rendererFactory.getGroundTexture(),
-      rendererFactory.getScaleCalculator(),
-    ),
-});
-
-rendererFactory.register("pipe", {
-  create: (entity) =>
-    new PipeRenderer(
-      rendererFactory.getPipeTexture(),
-      rendererFactory.getScaleCalculator(),
-      (entity as Pipe).isTop,
-    ),
-});
+registerRenderers(rendererFactory);
 
 // Create adapters
 const stageAdapter = new PixiStageAdapter(app, rendererFactory);

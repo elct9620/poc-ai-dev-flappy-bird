@@ -1,5 +1,6 @@
 import { AnimatedSprite, Container, Texture } from "pixi.js";
 
+import { ZINDEX_BIRD } from "@/constants";
 import type { Bird as BirdEntity } from "@/entity/Bird";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
@@ -36,6 +37,9 @@ export class Bird extends Container {
     this.sprite.play();
 
     this.addChild(this.sprite);
+
+    // Set zIndex for rendering order - Bird above pipes but below ground
+    this.zIndex = ZINDEX_BIRD;
   }
 
   sync(entity: BirdEntity): void {

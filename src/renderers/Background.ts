@@ -1,5 +1,6 @@
 import { Container, Texture, TilingSprite } from "pixi.js";
 
+import { ZINDEX_BACKGROUND } from "@/constants";
 import type { Background as BackgroundEntity } from "@/entity/Background";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
@@ -37,6 +38,9 @@ export class Background extends Container {
     this.tilingSprite.tileScale.set(scale, scale);
 
     this.addChild(this.tilingSprite);
+
+    // Set zIndex for rendering order - Background at the back
+    this.zIndex = ZINDEX_BACKGROUND;
   }
 
   sync(_entity: BackgroundEntity): void {

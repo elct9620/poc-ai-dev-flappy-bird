@@ -130,7 +130,7 @@ Then("the bird's animation should be playing", (world: GameWorld) => {
   // We verify the bird is alive and has been updated multiple times with enough deltaTime
   // 0.15 seconds = 9 ticks at 60fps, which should advance animation at least once (8 ticks per frame)
   expect(bird.isAlive).toBe(true);
-  expect(world.adapter.updateBirdCalls.length).toBeGreaterThan(0);
+  expect(world.adapter.updateCalls.length).toBeGreaterThan(0);
 });
 
 Then(

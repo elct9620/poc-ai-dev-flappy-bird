@@ -20,7 +20,7 @@ export const GroundSystem = (adapter: StageAdapter): System => {
         const newEntity = createGround(event.payload.id);
 
         // Update adapter immediately after state update
-        adapter.updateGround(newEntity);
+        adapter.update(newEntity);
 
         return {
           ...currentState,

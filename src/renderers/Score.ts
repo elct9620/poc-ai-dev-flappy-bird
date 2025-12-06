@@ -1,5 +1,6 @@
 import { Container, Sprite, Texture } from "pixi.js";
 
+import { ZINDEX_SCORE } from "@/constants";
 import type { Score as ScoreEntity } from "@/entity/Score";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
@@ -24,6 +25,9 @@ export class Score extends Container {
     // Apply base scale to match background scaling
     const scale = scaleCalculator.getBaseScale();
     this.scale.set(scale);
+
+    // Set zIndex for rendering order - Score above all game elements
+    this.zIndex = ZINDEX_SCORE;
   }
 
   sync(entity: ScoreEntity): void {

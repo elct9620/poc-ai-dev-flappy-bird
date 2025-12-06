@@ -1,5 +1,6 @@
 import { Container, Texture, TilingSprite } from "pixi.js";
 
+import { ZINDEX_GROUND } from "@/constants";
 import type { Ground as GroundEntity } from "@/entity/Ground";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
@@ -38,6 +39,9 @@ export class Ground extends Container {
     this.tilingSprite.position.set(0, screenHeight - groundHeight);
 
     this.addChild(this.tilingSprite);
+
+    // Set zIndex for rendering order - Ground on top to cover pipe bottoms
+    this.zIndex = ZINDEX_GROUND;
   }
 
   sync(_entity: GroundEntity): void {

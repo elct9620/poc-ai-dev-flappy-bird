@@ -140,8 +140,8 @@ export const PipeSystem = (adapter: StageAdapter): System => {
         );
 
         // Update adapter for both pipes
-        adapter.updatePipe(topPipe);
-        adapter.updatePipe(bottomPipe);
+        adapter.update(topPipe);
+        adapter.update(bottomPipe);
 
         return {
           ...currentState,
@@ -191,8 +191,8 @@ export const PipeSystem = (adapter: StageAdapter): System => {
             screenHeight,
           );
 
-          adapter.updatePipe(topPipe);
-          adapter.updatePipe(bottomPipe);
+          adapter.update(topPipe);
+          adapter.update(bottomPipe);
 
           return {
             ...currentState,
@@ -253,7 +253,7 @@ export const PipeSystem = (adapter: StageAdapter): System => {
             y: currentPipe.position.y,
           });
 
-          adapter.updatePipe(updatedPipe);
+          adapter.update(updatedPipe);
 
           return {
             ...currentState,
@@ -273,7 +273,7 @@ export const PipeSystem = (adapter: StageAdapter): System => {
             if (!currentPipe || currentPipe.passed) return currentState;
 
             const updatedPipe = markPipeAsPassed(currentPipe);
-            adapter.updatePipe(updatedPipe);
+            adapter.update(updatedPipe);
 
             return {
               ...currentState,

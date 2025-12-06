@@ -1,37 +1,13 @@
-import type { Background } from "@/entity/Background";
-import type { Bird } from "@/entity/Bird";
-import type { Ground } from "@/entity/Ground";
-import type { Pipe } from "@/entity/Pipe";
-import type { Score } from "@/entity/Score";
+import type { Entity } from "@/entity/GameState";
 import type { AudioAdapter } from "@/systems/AudioAdapter";
 import type { StageAdapter } from "@/systems/StageAdapter";
 
 export class MockStageAdapter implements StageAdapter {
-  public updateScoreCalls: Score[] = [];
-  public updateBackgroundCalls: Background[] = [];
-  public updateBirdCalls: Bird[] = [];
-  public updateGroundCalls: Ground[] = [];
-  public updatePipeCalls: Pipe[] = [];
+  public updateCalls: Entity[] = [];
   public removeEntityCalls: string[] = [];
 
-  updateScore(entity: Score): void {
-    this.updateScoreCalls.push(entity);
-  }
-
-  updateBackground(entity: Background): void {
-    this.updateBackgroundCalls.push(entity);
-  }
-
-  updateBird(entity: Bird): void {
-    this.updateBirdCalls.push(entity);
-  }
-
-  updateGround(entity: Ground): void {
-    this.updateGroundCalls.push(entity);
-  }
-
-  updatePipe(entity: Pipe): void {
-    this.updatePipeCalls.push(entity);
+  update(entity: Entity): void {
+    this.updateCalls.push(entity);
   }
 
   removeEntity(id: string): void {
@@ -44,11 +20,7 @@ export class MockStageAdapter implements StageAdapter {
   }
 
   reset(): void {
-    this.updateScoreCalls = [];
-    this.updateBackgroundCalls = [];
-    this.updateBirdCalls = [];
-    this.updateGroundCalls = [];
-    this.updatePipeCalls = [];
+    this.updateCalls = [];
     this.removeEntityCalls = [];
   }
 }

@@ -1,17 +1,9 @@
-import type { Application, Container, Texture } from "pixi.js";
+import type { Application } from "pixi.js";
 
-import type { Background } from "@/entity/Background";
-import type { Bird } from "@/entity/Bird";
-import type { Ground } from "@/entity/Ground";
-import type { Pipe } from "@/entity/Pipe";
-import type { Score } from "@/entity/Score";
-import { Background as BackgroundRenderer } from "@/renderers/Background";
-import { Bird as BirdRenderer } from "@/renderers/Bird";
-import { Ground as GroundRenderer } from "@/renderers/Ground";
-import { Pipe as PipeRenderer } from "@/renderers/Pipe";
-import { Score as ScoreRenderer } from "@/renderers/Score";
+import type { Renderer } from "@/adapters/Renderer";
+import type { Entity } from "@/entity/GameState";
+import type { RendererFactory } from "@/renderers/RendererFactory";
 import type { StageAdapter } from "@/systems/StageAdapter";
-import { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
  * PixiStageAdapter bridges game entities with PixiJS rendering.
@@ -20,134 +12,37 @@ import { ScaleCalculator } from "@/utils/ScaleCalculator";
  *
  * This adapter implements the StageAdapter interface, providing
  * a concrete implementation for rendering entities using PixiJS.
+ * Uses the factory pattern to dynamically create renderers based
+ * on entity type.
+ *
+ * @see {@link ../../docs/ARCHITECTURE.md|Architecture Document} (lines 240-278)
  */
 export class PixiStageAdapter implements StageAdapter {
   private app: Application;
-  private renderers: Record<string, Container> = {};
-  private numberTextures: Record<string, Texture>;
-  private birdTextures: Texture[];
-  private backgroundTexture: Texture;
-  private groundTexture: Texture;
-  private pipeTexture: Texture;
-  private scaleCalculator: ScaleCalculator;
+  private renderers: Record<string, Renderer> = {};
+  private rendererFactory: RendererFactory;
 
-  constructor(
-    app: Application,
-    numberTextures: Record<string, Texture>,
-    birdTextures: Texture[],
-    backgroundTexture: Texture,
-    groundTexture: Texture,
-    pipeTexture: Texture,
-  ) {
+  constructor(app: Application, rendererFactory: RendererFactory) {
     this.app = app;
-    this.numberTextures = numberTextures;
-    this.birdTextures = birdTextures;
-    this.backgroundTexture = backgroundTexture;
-    this.groundTexture = groundTexture;
-    this.pipeTexture = pipeTexture;
-    this.scaleCalculator = new ScaleCalculator(
-      app.screen.width,
-      app.screen.height,
-    );
+    this.rendererFactory = rendererFactory;
     // Enable sorting by zIndex
     this.app.stage.sortableChildren = true;
   }
 
-  updateScore(entity: Score): void {
+  update(entity: Entity): void {
     try {
-      // Get or create Score renderer
+      // Get or create renderer using factory
       let renderer = this.renderers[entity.id];
       if (!renderer) {
-        renderer = new ScoreRenderer(this.numberTextures, this.scaleCalculator);
+        renderer = this.rendererFactory.createRenderer(entity);
         this.renderers[entity.id] = renderer;
-        renderer.zIndex = 200; // Score above all game elements
         this.app.stage.addChild(renderer);
       }
 
       // Sync renderer with entity
-      (renderer as ScoreRenderer).sync(entity);
+      renderer.sync(entity);
     } catch (error) {
-      console.error(`Error updating score ${entity.id}:`, error);
-    }
-  }
-
-  updateBird(entity: Bird): void {
-    try {
-      // Get or create Bird renderer
-      let renderer = this.renderers[entity.id];
-      if (!renderer) {
-        renderer = new BirdRenderer(this.birdTextures, this.scaleCalculator);
-        this.renderers[entity.id] = renderer;
-        renderer.zIndex = 50; // Bird above pipes but below ground
-        this.app.stage.addChild(renderer);
-      }
-
-      // Sync renderer with entity
-      // AnimatedSprite manages its own animation timing internally
-      (renderer as BirdRenderer).sync(entity);
-    } catch (error) {
-      console.error(`Error updating bird ${entity.id}:`, error);
-    }
-  }
-
-  updateBackground(entity: Background): void {
-    try {
-      // Get or create Background renderer
-      let renderer = this.renderers[entity.id];
-      if (!renderer) {
-        renderer = new BackgroundRenderer(
-          this.backgroundTexture,
-          this.scaleCalculator,
-        );
-        this.renderers[entity.id] = renderer;
-        renderer.zIndex = 0; // Background at the back
-        this.app.stage.addChild(renderer);
-      }
-
-      // Sync renderer with entity
-      (renderer as BackgroundRenderer).sync(entity);
-    } catch (error) {
-      console.error(`Error updating background ${entity.id}:`, error);
-    }
-  }
-
-  updateGround(entity: Ground): void {
-    try {
-      // Get or create Ground renderer
-      let renderer = this.renderers[entity.id];
-      if (!renderer) {
-        renderer = new GroundRenderer(this.groundTexture, this.scaleCalculator);
-        this.renderers[entity.id] = renderer;
-        renderer.zIndex = 100; // Ground on top to cover pipe bottoms
-        this.app.stage.addChild(renderer);
-      }
-
-      // Sync renderer with entity
-      (renderer as GroundRenderer).sync(entity);
-    } catch (error) {
-      console.error(`Error updating ground ${entity.id}:`, error);
-    }
-  }
-
-  updatePipe(entity: Pipe): void {
-    try {
-      // Get or create Pipe renderer
-      let renderer = this.renderers[entity.id];
-      if (!renderer) {
-        renderer = new PipeRenderer(
-          this.pipeTexture,
-          this.scaleCalculator,
-          entity.isTop,
-        );
-        this.renderers[entity.id] = renderer;
-        renderer.zIndex = 10; // Pipes above background but below ground
-        this.app.stage.addChild(renderer);
-      }
-
-      // Sync renderer with entity
-      (renderer as PipeRenderer).sync(entity);
-    } catch (error) {
-      console.error(`Error updating pipe ${entity.id}:`, error);
+      console.error(`Error updating entity ${entity.id}:`, error);
     }
   }
 
@@ -167,6 +62,6 @@ export class PixiStageAdapter implements StageAdapter {
   }
 
   getScreenDimensions(): { width: number; height: number } {
-    return this.scaleCalculator.getDimensions();
+    return { width: this.app.screen.width, height: this.app.screen.height };
   }
 }

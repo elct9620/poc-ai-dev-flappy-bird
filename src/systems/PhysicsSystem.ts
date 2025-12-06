@@ -16,12 +16,7 @@ import {
 } from "@/entity/Bird";
 import type { GameState } from "@/entity/GameState";
 import { GameEventType, SystemEventType, type Event } from "@/events";
-
-// Adapter interface defined in system (dependency inversion principle)
-export interface StageAdapter {
-  updateBird(entity: Bird): void;
-  removeEntity(id: string): void;
-}
+import type { StageAdapter } from "@/systems/StageAdapter";
 
 export const PhysicsSystem = (adapter: StageAdapter): System => {
   return (state, event: Event): Command[] => {
@@ -34,7 +29,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
         const newEntity = createBird(event.payload.id, event.payload.position);
 
         // Update adapter immediately after state update
-        adapter.updateBird(newEntity);
+        adapter.update(newEntity);
 
         return {
           ...currentState,
@@ -60,7 +55,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
             });
 
             // Update adapter immediately
-            adapter.updateBird(updatedEntity);
+            adapter.update(updatedEntity);
 
             return {
               ...currentState,
@@ -121,7 +116,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
               updatedEntity = updateBirdRotation(updatedEntity, newRotation);
 
               // Update adapter immediately
-              adapter.updateBird(updatedEntity);
+              adapter.update(updatedEntity);
 
               return {
                 ...currentState,
@@ -145,7 +140,7 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
           const updatedEntity = setBirdAlive(bird, false);
 
           // Update adapter immediately
-          adapter.updateBird(updatedEntity);
+          adapter.update(updatedEntity);
 
           return {
             ...currentState,

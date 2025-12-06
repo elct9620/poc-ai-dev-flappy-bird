@@ -42,7 +42,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
         const newEntity = buildScoreEntity(event.payload);
 
         // Update adapter immediately after state update
-        adapter.updateScore(newEntity);
+        adapter.update(newEntity);
 
         return {
           ...currentState,
@@ -62,7 +62,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
           const updatedEntity = updateScoreValue(entity as Score, 0);
 
           // Update adapter immediately
-          adapter.updateScore(updatedEntity);
+          adapter.update(updatedEntity);
 
           return {
             ...currentState,
@@ -87,7 +87,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
           );
 
           // Update adapter immediately
-          adapter.updateScore(updatedEntity);
+          adapter.update(updatedEntity);
 
           return {
             ...currentState,

@@ -1,8 +1,4 @@
-import type { Background } from "@/entity/Background";
-import type { Bird } from "@/entity/Bird";
-import type { Ground } from "@/entity/Ground";
-import type { Pipe } from "@/entity/Pipe";
-import type { Score } from "@/entity/Score";
+import type { Entity } from "@/entity/GameState";
 
 /**
  * StageAdapter interface for rendering system integration.
@@ -10,13 +6,27 @@ import type { Score } from "@/entity/Score";
  *
  * This interface follows the Dependency Inversion Principle, allowing systems
  * to depend on abstractions rather than concrete implementations.
+ *
+ * The generic update() method uses the factory pattern internally to dispatch
+ * entity updates to appropriate renderers based on entity type, eliminating
+ * the need for type-specific methods.
  */
 export interface StageAdapter {
-  updateScore(entity: Score): void;
-  updateBackground(entity: Background): void;
-  updateBird(entity: Bird): void;
-  updateGround(entity: Ground): void;
-  updatePipe(entity: Pipe): void;
+  /**
+   * Update or create a renderer for the given entity.
+   * @param entity The entity to render
+   */
+  update(entity: Entity): void;
+
+  /**
+   * Remove an entity's renderer from the stage.
+   * @param id The entity ID to remove
+   */
   removeEntity(id: string): void;
+
+  /**
+   * Get the current screen dimensions.
+   * @returns Object containing width and height in pixels
+   */
   getScreenDimensions(): { width: number; height: number };
 }

@@ -69,3 +69,24 @@ export const WING_FLAP_SOUND = "wing";
 
 /** Amount to increment score by when player passes a pipe */
 export const SCORE_INCREMENT_VALUE = 1;
+
+// =============================================================================
+// Rendering Layer Constants (zIndex)
+// =============================================================================
+// Controls the rendering order of game elements on the stage.
+// Higher values render on top of lower values.
+
+/** Background layer - renders at the back */
+export const ZINDEX_BACKGROUND = 0;
+
+/** Pipe layer - renders above background */
+export const ZINDEX_PIPE = 10;
+
+/** Bird layer - renders above pipes but below ground */
+export const ZINDEX_BIRD = 50;
+
+/** Ground layer - renders on top to cover pipe bottoms */
+export const ZINDEX_GROUND = 100;
+
+/** Score layer - renders above all game elements */
+export const ZINDEX_SCORE = 200;

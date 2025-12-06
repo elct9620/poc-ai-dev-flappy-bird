@@ -1,5 +1,6 @@
 import { Container, Sprite, Texture } from "pixi.js";
 
+import { ZINDEX_PIPE } from "@/constants";
 import type { Pipe as PipeEntity } from "@/entity/Pipe";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
@@ -43,6 +44,9 @@ export class Pipe extends Container {
     }
 
     this.addChild(this.sprite);
+
+    // Set zIndex for rendering order - Pipes above background but below ground
+    this.zIndex = ZINDEX_PIPE;
   }
 
   sync(entity: PipeEntity): void {

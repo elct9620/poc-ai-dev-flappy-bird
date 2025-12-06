@@ -20,7 +20,7 @@ export const BackgroundSystem = (adapter: StageAdapter): System => {
         const newEntity = createBackground(event.payload.id);
 
         // Update adapter immediately after state update
-        adapter.updateBackground(newEntity);
+        adapter.update(newEntity);
 
         return {
           ...currentState,

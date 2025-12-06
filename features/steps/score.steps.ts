@@ -18,7 +18,6 @@ Given(
         id,
         value,
         position: { x: 0, y: 0 },
-        scale: 1,
         spacing: 0,
         alignment: "left",
       },
@@ -37,7 +36,6 @@ When(
         id,
         value,
         position: { x: 0, y: 0 },
-        scale: 1,
         spacing: 0,
         alignment: "left",
       },
@@ -47,14 +45,13 @@ When(
 );
 
 When(
-  "I create a score with id {string}, value {int}, position \\({int}, {int}), scale {float}, spacing {int}, and {string} alignment",
+  "I create a score with id {string}, value {int}, position \\({int}, {int}), spacing {int}, and {string} alignment",
   (
     world: GameWorld,
     id: string,
     value: number,
     x: number,
     y: number,
-    scale: number,
     spacing: number,
     alignment: string,
   ) => {
@@ -64,7 +61,6 @@ When(
         id,
         value,
         position: { x, y },
-        scale,
         spacing,
         alignment,
       },
@@ -127,16 +123,6 @@ Then(
     expect(entity).toBeDefined();
     expect(entity.position.x).toBe(x);
     expect(entity.position.y).toBe(y);
-  },
-);
-
-Then(
-  "the score {string} should have scale {float}",
-  (world: GameWorld, id: string, scale: number) => {
-    const state = world.getState();
-    const entity = state.entities[id] as Score;
-    expect(entity).toBeDefined();
-    expect(entity.scale).toBe(scale);
   },
 );
 

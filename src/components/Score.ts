@@ -1,21 +1,34 @@
 import { Container, Sprite, Texture } from "pixi.js";
 
 import type { Score as ScoreEntity } from "@/entity/Score";
+import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
+/**
+ * Score component displays the game score using digit sprites.
+ * Scale is calculated using ScaleCalculator for responsive rendering.
+ * @see {@link ../../docs/design/component/score.md|Score Component Design Document}
+ * @see {@link ../../docs/design/guidelines/scale.md|Scale Guidelines}
+ */
 export class Score extends Container {
   private textures: Record<string, Texture>;
   private currentValue: number = -1;
   private digitSprites: Sprite[] = [];
 
-  constructor(textures: Record<string, Texture>) {
+  constructor(
+    textures: Record<string, Texture>,
+    scaleCalculator: ScaleCalculator,
+  ) {
     super();
     this.textures = textures;
+
+    // Apply responsive scale with design factor 2.0
+    const scale = scaleCalculator.getResponsiveScale(2.0);
+    this.scale.set(scale);
   }
 
   sync(entity: ScoreEntity): void {
-    // Update position and scale
+    // Update position (scale is set in constructor)
     this.position.set(entity.position.x, entity.position.y);
-    this.scale.set(entity.scale);
 
     // Rebuild digits only if value changed
     if (this.currentValue !== entity.value) {

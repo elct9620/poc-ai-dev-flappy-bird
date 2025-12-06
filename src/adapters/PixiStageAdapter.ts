@@ -9,6 +9,7 @@ import type { Bird } from "@/entity/Bird";
 import type { Ground } from "@/entity/Ground";
 import type { Score } from "@/entity/Score";
 import type { StageAdapter } from "@/systems/StageAdapter";
+import { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
  * PixiStageAdapter bridges game entities with PixiJS rendering.
@@ -25,6 +26,7 @@ export class PixiStageAdapter implements StageAdapter {
   private birdTextures: Texture[];
   private backgroundTexture: Texture;
   private groundTexture: Texture;
+  private scaleCalculator: ScaleCalculator;
 
   constructor(
     app: Application,
@@ -38,6 +40,10 @@ export class PixiStageAdapter implements StageAdapter {
     this.birdTextures = birdTextures;
     this.backgroundTexture = backgroundTexture;
     this.groundTexture = groundTexture;
+    this.scaleCalculator = new ScaleCalculator(
+      app.screen.width,
+      app.screen.height,
+    );
   }
 
   updateScore(entity: Score): void {
@@ -45,7 +51,10 @@ export class PixiStageAdapter implements StageAdapter {
       // Get or create Score component
       let component = this.components[entity.id];
       if (!component) {
-        component = new ScoreComponent(this.numberTextures);
+        component = new ScoreComponent(
+          this.numberTextures,
+          this.scaleCalculator,
+        );
         this.components[entity.id] = component;
         this.app.stage.addChild(component);
       }
@@ -62,7 +71,7 @@ export class PixiStageAdapter implements StageAdapter {
       // Get or create Bird component
       let component = this.components[entity.id];
       if (!component) {
-        component = new BirdComponent(this.birdTextures);
+        component = new BirdComponent(this.birdTextures, this.scaleCalculator);
         this.components[entity.id] = component;
         this.app.stage.addChild(component);
       }
@@ -82,8 +91,7 @@ export class PixiStageAdapter implements StageAdapter {
       if (!component) {
         component = new BackgroundComponent(
           this.backgroundTexture,
-          this.app.screen.width,
-          this.app.screen.height,
+          this.scaleCalculator,
         );
         this.components[entity.id] = component;
         // Add background at the back (index 0) so it renders behind everything
@@ -104,8 +112,7 @@ export class PixiStageAdapter implements StageAdapter {
       if (!component) {
         component = new GroundComponent(
           this.groundTexture,
-          this.app.screen.width,
-          this.app.screen.height,
+          this.scaleCalculator,
         );
         this.components[entity.id] = component;
         // Add ground above background but below other elements (index 1)

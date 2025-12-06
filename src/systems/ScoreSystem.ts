@@ -12,7 +12,6 @@ function buildScoreEntity(payload: {
   id: string;
   value: number;
   position: { x: number; y: number };
-  scale: number;
   spacing: number;
   alignment: "left" | "center" | "right";
 }): Score {
@@ -20,7 +19,6 @@ function buildScoreEntity(payload: {
     payload.id,
     payload.value,
     payload.position,
-    payload.scale,
     payload.spacing,
     payload.alignment,
   );

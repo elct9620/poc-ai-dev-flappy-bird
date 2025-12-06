@@ -1,6 +1,7 @@
 import { AnimatedSprite, Container, Texture } from "pixi.js";
 
 import type { Bird as BirdEntity } from "@/entity/Bird";
+import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
  * Bird component is responsible for visually representing the player character
@@ -10,18 +11,24 @@ import type { Bird as BirdEntity } from "@/entity/Bird";
  * The component uses PixiJS AnimatedSprite to manage wing flapping animation
  * internally, cycling through frames continuously without relying on entity state.
  *
+ * Scale is calculated using ScaleCalculator for responsive rendering.
+ *
  * @see {@link ../../docs/design/component/bird.md|Bird Component Design Document}
+ * @see {@link ../../docs/design/guidelines/scale.md|Scale Guidelines}
  */
 export class Bird extends Container {
   private sprite: AnimatedSprite;
 
-  constructor(textures: Texture[]) {
+  constructor(textures: Texture[], scaleCalculator: ScaleCalculator) {
     super();
 
     // Create AnimatedSprite with all three frames
     this.sprite = new AnimatedSprite(textures);
     // Set anchor to center for proper rotation
     this.sprite.anchor.set(0.5, 0.5);
+    // Apply responsive scale with design factor 2.0
+    const scale = scaleCalculator.getResponsiveScale(2.0);
+    this.sprite.scale.set(scale, scale);
     // Set animation speed: 8 ticks per frame at 60fps = 0.133 frames per tick
     // AnimationSpeed is in frames per tick, so 1/8 ≈ 0.125
     this.sprite.animationSpeed = 0.125;

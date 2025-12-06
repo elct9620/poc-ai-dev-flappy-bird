@@ -12,11 +12,10 @@ Feature: Score System
     And the score "player-score" should have value 0
 
   Scenario: Create score with all properties
-    When I create a score with id "hud-score", value 42, position (100, 50), scale 2.5, spacing 4, and "center" alignment
+    When I create a score with id "hud-score", value 42, position (100, 50), spacing 4, and "center" alignment
     Then the score "hud-score" should exist
     And the score "hud-score" should have value 42
     And the score "hud-score" should have position (100, 50)
-    And the score "hud-score" should have scale 2.5
     And the score "hud-score" should have spacing 4
     And the score "hud-score" should have "center" alignment
 
@@ -52,7 +51,7 @@ Feature: Score System
     And the score "score-3" should have value 30
 
   Scenario Outline: Score with different alignments
-    When I create a score with id "aligned-score", value 100, position (50, 50), scale 1, spacing 2, and "<alignment>" alignment
+    When I create a score with id "aligned-score", value 100, position (50, 50), spacing 2, and "<alignment>" alignment
     Then the score "aligned-score" should have "<alignment>" alignment
 
     Examples:

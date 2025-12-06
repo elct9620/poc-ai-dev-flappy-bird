@@ -3,13 +3,13 @@ import type { Vector } from "@/entity/Vector";
 
 /**
  * Score entity for displaying game score.
+ * Scale is managed by the Score component, not the entity.
  * @see {@link ../../docs/design/entity/score.md|Score Entity Design Document}
  */
 export interface Score extends Entity {
   type: "score";
   value: number;
   position: Vector;
-  scale: number;
   spacing: number;
   alignment: "left" | "center" | "right";
 }
@@ -21,7 +21,6 @@ export function createScore(
   id: string,
   value: number,
   position: Vector,
-  scale: number,
   spacing: number,
   alignment: "left" | "center" | "right",
 ): Score {
@@ -30,7 +29,6 @@ export function createScore(
     id,
     value,
     position,
-    scale,
     spacing,
     alignment,
   };
@@ -48,11 +46,4 @@ export function updateScoreValue(score: Score, newValue: number): Score {
  */
 export function updateScorePosition(score: Score, position: Vector): Score {
   return { ...score, position };
-}
-
-/**
- * Update score scale immutably.
- */
-export function updateScoreScale(score: Score, scale: number): Score {
-  return { ...score, scale };
 }

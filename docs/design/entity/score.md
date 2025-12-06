@@ -2,6 +2,8 @@
 
 The Score entity represents the state of a numeric score display in the game. It is a pure data structure containing the score value and its visual presentation properties.
 
+Scale is managed by the Score component using ScaleCalculator, not by this entity.
+
 ## Properties
 
 | Name      | Type                           | Description                                           |
@@ -10,7 +12,6 @@ The Score entity represents the state of a numeric score display in the game. It
 | type      | "score"                        | Type annotation indicating this is a score entity    |
 | value     | number                         | The numeric score value to display                   |
 | position  | [Vector](./vector.md)          | Screen position for rendering the score              |
-| scale     | number                         | Scale multiplier for the score display               |
 | spacing   | number                         | Horizontal spacing (in pixels) between digit sprites |
 | alignment | "left" \| "center" \| "right"  | Horizontal alignment of the digit string             |
 

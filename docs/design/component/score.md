@@ -2,6 +2,8 @@
 
 The Score component is a PixiJS Container that displays a numeric score value using sprite-based digit rendering. It handles layout, alignment, and synchronization with the Score state.
 
+Scale is managed by the component using ScaleCalculator for responsive rendering, not by the entity.
+
 ## Properties
 
 | Name          | Type                           | Description                                    |
@@ -22,13 +24,24 @@ Container (Score)
 
 - Each digit in the score value is represented by a separate Sprite instance
 - Sprites are positioned horizontally with configurable spacing
-- The entire container can be positioned and scaled via Score properties
+- The entire container is scaled using ScaleCalculator with design factor 2.0
+
+## Scale Management
+
+Scale is applied in the constructor using ScaleCalculator:
+
+```typescript
+const scale = scaleCalculator.getResponsiveScale(2.0);
+this.scale.set(scale);
+```
+
+This ensures consistent responsive rendering across all screen sizes. See the [Scale Guidelines](../../design/guidelines/scale.md) for details.
 
 ## Synchronization
 
 The `sync(entity: Score)` method reconciles the component's visual state with the entity:
 
-1. **Position & Scale**: Updates the container's position and scale immediately
+1. **Position**: Updates the container's position from entity
 2. **Value Change Detection**: Compares `entity.value` with cached `currentValue`
 3. **Conditional Rebuild**: Only rebuilds digit sprites if the value has changed
 4. **Layout Algorithm**:
@@ -44,3 +57,4 @@ The `sync(entity: Score)` method reconciles the component's visual state with th
 - Old sprites are properly destroyed to prevent memory leaks
 - Alignment calculations are performed only during rebuilds
 - Texture lookups use a pre-loaded atlas for fast rendering
+- Scale is set once in constructor, not on every sync

@@ -33,6 +33,7 @@ export enum GameEventType {
  * CREATE_SCORE event
  *
  * Creates a new score entity in the game state with full configuration.
+ * Scale is managed by the Score component, not the entity.
  */
 export interface CreateScoreEvent {
   type: GameEventType.CreateScore;
@@ -43,8 +44,6 @@ export interface CreateScoreEvent {
     value: number;
     /** Screen position for rendering */
     position: Vector;
-    /** Scale multiplier for the display */
-    scale: number;
     /** Horizontal spacing between digit sprites */
     spacing: number;
     /** Horizontal alignment of digits */

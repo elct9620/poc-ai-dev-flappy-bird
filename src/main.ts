@@ -111,7 +111,6 @@ engine.dispatch({
     id: "score",
     value: 0,
     position: { x: window.innerWidth / 2, y: 100 },
-    scale: 2,
     spacing: 4,
     alignment: "center",
   },

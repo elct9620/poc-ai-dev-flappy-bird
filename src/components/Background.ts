@@ -1,16 +1,22 @@
 import { Container, Texture, TilingSprite } from "pixi.js";
 
 import type { Background as BackgroundEntity } from "@/entity/Background";
+import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
  * Background component displays a tiled background using PixiJS TilingSprite.
+ * Scale is calculated using ScaleCalculator for responsive fullscreen rendering.
  * @see {@link ../../docs/design/component/background.md|Background Component Design Document}
+ * @see {@link ../../docs/design/guidelines/scale.md|Scale Guidelines}
  */
 export class Background extends Container {
   private tilingSprite: TilingSprite;
 
-  constructor(texture: Texture, screenWidth: number, screenHeight: number) {
+  constructor(texture: Texture, scaleCalculator: ScaleCalculator) {
     super();
+
+    const { width: screenWidth, height: screenHeight } =
+      scaleCalculator.getDimensions();
 
     // Create TilingSprite with the background texture
     this.tilingSprite = new TilingSprite({
@@ -24,7 +30,7 @@ export class Background extends Container {
 
     // Calculate scale to fit screen height while maintaining aspect ratio
     // Background should fill the height and tile horizontally (X-axis only)
-    const scale = screenHeight / texture.height;
+    const scale = scaleCalculator.getFullscreenScale(texture.height);
 
     // Apply the same scale to both axes to maintain aspect ratio
     // This makes each tile's height match screen height, and width scales proportionally

@@ -109,6 +109,7 @@ Located in `src/entity/`, this module defines the game state which is an entity 
 export interface GameState {
   // implicitly implements Engine's State interface
   entities: Record<string, Entity>;
+  // other global game state properties can be added here
 }
 
 export function createGameState(): GameState {
@@ -152,13 +153,14 @@ Located in `src/systems/`, systems are pure functions that process events and ge
 // src/systems/MovementSystem.ts
 
 import { System, Event, Command } from '@/engine/engine';
+import { GameEventType } from '@/events/GameEvents';
 import { GameState } from '@/entity/GameState';
 import { movePlayer } from '@/entity/Player';
 
 export const MovementSystem: System = (state: GameState, event: Event): Command[] => {
     const commands: Command[] = [];
 
-    if (event.type === 'MOVE_PLAYER') {
+    if (event.type === GameEventType.PlayerMove) {
         const { playerId, dx, dy } = event.payload;
         const player = state.entities[playerId] as Player;
 
@@ -182,6 +184,7 @@ export const MovementSystem: System = (state: GameState, event: Event): Command[
 // src/systems/SoundEffectSystem.ts
 
 import { System, Event, Command } from '@/engine/engine';
+import { GameEventType } from '@/events/GameEvents';
 import { GameState } from '@/entity/GameState';
 
 export interface SoundAdapter {
@@ -192,7 +195,7 @@ export const SoundEffectSystem = (soundAdapter: SoundAdapter): System => {
     return (state: GameState, event: Event): Command[] => {
         const commands: Command[] = [];
 
-        if (event.type === 'PLAYER_HIT') {
+        if (event.type === GameEventType.PlayerHit) {
             commands.push(() => {
                 soundAdapter.playSound('hit-sound');
                 return state;

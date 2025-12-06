@@ -29,6 +29,7 @@ root/
 │   ├── adapters/               # Adapters for external systems (e.g., PixiJS)
 │   │   ├── pixiStageAdapter.ts # Adapter for PixiJS stage
 │   ├── utils/                  # Utility functions and helpers
+│   ├── constants.ts            # Constant values used across the project
 │   ├── main.ts                 # Entry point of the application
 ├── features/                   # Gherkin feature files for behavior-driven development
 │   ├── steps/                  # Step definitions for Gherkin features

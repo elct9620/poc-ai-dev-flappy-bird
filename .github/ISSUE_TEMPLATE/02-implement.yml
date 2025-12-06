@@ -8,12 +8,16 @@ body:
       value: |
         ## Implement Feature
 
-        This template is for implementing features. Claude Code will automatically find related design documents if they exist.
+        Describe the feature you want to implement. Claude will automatically find related design documents and handle the technical implementation.
 
-        **You can:**
-        - Specify design document paths if you know them
-        - Let Claude find the design documents based on feature name
-        - Request implementation even without formal design (Claude will use best practices)
+        **You don't need to know:**
+        - Where design documents are located (Claude finds them automatically)
+        - Which architecture layers to modify (entities/systems/renderers)
+        - How to write tests (Claude creates them)
+
+        **Just describe:**
+        - What feature you want implemented
+        - Any specific priorities or parts to focus on
 
   - type: input
     id: claude_command
@@ -33,23 +37,16 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: design_reference
-    attributes:
-      label: Design Document Reference (Optional)
-      description: Path(s) to the design document(s) in `docs/design/`. Leave empty for Claude to infer.
-      placeholder: "e.g., docs/design/entity/bird.md, docs/design/system/physics.md"
-
   - type: textarea
     id: implementation_scope
     attributes:
       label: Implementation Scope
       description: What specifically should be implemented? (if implementing everything, say "Full implementation")
       placeholder: |
-        Describe what to implement:
-        - Which entities/systems/renderers?
-        - Are there any parts to exclude?
-        - Any specific priorities or ordering?
+        Describe what should be implemented:
+        - What features should work?
+        - Any parts to skip for now?
+        - Any specific order or priorities?
       value: "Full implementation of all design documents"
     validations:
       required: true
@@ -59,12 +56,6 @@ body:
     attributes:
       label: Acceptance Criteria
       description: How will we know this implementation is complete and correct?
-      placeholder: |
-        - [ ] All entities are implemented with correct properties
-        - [ ] Systems handle all events specified in design
-        - [ ] Renderers render correctly
-        - [ ] All BDD scenarios pass
-        - [ ] Code follows project conventions
       value: |
         - [ ] Pass all tests
         - [ ] No skipped tests

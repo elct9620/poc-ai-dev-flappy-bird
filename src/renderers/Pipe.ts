@@ -24,7 +24,9 @@ export class Pipe extends Container {
 
     // Create sprite with pipe texture
     this.sprite = new Sprite(texture);
-    this.sprite.anchor.set(0, 0);
+    // For top pipes, anchor at bottom (0, 1) so flip happens correctly
+    // For bottom pipes, anchor at top (0, 0)
+    this.sprite.anchor.set(0, isTop ? 1 : 0);
 
     // Apply scale once in constructor - for top pipes, flip vertically
     const scale = scaleCalculator.getBaseScale();

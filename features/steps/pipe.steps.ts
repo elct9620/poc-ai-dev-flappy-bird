@@ -8,7 +8,7 @@ import type { GameWorld } from "../support/world";
 When(
   "I create a pipe pair at x position {int} with gap at y position {int}",
   (world: GameWorld, x: number, gapY: number) => {
-    const gapSize = 100; // Use minimum gap size for consistent tests
+    const gapSize = 140; // Use minimum gap size for consistent tests
     world.engine.dispatch({
       type: GameEventType.CreatePipe,
       payload: {
@@ -26,10 +26,10 @@ When(
 When(
   "I create a pipe pair at x position {int} with random gap position",
   (world: GameWorld, x: number) => {
-    // Random gap position between 100 and 300 as per design doc
-    const gapY = Math.floor(Math.random() * 200) + 100;
-    // Random gap size between 100 and 120 as per design doc
-    const gapSize = 100 + Math.floor(Math.random() * 21);
+    // Random gap position between 120 and 280 as per design doc
+    const gapY = Math.floor(Math.random() * 160) + 120;
+    // Random gap size between 140 and 160 as per design doc
+    const gapSize = 140 + Math.floor(Math.random() * 21);
     world.engine.dispatch({
       type: GameEventType.CreatePipe,
       payload: {
@@ -73,7 +73,7 @@ When(
 Given(
   "a pipe pair exists at x position {int}",
   (world: GameWorld, x: number) => {
-    const gapSize = 100; // Use minimum gap size for consistent tests
+    const gapSize = 140; // Use minimum gap size for consistent tests
     world.engine.dispatch({
       type: GameEventType.CreatePipe,
       payload: {

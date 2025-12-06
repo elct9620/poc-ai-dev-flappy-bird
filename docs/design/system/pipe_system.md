@@ -42,11 +42,11 @@ The PipeSystem uses the following constants for pipe generation and movement:
 
 - **Pipe Width**: 52 pixels (from sprite dimensions)
 - **Pipe Height**: 320 pixels (from sprite dimensions)
-- **Gap Size**: 100-120 pixels (vertical space between top and bottom pipes)
+- **Gap Size**: 140-160 pixels (vertical space between top and bottom pipes)
 - **Horizontal Spacing**: 200 pixels (distance between pipe pairs)
 - **Scroll Speed**: 2 pixels/frame (horizontal movement speed, equivalent to ~120 pixels/second at 60fps)
-- **Min Gap Y**: 100 pixels (minimum y-coordinate for gap center)
-- **Max Gap Y**: 300 pixels (maximum y-coordinate for gap center)
+- **Min Gap Y**: 120 pixels (minimum y-coordinate for gap center)
+- **Max Gap Y**: 280 pixels (maximum y-coordinate for gap center)
 
 These values provide appropriate difficulty while ensuring the game remains playable.
 

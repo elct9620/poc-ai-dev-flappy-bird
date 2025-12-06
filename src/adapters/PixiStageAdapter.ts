@@ -49,6 +49,8 @@ export class PixiStageAdapter implements StageAdapter {
       app.screen.width,
       app.screen.height,
     );
+    // Enable sorting by zIndex
+    this.app.stage.sortableChildren = true;
   }
 
   updateScore(entity: Score): void {
@@ -96,8 +98,8 @@ export class PixiStageAdapter implements StageAdapter {
           this.scaleCalculator,
         );
         this.renderers[entity.id] = renderer;
-        // Add background at the back (index 0) so it renders behind everything
-        this.app.stage.addChildAt(renderer, 0);
+        renderer.zIndex = 0; // Background at the back
+        this.app.stage.addChild(renderer);
       }
 
       // Sync renderer with entity
@@ -114,8 +116,8 @@ export class PixiStageAdapter implements StageAdapter {
       if (!renderer) {
         renderer = new GroundRenderer(this.groundTexture, this.scaleCalculator);
         this.renderers[entity.id] = renderer;
-        // Add ground on top to cover pipe bottoms (pipes at index 1, ground at index 2)
-        this.app.stage.addChildAt(renderer, 2);
+        renderer.zIndex = 100; // Ground on top to cover pipe bottoms
+        this.app.stage.addChild(renderer);
       }
 
       // Sync renderer with entity
@@ -136,8 +138,8 @@ export class PixiStageAdapter implements StageAdapter {
           entity.isTop,
         );
         this.renderers[entity.id] = renderer;
-        // Add pipe above background but below ground (index 1)
-        this.app.stage.addChildAt(renderer, 1);
+        renderer.zIndex = 10; // Pipes above background but below ground
+        this.app.stage.addChild(renderer);
       }
 
       // Sync renderer with entity

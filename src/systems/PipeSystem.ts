@@ -17,7 +17,7 @@ const SCROLL_SPEED = 2;
 
 /**
  * Utility function to build a Pipe entity from parameters.
- * @param gapSize The gap size to use for this pipe pair (should be between 100 and 120 pixels)
+ * @param gapSize The gap size to use for this pipe pair (should be between 140 and 160 pixels)
  */
 function buildPipeEntity(
   id: string,
@@ -27,7 +27,10 @@ function buildPipeEntity(
   isTop: boolean,
 ): Pipe {
   // Calculate height based on position and gap
-  const height = isTop ? gapY - gapSize / 2 : PIPE_HEIGHT;
+  // Both top and bottom pipes are cropped based on gap position
+  const height = isTop
+    ? gapY - gapSize / 2
+    : PIPE_HEIGHT - (gapY + gapSize / 2);
   // Top pipe: position at gap top edge (will flip upward with negative scale)
   // Bottom pipe: position at gap bottom edge
   const position = isTop

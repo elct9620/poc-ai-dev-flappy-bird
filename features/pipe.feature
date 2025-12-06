@@ -39,4 +39,4 @@ Feature: Pipe System
 
   Scenario: Pipes with random gap positions
     When I create a pipe pair at x position 400 with random gap position
-    Then the gap y position should be between 100 and 300
+    Then the gap y position should be between 120 and 280

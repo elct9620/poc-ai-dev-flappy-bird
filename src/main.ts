@@ -132,10 +132,10 @@ engine.dispatch({
 });
 
 // Pipe generation configuration
-const MIN_GAP_SIZE = 100;
-const MAX_GAP_SIZE = 120;
-const MIN_GAP_Y = 100;
-const MAX_GAP_Y = 300;
+const MIN_GAP_SIZE = 140;
+const MAX_GAP_SIZE = 160;
+const MIN_GAP_Y = 120;
+const MAX_GAP_Y = 280;
 const PIPE_SPACING = 200;
 const PIPE_SCROLL_SPEED = 2;
 

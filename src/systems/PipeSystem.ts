@@ -1,4 +1,5 @@
 import type { Command, System } from "@/engine/engine";
+import type { Bird } from "@/entity/Bird";
 import type { GameState } from "@/entity/GameState";
 import type { Pipe } from "@/entity/Pipe";
 import {
@@ -137,9 +138,9 @@ export const PipeSystem = (adapter: StageAdapter): System => {
 
       // Get bird position for passed check
       const bird = Object.values(gameState.entities).find(
-        (entity) => entity.type === "bird",
+        (entity): entity is Bird => entity.type === "bird",
       );
-      const birdX = bird && "position" in bird ? (bird as any).position.x : 0;
+      const birdX = bird ? bird.position.x : 0;
 
       pipeEntities.forEach((pipe) => {
         // Update position command

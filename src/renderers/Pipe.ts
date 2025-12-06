@@ -12,67 +12,90 @@ import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 export class Pipe extends Container {
   private sprite: Sprite;
   private baseTexture: Texture;
+  private isTop: boolean;
+  private cachedTexture: Texture | null = null;
+  private cachedHeight: number = -1;
 
-  constructor(texture: Texture, scaleCalculator: ScaleCalculator) {
+  constructor(
+    texture: Texture,
+    scaleCalculator: ScaleCalculator,
+    isTop: boolean,
+  ) {
     super();
 
     this.baseTexture = texture;
+    this.isTop = isTop;
 
     // Create sprite with pipe texture
     this.sprite = new Sprite(texture);
 
-    // Apply scale once in constructor
+    // Apply scale and anchor once in constructor based on pipe type
     const scale = scaleCalculator.getBaseScale();
-    this.sprite.scale.set(scale, scale);
+    if (isTop) {
+      // Top pipes: anchor at bottom-left and flip vertically
+      this.sprite.anchor.set(0, 1);
+      this.sprite.scale.set(scale, -scale);
+    } else {
+      // Bottom pipes: anchor at top-left, normal orientation
+      this.sprite.anchor.set(0, 0);
+      this.sprite.scale.set(scale, scale);
+    }
 
     this.addChild(this.sprite);
   }
 
   sync(entity: PipeEntity): void {
-    // For top pipes, flip vertically and adjust anchor
-    if (entity.isTop) {
-      // Anchor at bottom-left (0, 1) so the bottom of the sprite is at position.y
-      this.sprite.anchor.set(0, 1);
-      // Negative y scale to flip vertically (pipe cap will be at bottom)
-      const currentScale = this.sprite.scale.x;
-      this.sprite.scale.set(currentScale, -currentScale);
-    } else {
-      // Bottom pipes use anchor at top-left (0, 0)
-      this.sprite.anchor.set(0, 0);
-      // Positive y scale (normal orientation)
-      const currentScale = this.sprite.scale.x;
-      this.sprite.scale.set(currentScale, currentScale);
-    }
-
     // Update position
     this.position.set(entity.position.x, entity.position.y);
 
-    // Adjust height by cropping texture
+    // Adjust height by cropping texture (with caching to avoid recreation)
     const originalHeight = 320; // From design doc
     const originalWidth = 52; // From design doc
 
     if (entity.height < originalHeight) {
-      // Crop the texture based on height
-      let frame: Rectangle;
-      if (entity.isTop) {
-        // For top pipes, crop from the bottom to show the cap at bottom
-        const cropY = originalHeight - entity.height;
-        frame = new Rectangle(0, cropY, originalWidth, entity.height);
-      } else {
-        // For bottom pipes, crop from the top to show the cap at top
-        frame = new Rectangle(0, 0, originalWidth, entity.height);
+      // Only recreate texture if height has changed
+      if (this.cachedHeight !== entity.height) {
+        // Destroy old cached texture if it exists
+        if (this.cachedTexture && this.cachedTexture !== this.baseTexture) {
+          this.cachedTexture.destroy(false); // false = don't destroy the source
+        }
+
+        // Crop the texture based on height
+        let frame: Rectangle;
+        if (this.isTop) {
+          // For top pipes, crop from the bottom to show the cap at bottom
+          const cropY = originalHeight - entity.height;
+          frame = new Rectangle(0, cropY, originalWidth, entity.height);
+        } else {
+          // For bottom pipes, crop from the top to show the cap at top
+          frame = new Rectangle(0, 0, originalWidth, entity.height);
+        }
+
+        // Create and cache the new texture
+        this.cachedTexture = new Texture({
+          source: this.baseTexture.source,
+          frame,
+        });
+        this.cachedHeight = entity.height;
       }
-      // Create a new texture with the cropped frame
-      this.sprite.texture = new Texture({
-        source: this.baseTexture.source,
-        frame,
-      });
+
+      // Use the cached texture
+      this.sprite.texture = this.cachedTexture!;
     } else {
       // Use full texture
       this.sprite.texture = this.baseTexture;
+      this.cachedHeight = -1;
     }
 
     // Ensure visibility
     this.visible = true;
+  }
+
+  destroy(options?: boolean | { children?: boolean; texture?: boolean }): void {
+    // Clean up cached texture
+    if (this.cachedTexture && this.cachedTexture !== this.baseTexture) {
+      this.cachedTexture.destroy(false);
+    }
+    super.destroy(options);
   }
 }

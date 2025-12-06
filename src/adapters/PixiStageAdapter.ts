@@ -159,4 +159,8 @@ export class PixiStageAdapter implements StageAdapter {
       console.error(`Error removing entity ${id}:`, error);
     }
   }
+
+  getScreenDimensions(): { width: number; height: number } {
+    return this.scaleCalculator.getDimensions();
+  }
 }

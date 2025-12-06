@@ -10,14 +10,19 @@ import { GameEventType, type Event } from "@/events";
 import type { SystemEventType } from "@/events/SystemEvents";
 import type { StageAdapter } from "@/systems/StageAdapter";
 
-// Pipe generation constants
+// Pipe generation constants (texture dimensions)
 const PIPE_WIDTH = 52;
 const PIPE_HEIGHT = 320;
 const SCROLL_SPEED = 2;
+const REFERENCE_HEIGHT = 512;
 
 /**
  * Utility function to build a Pipe entity from parameters.
- * @param gapSize The gap size to use for this pipe pair (should be between 140 and 160 pixels)
+ * Converts reference coordinates (based on 512px height) to screen coordinates.
+ *
+ * @param gapSize The gap size in reference pixels (140-160)
+ * @param gapY The gap center Y position in reference pixels (120-280)
+ * @param screenHeight The actual screen height for coordinate conversion
  */
 function buildPipeEntity(
   id: string,
@@ -25,19 +30,26 @@ function buildPipeEntity(
   gapY: number,
   gapSize: number,
   isTop: boolean,
+  screenHeight: number,
 ): Pipe {
-  // Calculate height based on position and gap
-  // Top pipe: extends from y=0 down to gap top edge
-  // Bottom pipe: extends from gap bottom edge down
+  // Calculate scale factor to convert reference coords to screen coords
+  const scale = screenHeight / REFERENCE_HEIGHT;
+
+  // Convert reference coordinates to screen coordinates for positioning
+  const gapYScreen = gapY * scale;
+  const gapSizeScreen = gapSize * scale;
+
+  // Height remains in texture pixels (for Rectangle frame cropping in renderer)
   const height = isTop
     ? gapY - gapSize / 2
     : PIPE_HEIGHT - (gapY + gapSize / 2);
 
-  // Top pipe: position at y=0 (top of screen), extends down to gap
-  // Bottom pipe: position at gap bottom edge, extends down
-  const position = isTop ? { x, y: 0 } : { x, y: gapY + gapSize / 2 };
+  // Position is in screen pixels
+  const position = isTop
+    ? { x, y: 0 }
+    : { x, y: gapYScreen + gapSizeScreen / 2 };
 
-  return createPipe(id, position, height, isTop, gapY);
+  return createPipe(id, position, height, isTop, gapYScreen);
 }
 
 /**
@@ -57,8 +69,25 @@ export const PipeSystem = (adapter: StageAdapter): System => {
         const currentState = state as GameState;
         const { topId, bottomId, x, gapY, gapSize } = event.payload;
 
-        const topPipe = buildPipeEntity(topId, x, gapY, gapSize, true);
-        const bottomPipe = buildPipeEntity(bottomId, x, gapY, gapSize, false);
+        // Get screen dimensions from adapter
+        const { height: screenHeight } = adapter.getScreenDimensions();
+
+        const topPipe = buildPipeEntity(
+          topId,
+          x,
+          gapY,
+          gapSize,
+          true,
+          screenHeight,
+        );
+        const bottomPipe = buildPipeEntity(
+          bottomId,
+          x,
+          gapY,
+          gapSize,
+          false,
+          screenHeight,
+        );
 
         // Update adapter for both pipes
         adapter.updatePipe(topPipe);

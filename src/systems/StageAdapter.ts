@@ -18,4 +18,5 @@ export interface StageAdapter {
   updateGround(entity: Ground): void;
   updatePipe(entity: Pipe): void;
   removeEntity(id: string): void;
+  getScreenDimensions(): { width: number; height: number };
 }

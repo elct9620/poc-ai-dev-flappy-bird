@@ -38,6 +38,11 @@ export class MockStageAdapter implements StageAdapter {
     this.removeEntityCalls.push(id);
   }
 
+  getScreenDimensions(): { width: number; height: number } {
+    // Return mock screen dimensions matching reference height for tests
+    return { width: 800, height: 512 };
+  }
+
   reset(): void {
     this.updateScoreCalls = [];
     this.updateBackgroundCalls = [];

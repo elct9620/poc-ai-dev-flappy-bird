@@ -1,8 +1,8 @@
 name: Update Game Design Document
 
 on:
-  push:
-    branches: [main]
+  pull_request:
+    types: [opened, synchronize]
     paths:
       - "docs/design/**/*.md"
       - "docs/entities.md"
@@ -10,28 +10,21 @@ on:
       - "docs/renderers.md"
       - "docs/events.md"
       - "docs/foundations.md"
-  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
 
 jobs:
   update-game-design:
-    # Skip if the commit is from claude[bot] to prevent infinite loops
-    if: |
-      !contains(github.event.head_commit.message, 'docs: update GAME_DESIGN.md') &&
-      github.event.head_commit.author.name != 'claude[bot]'
-
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
+      pull-requests: write
       id-token: write
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.ref }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update GAME_DESIGN.md with Claude Code
         id: claude
@@ -39,6 +32,10 @@ jobs:
         timeout-minutes: 15
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          use_commit_signing: true
           prompt: |
             /game-design
-          claude_args: "--allowed-tools Read,Write,Edit,Glob,Grep,Slash(/game-design)"
+
+            After updating GAME_DESIGN.md, commit the changes with message:
+            "docs: update GAME_DESIGN.md based on design changes"
+          claude_args: "--allowed-tools Read,Write,Edit,Glob,Grep,Slash(/game-design),Bash(git:*)"

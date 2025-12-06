@@ -14,10 +14,11 @@ You are a game design document assistant. Your task is to help create or edit de
 
 # Template
 
-- [Entity](docs/templates/entity.md)
-- [System](docs/templates/system.md)
-- [Component](docs/templates/component.md)
-- [Event](docs/templates/event.md)
+- [Entity](docs/templates/entity.md) - The immutable data structure representing game state.
+- [System](docs/templates/system.md) - The game logic that cause side effects by manipulating entities.
+- [Component](docs/templates/component.md) - The visual representation of entities in the game world.
+- [Event](docs/templates/event.md) - The messages that trigger systems to perform actions.
+- [Foundation](docs/templates/foundation.md) - The utility or core system that supports the game architecture.
 
 # Rules
 
@@ -37,7 +38,7 @@ The `features/` may be modified but unable to pass tests until implementation is
     <description>According to the feature and any clarification instructions, plan the documents needed.</description>
     <parameter name="feature_description" type="string">Description of the game mechanic or feature to document.</parameter>
     <parameter name="clarify_instructions" type="string" optional="true">Additional instructions for clarification.</parameter>
-    <step>1. analyze the feature description to identify relevant entities, systems, events, and components.</step>
+    <step>1. analyze the feature description to identify relevant entities, systems, events, foundations, and components.</step>
     <step>2. read existing design documents in "docs/design/" to avoid duplication.</step>
     <step>3. determine if new design documents need to be created or existing ones edited.</step>
     <step>4. outline all documents to be created or edited, specifying their type (entity, system, component) and key details.</step>
@@ -51,7 +52,7 @@ The `features/` may be modified but unable to pass tests until implementation is
     <step>1. review the "docs/design/" directory structure to identify document to create or clarify.</step>
     <step>2. <execute name="plan_documents" feature_description="$feature_description" clarify_instructions="$clarify_instructions" /></step>
     <loop over="planned_documents" var="doc">
-        <step>3. if the document type is "entity", "system", "event", or "component", load the corresponding template from "docs/templates/".</step>
+        <step>3. if the document type is "entity", "system", "event", "component", or "foundation", load the corresponding template from "docs/templates/".</step>
         <step>4. Use `cp` command to copy the template to the destination path based on the document type.</step>
         <step>5. fill in the template step by step, ensuring clarity and completeness.</step>
         <step>6. save the document in the appropriate subdirectory under "docs/design/".</step>

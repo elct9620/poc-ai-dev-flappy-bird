@@ -10,24 +10,30 @@ The design document should follow template structure and formatting guidelines.
 
 For example:
 
-- The `entity` should follow `docs/tmplates/entity.md`.
-- The `system` should follow `docs/tmplates/system.md`.
-- The `component` should follow `docs/tmplates/component.md`.
-- The `event` should follow `docs/tmplates/event.md`.
+- The `entity` should strictly follow `docs/tmplates/entity.md`.
+- The `system` should strictly follow `docs/tmplates/system.md`.
+- The `component` should strictly follow `docs/tmplates/component.md`.
+- The `event` should strictly follow `docs/tmplates/event.md`.
+- The `foundation` should strictly follow `docs/tmplates/foundation.md`.
 
 ### Avoid Over-Engineering (1 point)
 
-If the data, function, property is not necessary for the current scope or stage, avoid adding them to the design document.
-Keep the design small and focused on the current requirements, and avoid speculative additions.
+When creating a design document, ensure that the design is as simple as possible while still meeting requirements.
+
+Depending on the more complex requirements, consider the following:
+
+- Progressive enhancement: start with a simple design and add complexity only as needed.
+- YAGNI (You Aren't Gonna Need It): avoid adding features or complexity that are not currently required.
+- KISS (Keep It Simple, Stupid): strive for simplicity in design and implementation.
 
 ### Clarity and Readability (1 point)
 
-The design document should be non-technical and easy to understand for all team members.
+The design document should be clear and easy to understand.
 
-- Explain why certain design choices were made.
-- Write without technical jargon or complex language.
-- Use diagrams or visual aids where appropriate to enhance understanding.
-- Focus on value and purpose rather than implementation details.
+- Use simple and concise language.
+- Avoid jargon and technical terms unless necessary, and provide explanations when used.
+- Use diagrams or illustrations to explain complex concepts when appropriate.
+- Easy to follow to implement the design based on the document.
 
 ### Consistency (1 point)
 
@@ -41,9 +47,15 @@ All design documents should maintain a consistent style and format throughout th
 
 Take care to define any new terms or concepts introduced in the design document.
 
-- Check index of glossary for existing definitions, e.g. `docs/entities.md`, `docs/systems.md`, `docs/components.md`, `docs/events.md`.
+- Check index of glossary for existing definitions, e.g. `docs/entities.md`, `docs/systems.md`, `docs/components.md`, `docs/events.md`, `docs/foundations.md`.
 - Ensure that definitions are clear and unambiguous.
 - Avoid using undefined terms or jargon without explanation.
 - Keep index of glossary up to date with new definitions as needed.
 
+### Cross-Referencing (1 point)
 
+Any document that related to other design documents should include cross-references.
+
+```markdown
+This component builds upon the [Entity Name](../entity/entity-name.md) to update its state based on game events.
+```

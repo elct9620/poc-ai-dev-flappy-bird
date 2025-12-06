@@ -20,7 +20,7 @@ This document provides an overview of the [layer type] used in the game and thei
 | [Item](./design/[layer]/[item].md) | [Brief description] |
 ```
 
-- Index files should be named after the layer: `entities.md`, `systems.md`, `events.md`, `components.md`
+- Index files should be named after the layer: `entities.md`, `systems.md`, `events.md`, `components.md`, `foundations.md`
 - Must include a header with layer name
 - Must include an overview sentence explaining the layer's purpose
 - Must use a table format with Name and Description columns

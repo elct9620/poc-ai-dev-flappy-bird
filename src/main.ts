@@ -14,12 +14,14 @@ import { BackgroundSystem } from "@/systems/BackgroundSystem";
 import { GroundSystem } from "@/systems/GroundSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
+import { PipeSystem } from "@/systems/PipeSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import {
   loadBackgroundAssets,
   loadBirdAssets,
   loadGroundAssets,
   loadNumberAssets,
+  loadPipeAssets,
 } from "@/utils/AssetLoader";
 import "./style.css";
 
@@ -41,6 +43,7 @@ const numberTextures = await loadNumberAssets();
 const birdTextures = await loadBirdAssets();
 const backgroundTexture = await loadBackgroundAssets();
 const groundTexture = await loadGroundAssets();
+const pipeTexture = await loadPipeAssets();
 
 // Create adapters
 const stageAdapter = new PixiStageAdapter(
@@ -49,6 +52,7 @@ const stageAdapter = new PixiStageAdapter(
   birdTextures,
   backgroundTexture,
   groundTexture,
+  pipeTexture,
 );
 const audioAdapter = new BrowserAudioAdapter();
 
@@ -63,6 +67,7 @@ const backgroundSystem = BackgroundSystem(stageAdapter);
 const groundSystem = GroundSystem(stageAdapter);
 const scoreSystem = ScoreSystem(stageAdapter);
 const physicsSystem = PhysicsSystem(stageAdapter);
+const pipeSystem = PipeSystem(stageAdapter);
 const audioSystem = AudioSystem(audioAdapter);
 
 // Create initial state
@@ -78,6 +83,7 @@ const inputSystem = InputSystem(eventBus, "bird");
 const engine = new Engine(initialState, eventBus, [
   backgroundSystem,
   groundSystem,
+  pipeSystem,
   scoreSystem,
   physicsSystem,
   inputSystem,

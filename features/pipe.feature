@@ -1,6 +1,5 @@
 # Design Document: docs/design/system/pipe_system.md
 
-@skip
 Feature: Pipe System
   As a game developer
   I want to manage pipe obstacles through events
@@ -25,6 +24,7 @@ Feature: Pipe System
     When I remove the off-screen pipes
     Then the pipes should not exist
 
+  @skip
   Scenario: Mark pipe as passed
     Given a pipe pair exists at x position 100
     And the bird is at x position 50

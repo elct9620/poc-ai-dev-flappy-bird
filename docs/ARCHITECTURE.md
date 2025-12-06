@@ -39,6 +39,7 @@ root/
 │   │   ├── entity/             # Entity design documents
 │   │   ├── system/             # System design documents
 │   │   ├── component/          # Component design documents
+│   │   ├── foundation/         # The shared logic and principles, e.g. scale management, adapter interfaces & implementations
 │   ├── ARCHITECTURE.md         # This architecture document
 │   ├── entities.md             # Entity index and descriptions
 │   ├── systems.md              # System index and descriptions

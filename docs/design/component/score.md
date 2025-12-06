@@ -35,7 +35,7 @@ const scale = scaleCalculator.getResponsiveScale(2.0);
 this.scale.set(scale);
 ```
 
-This ensures consistent responsive rendering across all screen sizes. See the [Scale Guidelines](../../design/guidelines/scale.md) for details.
+This ensures consistent responsive rendering across all screen sizes. See the [Scale Guidelines](../foundation/scale.md) for details.
 
 ## Synchronization
 

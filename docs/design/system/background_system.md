@@ -1,6 +1,6 @@
 # Background System
 
-The Background System is responsible for managing background entities in the game. It handles the creation and removal of background visuals that provide visual context for gameplay. The system works with minimal entity state, delegating all rendering details to the Component layer.
+The Background System is responsible for managing background entities in the game. It handles the creation and removal of background visuals that provide visual context for gameplay. The system works with minimal entity state, delegating all rendering details to the Renderer layer.
 
 ## Side Effects
 

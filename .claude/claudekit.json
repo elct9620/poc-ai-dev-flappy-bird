@@ -3,7 +3,7 @@
     "rules": [
       {
         "name": "Document Index",
-        "pattern": "docs/(entities|systems|events|components)\\.md$",
+        "pattern": "docs/(entities|systems|events|renderers)\\.md$",
         "path": "docs/rubrics/document_index.md"
       },
       {

@@ -1,8 +1,8 @@
 # Bird
 
-The Bird component is responsible for visually representing the player character using animated sprites. It displays the bird with appropriate position, rotation, and wing flapping animation based on the bird entity's state.
+The Bird renderer is responsible for visually representing the player character using animated sprites. It displays the bird with appropriate position, rotation, and wing flapping animation based on the bird entity's state.
 
-The component manages its own animation state internally, cycling through wing flapping frames continuously without relying on entity state. This simplifies the architecture by keeping purely visual concerns within the rendering layer.
+The renderer manages its own animation state internally, cycling through wing flapping frames continuously without relying on entity state. This simplifies the architecture by keeping purely visual concerns within the rendering layer.
 
 ## Properties
 
@@ -13,7 +13,7 @@ The component manages its own animation state internally, cycling through wing f
 
 ## Structure
 
-The Bird component is built using PixiJS AnimatedSprite with three animation frames for wing flapping.
+The Bird renderer is built using PixiJS AnimatedSprite with three animation frames for wing flapping.
 
 ```markdown
 Container (Bird)
@@ -33,7 +33,7 @@ The bird uses three sprite assets for animation:
 2. **Frame 1** (`yellowbird-midflap.png`): Wings in middle position
 3. **Frame 2** (`yellowbird-upflap.png`): Wings in upward position
 
-The animation cycles through these frames (0 → 1 → 2 → 0) continuously during gameplay to create a smooth flapping effect. The component uses PixiJS AnimatedSprite to manage this animation with:
+The animation cycles through these frames (0 → 1 → 2 → 0) continuously during gameplay to create a smooth flapping effect. The renderer uses PixiJS AnimatedSprite to manage this animation with:
 
 - **AnimatedSprite.animationSpeed**: Set to 0.125 (1/8) for 8 ticks per frame (~133ms at 60fps)
 - **AnimatedSprite.play()**: Starts the continuous animation loop
@@ -44,16 +44,16 @@ The animation cycles through these frames (0 → 1 → 2 → 0) continuously dur
 
 ### Sync Method
 
-The `sync(entity: Bird)` method reconciles the component's visual state with the bird entity:
+The `sync(entity: Bird)` method reconciles the renderer's visual state with the bird entity:
 
 1. **Position Update**: Sets the container's position to match `entity.position`
 2. **Rotation Update**: Sets the container's rotation to match `entity.rotation`
 3. **Animation Control**: Starts animation with `play()` if bird is alive and animation stopped, or stops with `stop()` if bird is dead
-4. **Visibility**: Hides the component if `entity.isAlive` is false
+4. **Visibility**: Hides the renderer if `entity.isAlive` is false
 
 ### Initialization
 
-When created, the component:
+When created, the renderer:
 
 1. Receives all three bird sprite textures as a parameter
 2. Creates an AnimatedSprite with all textures

@@ -4,16 +4,16 @@ import type { Bird as BirdEntity } from "@/entity/Bird";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
- * Bird component is responsible for visually representing the player character
+ * Bird renderer is responsible for visually representing the player character
  * using animated sprites. It displays the bird with appropriate position, rotation,
  * and wing flapping animation based on the bird entity's state.
  *
- * The component uses PixiJS AnimatedSprite to manage wing flapping animation
+ * The renderer uses PixiJS AnimatedSprite to manage wing flapping animation
  * internally, cycling through frames continuously without relying on entity state.
  *
  * Scale is calculated using ScaleCalculator for responsive rendering.
  *
- * @see {@link ../../docs/design/component/bird.md|Bird Component Design Document}
+ * @see {@link ../../docs/design/renderer/bird.md|Bird Renderer Design Document}
  * @see {@link ../../docs/design/guidelines/scale.md|Scale Guidelines}
  */
 export class Bird extends Container {

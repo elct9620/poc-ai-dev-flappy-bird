@@ -33,7 +33,7 @@ export enum GameEventType {
  * CREATE_SCORE event
  *
  * Creates a new score entity in the game state with full configuration.
- * Scale is managed by the Score component, not the entity.
+ * Scale is managed by the Score renderer, not the entity.
  */
 export interface CreateScoreEvent {
   type: GameEventType.CreateScore;

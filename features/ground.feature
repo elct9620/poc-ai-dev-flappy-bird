@@ -1,6 +1,6 @@
 # This feature is related to:
 # - docs/design/entity/ground.md
-# - docs/design/component/ground.md
+# - docs/design/renderer/ground.md
 # - docs/design/system/ground_system.md
 Feature: Ground System
   As a player

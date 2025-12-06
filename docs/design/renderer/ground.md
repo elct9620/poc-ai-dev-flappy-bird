@@ -1,6 +1,6 @@
 # Ground
 
-The Ground component is a visual element that displays a tiled ground (base) image at the bottom of the screen using PixiJS TilingSprite. It automatically repeats the ground texture horizontally to fill the screen width and is positioned at the bottom of the game area.
+The Ground renderer is a visual element that displays a tiled ground (base) image at the bottom of the screen using PixiJS TilingSprite. It automatically repeats the ground texture horizontally to fill the screen width and is positioned at the bottom of the game area.
 
 ## Properties
 
@@ -26,15 +26,15 @@ Container (Ground)
 
 ### Sync Method
 
-The `sync(entity: Ground)` method reconciles the component's visual state with the entity. Since the Ground entity contains minimal state (only `id` and `type`), the sync method has minimal work:
+The `sync(entity: Ground)` method reconciles the renderer's visual state with the entity. Since the Ground entity contains minimal state (only `id` and `type`), the sync method has minimal work:
 
-1. **Visibility**: Ensures the component is visible when the entity exists
+1. **Visibility**: Ensures the renderer is visible when the entity exists
 2. **Screen Adaptation**: Updates TilingSprite dimensions to match current screen width if changed
 3. **Bottom Positioning**: Ensures the ground stays aligned to the bottom of the screen
 
 ### Initialization
 
-When created, the component:
+When created, the renderer:
 
 1. Receives the ground texture as a parameter
 2. Calculates the ground height using a fixed scale factor (2.0)

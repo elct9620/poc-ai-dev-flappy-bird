@@ -47,7 +47,7 @@ body:
       description: What specifically should be implemented? (if implementing everything, say "Full implementation")
       placeholder: |
         Describe what to implement:
-        - Which entities/systems/components?
+        - Which entities/systems/renderers?
         - Are there any parts to exclude?
         - Any specific priorities or ordering?
       value: "Full implementation of all design documents"
@@ -62,7 +62,7 @@ body:
       placeholder: |
         - [ ] All entities are implemented with correct properties
         - [ ] Systems handle all events specified in design
-        - [ ] Components render correctly
+        - [ ] Renderers render correctly
         - [ ] All BDD scenarios pass
         - [ ] Code follows project conventions
       value: |

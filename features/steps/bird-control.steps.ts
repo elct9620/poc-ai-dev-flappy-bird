@@ -126,7 +126,7 @@ Then("the bird's animation should be playing", (world: GameWorld) => {
   const state = world.getState();
   const bird = state.entities["bird"] as Bird;
   expect(bird).toBeDefined();
-  // Animation is now managed internally by the component
+  // Animation is now managed internally by the renderer
   // We verify the bird is alive and has been updated multiple times with enough deltaTime
   // 0.15 seconds = 9 ticks at 60fps, which should advance animation at least once (8 ticks per frame)
   expect(bird.isAlive).toBe(true);

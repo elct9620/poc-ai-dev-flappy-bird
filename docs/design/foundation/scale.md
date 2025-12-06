@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the responsive scaling strategy for all game sprites. Scale management is handled by components (not entities) using the centralized `ScaleCalculator` utility to ensure consistent, responsive rendering across different screen sizes.
+This document defines the responsive scaling strategy for all game sprites. Scale management is handled by renderers (not entities) using the centralized `ScaleCalculator` utility to ensure consistent, responsive rendering across different screen sizes.
 
 ## Philosophy
 
@@ -13,7 +13,7 @@ All sprites scale proportionally with screen dimensions to maintain consistent v
 ### Separation of Concerns
 
 - **Entities**: Pure game state (position, velocity, value) - do NOT manage scale
-- **Components**: Visual representation - own scale logic and rendering
+- **Renderers**: Visual representation - own scale logic and rendering
 - **ScaleCalculator**: Centralized responsive scale calculations
 
 ## ScaleCalculator Utility
@@ -24,7 +24,7 @@ All sprites scale proportionally with screen dimensions to maintain consistent v
 
 ### Usage
 
-The `ScaleCalculator` is instantiated once in `PixiStageAdapter` with current screen dimensions and passed to all component constructors.
+The `ScaleCalculator` is instantiated once in `PixiStageAdapter` with current screen dimensions and passed to all renderer constructors.
 
 ```typescript
 const scaleCalculator = new ScaleCalculator(app.screen.width, app.screen.height);
@@ -38,7 +38,7 @@ Calculates scale for fullscreen elements (backgrounds) that should fill the enti
 
 **Formula**: `screenHeight / textureHeight`
 
-**Use case**: Background components that tile to fill the screen
+**Use case**: Background renderers that tile to fill the screen
 
 #### `getBaseScale(): number`
 
@@ -93,12 +93,12 @@ At different screen heights, all elements maintain consistent proportions:
 
 ## Implementation Pattern
 
-### Component Constructor
+### Renderer Constructor
 
-Components receive `ScaleCalculator` instance via constructor and apply scale during initialization:
+Renderers receive `ScaleCalculator` instance via constructor and apply scale during initialization:
 
 ```typescript
-export class GameObjectComponent extends Container {
+export class GameObjectRenderer extends Container {
   constructor(texture: Texture, scaleCalculator: ScaleCalculator) {
     super();
 
@@ -135,13 +135,13 @@ interface Score {
   value: number;
 }
 
-// Component applied entity scale
+// Renderer applied entity scale
 sync(entity: Score): void {
-  this.scale.set(entity.scale); // ❌ Component reads from entity
+  this.scale.set(entity.scale); // ❌ Renderer reads from entity
 }
 ```
 
-### After (Component-Managed Scale)
+### After (Renderer-Managed Scale)
 
 ```typescript
 // Entity does NOT manage scale
@@ -149,10 +149,10 @@ interface Score {
   value: number; // ✅ Pure game state only
 }
 
-// Component owns scale logic
+// Renderer owns scale logic
 constructor(textures: Record<string, Texture>, scaleCalculator: ScaleCalculator) {
   super();
-  const scale = scaleCalculator.getBaseScale(); // ✅ Component calculates
+  const scale = scaleCalculator.getBaseScale(); // ✅ Renderer calculates
   this.scale.set(scale);
 }
 
@@ -167,19 +167,19 @@ sync(entity: Score): void {
 Currently, screen dimensions are fixed at initialization. If dynamic screen resizing is needed in the future:
 
 1. Update `ScaleCalculator` with new dimensions
-2. Re-instantiate components with updated calculator
-3. Consider adding a `resize()` method to components
+2. Re-instantiate renderers with updated calculator
+3. Consider adding a `resize()` method to renderers
 
 ## Examples
 
-### Background Component
+### Background Renderer
 
 ```typescript
 const scale = scaleCalculator.getFullscreenScale(texture.height);
 tilingSprite.tileScale.set(scale, scale);
 ```
 
-### Ground Component
+### Ground Renderer
 
 ```typescript
 const scale = scaleCalculator.getBaseScale();
@@ -187,14 +187,14 @@ const groundHeight = texture.height * scale;
 tilingSprite.tileScale.set(scale, scale);
 ```
 
-### Bird Component
+### Bird Renderer
 
 ```typescript
 const scale = scaleCalculator.getBaseScale();
 sprite.scale.set(scale, scale);
 ```
 
-### Score Component
+### Score Renderer
 
 ```typescript
 const scale = scaleCalculator.getBaseScale();
@@ -203,15 +203,15 @@ this.scale.set(scale); // Container scale affects all children
 
 ## Testing Considerations
 
-- BDD tests should NOT test scale values (component implementation detail)
+- BDD tests should NOT test scale values (renderer implementation detail)
 - Tests focus on game behavior (position, collision, scoring)
 - Scale is verified visually or through rendering integration tests
 
 ## Related Documents
 
 - Implementation: `src/utils/ScaleCalculator.ts`
-- Component Designs:
-  - `docs/design/component/background.md`
-  - `docs/design/component/ground.md`
-  - `docs/design/component/bird.md`
-  - `docs/design/component/score.md`
+- Renderer Designs:
+  - `docs/design/renderer/background.md`
+  - `docs/design/renderer/ground.md`
+  - `docs/design/renderer/bird.md`
+  - `docs/design/renderer/score.md`

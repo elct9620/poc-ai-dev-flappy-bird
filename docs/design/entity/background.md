@@ -1,6 +1,6 @@
 # Background
 
-The Background entity represents the state of a background scene in the game. It is a pure data structure with minimal state, as the background is a static visual element. All rendering details (texture, tiling, positioning) are handled by the Component layer using PixiJS TilingSprite.
+The Background entity represents the state of a background scene in the game. It is a pure data structure with minimal state, as the background is a static visual element. All rendering details (texture, tiling, positioning) are handled by the Renderer layer using PixiJS TilingSprite.
 
 ## Properties
 

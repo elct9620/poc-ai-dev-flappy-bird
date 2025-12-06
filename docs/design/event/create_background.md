@@ -2,7 +2,7 @@
 
 **Type:** `GameEvent`
 
-Creates a new background entity in the game state to display a tiled background. The entity contains minimal state, as all rendering details are handled by the Component layer.
+Creates a new background entity in the game state to display a tiled background. The entity contains minimal state, as all rendering details are handled by the Renderer layer.
 
 ## Payload
 

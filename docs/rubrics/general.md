@@ -9,7 +9,7 @@ This document outlines the criteria for evaluating the quality of general coding
 In `tsconfig.json`, we already defined the path alias `@/` to point to the `src/` directory. All absolute imports should use this alias for better readability and maintainability.
 
 ```typescript
-import { MyComponent } from '@/components/MyComponent';
+import { MyRenderer } from '@/renderers/MyRenderer';
 ```
 
 ### Reference Design Documents (1 point)
@@ -29,7 +29,7 @@ For game-related implementations, always use TSDoc comments to reference the rel
 ```
 
 - `src/systems/` for Game System implementations
-- `src/components/` for Game Visual Component implementations
+- `src/renderers/` for Game Visual Renderer implementations
 - `src/entities/` for Game Entity implementations
 - `src/events/` for Event implementations
 

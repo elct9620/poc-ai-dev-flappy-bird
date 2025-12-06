@@ -11,7 +11,7 @@ body:
         This template helps you describe **what** you want and **why** you need it. Focus on the desired behavior and user value - Claude will handle all technical decisions.
 
         **You don't need to know:**
-        - Which architecture layers to use (Entity/System/Component)
+        - Which architecture layers to use (Entity/System/Renderer)
         - How many design documents to create
         - Technical implementation details
 

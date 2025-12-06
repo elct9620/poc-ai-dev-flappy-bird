@@ -2,7 +2,7 @@
 
 The Score entity represents the state of a numeric score display in the game. It is a pure data structure containing the score value and its visual presentation properties.
 
-Scale is managed by the Score component using ScaleCalculator, not by this entity.
+Scale is managed by the Score renderer using ScaleCalculator, not by this entity.
 
 ## Properties
 

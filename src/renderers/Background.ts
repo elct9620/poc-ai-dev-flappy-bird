@@ -4,9 +4,9 @@ import type { Background as BackgroundEntity } from "@/entity/Background";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
- * Background component displays a tiled background using PixiJS TilingSprite.
+ * Background renderer displays a tiled background using PixiJS TilingSprite.
  * Scale is calculated using ScaleCalculator for responsive fullscreen rendering.
- * @see {@link ../../docs/design/component/background.md|Background Component Design Document}
+ * @see {@link ../../docs/design/renderer/background.md|Background Renderer Design Document}
  * @see {@link ../../docs/design/guidelines/scale.md|Scale Guidelines}
  */
 export class Background extends Container {

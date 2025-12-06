@@ -30,9 +30,9 @@ export function ScoreSystem(state: GameState, event: Event): Command[] {
 
 ### No Dependencies (1 point)
 
-The system should not have dependencies on external modules or services. It only depends on high-level components, e,g. Entity, Event in the game architecture.
+The system should not have dependencies on external modules or services. It only depends on high-level modules, e,g. Entity, Event in the game architecture.
 
-If the low-level components are needed, define the adapter interfaces and make the system depend on the interfaces instead.
+If the low-level modules/dependencies are needed, define the adapter interfaces and make the system depend on the interfaces instead.
 
 ```typescript
 // src/systems/AdapterInterfaces.ts
@@ -62,7 +62,7 @@ export function MovementSystem(renderer: Renderer) {
 }
 ```
 
-- Use interfaces to abstract low-level components.
+- Use interfaces to abstract low-level modules/dependencies.
 - Inject dependencies through function parameters.
 - Method should be generic and reusable, not for specific entity or scenario.
 - Split interface into standalone files if necessary for reusability.

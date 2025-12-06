@@ -1,22 +1,22 @@
-# [Component Name]
+# [Renderer Name]
 
 <!--
     Responsibility
     ===
 
-    The component is everything related to the visual representation which the user can see. e.g. Player, Enemy, UI Widget, etc.
+    The renderer is everything related to the visual representation which the user can see. e.g. Player, Enemy, UI Widget, etc.
 -->
 
 
-Brief description of the component and its visual representation.
+Brief description of the renderer and its visual representation.
 
 ## Properties
 
 <!--
-    Component Properties
+    Renderer Properties
     ===
 
-    The properties only define the visual-related aspects of the component.
+    The properties only define the visual-related aspects of the renderer.
 -->
 
 | Name        | Type    | Description              |
@@ -27,17 +27,17 @@ Brief description of the component and its visual representation.
 
 ## Structure
 
-Explaination of the component's structure and how it is built using various UI elements or sub-components.
+Explaination of the renderer's structure and how it is built using various UI elements or sub-renderers.
 
 ```markdown
 Container
-    ├── ChildComponent1
+    ├── ChildRenderer1
     │    ├── SubElement1
     │    └── SubElement2
-    └── ChildComponent2
+    └── ChildRenderer2
         ├── SubElement1
         └── SubElement2
 ```
 
-- [ComponentName](./component_name.md): Reason for including this sub-component.
+- [RendererName](./renderer_name.md): Reason for including this sub-renderer.
 - [SubElementName](./subelement_name.md): Reason for including this sub-element.

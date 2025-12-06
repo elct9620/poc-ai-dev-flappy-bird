@@ -1,19 +1,19 @@
 import type { Application, Container, Texture } from "pixi.js";
 
-import { Background as BackgroundComponent } from "@/components/Background";
-import { Bird as BirdComponent } from "@/components/Bird";
-import { Ground as GroundComponent } from "@/components/Ground";
-import { Score as ScoreComponent } from "@/components/Score";
 import type { Background } from "@/entity/Background";
 import type { Bird } from "@/entity/Bird";
 import type { Ground } from "@/entity/Ground";
 import type { Score } from "@/entity/Score";
+import { Background as BackgroundRenderer } from "@/renderers/Background";
+import { Bird as BirdRenderer } from "@/renderers/Bird";
+import { Ground as GroundRenderer } from "@/renderers/Ground";
+import { Score as ScoreRenderer } from "@/renderers/Score";
 import type { StageAdapter } from "@/systems/StageAdapter";
 import { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
  * PixiStageAdapter bridges game entities with PixiJS rendering.
- * Manages visual component lifecycle and synchronization between
+ * Manages visual renderer lifecycle and synchronization between
  * game state and PixiJS display objects.
  *
  * This adapter implements the StageAdapter interface, providing
@@ -21,7 +21,7 @@ import { ScaleCalculator } from "@/utils/ScaleCalculator";
  */
 export class PixiStageAdapter implements StageAdapter {
   private app: Application;
-  private components: Record<string, Container> = {};
+  private renderers: Record<string, Container> = {};
   private numberTextures: Record<string, Texture>;
   private birdTextures: Texture[];
   private backgroundTexture: Texture;
@@ -48,19 +48,16 @@ export class PixiStageAdapter implements StageAdapter {
 
   updateScore(entity: Score): void {
     try {
-      // Get or create Score component
-      let component = this.components[entity.id];
-      if (!component) {
-        component = new ScoreComponent(
-          this.numberTextures,
-          this.scaleCalculator,
-        );
-        this.components[entity.id] = component;
-        this.app.stage.addChild(component);
+      // Get or create Score renderer
+      let renderer = this.renderers[entity.id];
+      if (!renderer) {
+        renderer = new ScoreRenderer(this.numberTextures, this.scaleCalculator);
+        this.renderers[entity.id] = renderer;
+        this.app.stage.addChild(renderer);
       }
 
-      // Sync component with entity
-      (component as ScoreComponent).sync(entity);
+      // Sync renderer with entity
+      (renderer as ScoreRenderer).sync(entity);
     } catch (error) {
       console.error(`Error updating score ${entity.id}:`, error);
     }
@@ -68,17 +65,17 @@ export class PixiStageAdapter implements StageAdapter {
 
   updateBird(entity: Bird): void {
     try {
-      // Get or create Bird component
-      let component = this.components[entity.id];
-      if (!component) {
-        component = new BirdComponent(this.birdTextures, this.scaleCalculator);
-        this.components[entity.id] = component;
-        this.app.stage.addChild(component);
+      // Get or create Bird renderer
+      let renderer = this.renderers[entity.id];
+      if (!renderer) {
+        renderer = new BirdRenderer(this.birdTextures, this.scaleCalculator);
+        this.renderers[entity.id] = renderer;
+        this.app.stage.addChild(renderer);
       }
 
-      // Sync component with entity
+      // Sync renderer with entity
       // AnimatedSprite manages its own animation timing internally
-      (component as BirdComponent).sync(entity);
+      (renderer as BirdRenderer).sync(entity);
     } catch (error) {
       console.error(`Error updating bird ${entity.id}:`, error);
     }
@@ -86,20 +83,20 @@ export class PixiStageAdapter implements StageAdapter {
 
   updateBackground(entity: Background): void {
     try {
-      // Get or create Background component
-      let component = this.components[entity.id];
-      if (!component) {
-        component = new BackgroundComponent(
+      // Get or create Background renderer
+      let renderer = this.renderers[entity.id];
+      if (!renderer) {
+        renderer = new BackgroundRenderer(
           this.backgroundTexture,
           this.scaleCalculator,
         );
-        this.components[entity.id] = component;
+        this.renderers[entity.id] = renderer;
         // Add background at the back (index 0) so it renders behind everything
-        this.app.stage.addChildAt(component, 0);
+        this.app.stage.addChildAt(renderer, 0);
       }
 
-      // Sync component with entity
-      (component as BackgroundComponent).sync(entity);
+      // Sync renderer with entity
+      (renderer as BackgroundRenderer).sync(entity);
     } catch (error) {
       console.error(`Error updating background ${entity.id}:`, error);
     }
@@ -107,20 +104,17 @@ export class PixiStageAdapter implements StageAdapter {
 
   updateGround(entity: Ground): void {
     try {
-      // Get or create Ground component
-      let component = this.components[entity.id];
-      if (!component) {
-        component = new GroundComponent(
-          this.groundTexture,
-          this.scaleCalculator,
-        );
-        this.components[entity.id] = component;
+      // Get or create Ground renderer
+      let renderer = this.renderers[entity.id];
+      if (!renderer) {
+        renderer = new GroundRenderer(this.groundTexture, this.scaleCalculator);
+        this.renderers[entity.id] = renderer;
         // Add ground above background but below other elements (index 1)
-        this.app.stage.addChildAt(component, 1);
+        this.app.stage.addChildAt(renderer, 1);
       }
 
-      // Sync component with entity
-      (component as GroundComponent).sync(entity);
+      // Sync renderer with entity
+      (renderer as GroundRenderer).sync(entity);
     } catch (error) {
       console.error(`Error updating ground ${entity.id}:`, error);
     }
@@ -128,14 +122,14 @@ export class PixiStageAdapter implements StageAdapter {
 
   removeEntity(id: string): void {
     try {
-      const component = this.components[id];
-      if (!component) {
-        console.warn(`Component ${id} not found for removal`);
+      const renderer = this.renderers[id];
+      if (!renderer) {
+        console.warn(`Renderer ${id} not found for removal`);
         return;
       }
-      this.app.stage.removeChild(component);
-      component.destroy();
-      delete this.components[id];
+      this.app.stage.removeChild(renderer);
+      renderer.destroy();
+      delete this.renderers[id];
     } catch (error) {
       console.error(`Error removing entity ${id}:`, error);
     }

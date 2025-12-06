@@ -4,9 +4,9 @@ import type { Ground as GroundEntity } from "@/entity/Ground";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
- * Ground component displays a tiled ground using PixiJS TilingSprite.
+ * Ground renderer displays a tiled ground using PixiJS TilingSprite.
  * Scale is calculated using ScaleCalculator for responsive rendering.
- * @see {@link ../../docs/design/component/ground.md|Ground Component Design Document}
+ * @see {@link ../../docs/design/renderer/ground.md|Ground Renderer Design Document}
  * @see {@link ../../docs/design/guidelines/scale.md|Scale Guidelines}
  */
 export class Ground extends Container {

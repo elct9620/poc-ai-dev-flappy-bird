@@ -1,6 +1,6 @@
 # This feature is related to:
 # - docs/design/entity/background.md
-# - docs/design/component/background.md
+# - docs/design/renderer/background.md
 # - docs/design/system/background_system.md
 Feature: Background System
   As a player

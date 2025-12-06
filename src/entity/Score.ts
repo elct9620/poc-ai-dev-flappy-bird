@@ -3,7 +3,7 @@ import type { Vector } from "@/entity/Vector";
 
 /**
  * Score entity for displaying game score.
- * Scale is managed by the Score component, not the entity.
+ * Scale is managed by the Score renderer, not the entity.
  * @see {@link ../../docs/design/entity/score.md|Score Entity Design Document}
  */
 export interface Score extends Entity {

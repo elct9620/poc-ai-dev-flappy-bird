@@ -4,9 +4,9 @@ import type { Score as ScoreEntity } from "@/entity/Score";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
- * Score component displays the game score using digit sprites.
+ * Score renderer displays the game score using digit sprites.
  * Scale is calculated using ScaleCalculator for responsive rendering.
- * @see {@link ../../docs/design/component/score.md|Score Component Design Document}
+ * @see {@link ../../docs/design/renderer/score.md|Score Renderer Design Document}
  * @see {@link ../../docs/design/guidelines/scale.md|Scale Guidelines}
  */
 export class Score extends Container {

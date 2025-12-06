@@ -24,7 +24,7 @@ root/
 │   │   ├── eventbus.ts         # Event bus for handling game events
 │   ├── entity/                 # Game state definitions and management
 │   ├── systems/                # Systems that process events and update state
-│   ├── components/             # PixiJS components for rendering and interaction
+│   ├── renderers/             # PixiJS renderers for rendering and interaction
 │   ├── events/                 # Event definitions
 │   ├── adapters/               # Adapters for external systems (e.g., PixiJS)
 │   │   ├── pixiStageAdapter.ts # Adapter for PixiJS stage
@@ -38,12 +38,12 @@ root/
 │   ├── design/                 # Game design documents
 │   │   ├── entity/             # Entity design documents
 │   │   ├── system/             # System design documents
-│   │   ├── component/          # Component design documents
+│   │   ├── renderer/          # Renderer design documents
 │   │   ├── foundation/         # The shared logic and principles, e.g. scale management, adapter interfaces & implementations
 │   ├── ARCHITECTURE.md         # This architecture document
 │   ├── entities.md             # Entity index and descriptions
 │   ├── systems.md              # System index and descriptions
-│   ├── components.md           # Component index and descriptions
+│   ├── renderers.md           # Renderer index and descriptions
 ├── public/                     # Public assets served directly
 ├── index.html                  # Main HTML file
 ├── vite.config.ts              # Vite configuration file
@@ -235,7 +235,7 @@ Located in `src/adapters/`, adapters interface with external systems like PixiJS
 
 import * as PIXI from 'pixi.js';
 import { StageAdapter } from '@/systems/RenderingSystem';
-import { ComponentFactory } from '@/components/ComponentFactory';
+import { RendererFactory } from '@/renderers/RendererFactory';
 
 export class PixiStageAdapter implements StageAdapter {
     private app: PIXI.Application;
@@ -245,8 +245,8 @@ export class PixiStageAdapter implements StageAdapter {
         this.app = app;
     }
 
-    createEntity(id: string, componentId: string): void {
-        const displayObject = ComponentFactory.createComponent(componentId);
+    createEntity(id: string, rendererId: string): void {
+        const displayObject = RendererFactory.createRenderer(rendererId);
         this.entities[id] = displayObject;
         this.app.stage.addChild(displayObject);
     }

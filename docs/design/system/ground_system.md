@@ -1,6 +1,6 @@
 # Ground System
 
-The Ground System is responsible for managing ground entities in the game. It handles the creation and removal of ground elements that provide the base visual layer at the bottom of the screen. The system works with minimal entity state, delegating all rendering details to the Component layer.
+The Ground System is responsible for managing ground entities in the game. It handles the creation and removal of ground elements that provide the base visual layer at the bottom of the screen. The system works with minimal entity state, delegating all rendering details to the Renderer layer.
 
 ## Side Effects
 

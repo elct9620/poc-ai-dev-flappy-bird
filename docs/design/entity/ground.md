@@ -1,6 +1,6 @@
 # Ground
 
-The Ground entity represents the state of the ground (base) element in the game. It is a pure data structure with minimal state, as the ground is a static visual element positioned at the bottom of the screen. All rendering details (texture, tiling, positioning, scaling) are handled by the Component layer using PixiJS TilingSprite.
+The Ground entity represents the state of the ground (base) element in the game. It is a pure data structure with minimal state, as the ground is a static visual element positioned at the bottom of the screen. All rendering details (texture, tiling, positioning, scaling) are handled by the Renderer layer using PixiJS TilingSprite.
 
 ## Properties
 

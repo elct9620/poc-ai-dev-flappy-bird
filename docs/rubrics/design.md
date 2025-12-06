@@ -12,7 +12,7 @@ For example:
 
 - The `entity` should strictly follow `docs/tmplates/entity.md`.
 - The `system` should strictly follow `docs/tmplates/system.md`.
-- The `component` should strictly follow `docs/tmplates/component.md`.
+- The `renderer` should strictly follow `docs/tmplates/renderer.md`.
 - The `event` should strictly follow `docs/tmplates/event.md`.
 - The `foundation` should strictly follow `docs/tmplates/foundation.md`.
 
@@ -41,13 +41,13 @@ All design documents should maintain a consistent style and format throughout th
 
 - Check related design documents for consistency in terminology and structure.
 - Ensure that naming conventions are followed consistently.
-- Use same style for naming entities, systems, components, and events across documents.
+- Use same style for naming entities, systems, renderers, and events across documents.
 
 ### Glossary and Definitions (1 point)
 
 Take care to define any new terms or concepts introduced in the design document.
 
-- Check index of glossary for existing definitions, e.g. `docs/entities.md`, `docs/systems.md`, `docs/components.md`, `docs/events.md`, `docs/foundations.md`.
+- Check index of glossary for existing definitions, e.g. `docs/entities.md`, `docs/systems.md`, `docs/renderers.md`, `docs/events.md`, `docs/foundations.md`.
 - Ensure that definitions are clear and unambiguous.
 - Avoid using undefined terms or jargon without explanation.
 - Keep index of glossary up to date with new definitions as needed.
@@ -57,5 +57,5 @@ Take care to define any new terms or concepts introduced in the design document.
 Any document that related to other design documents should include cross-references.
 
 ```markdown
-This component builds upon the [Entity Name](../entity/entity-name.md) to update its state based on game events.
+This renderer builds upon the [Entity Name](../entity/entity-name.md) to update its state based on game events.
 ```

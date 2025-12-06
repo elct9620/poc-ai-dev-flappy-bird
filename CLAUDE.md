@@ -47,9 +47,9 @@ This project follows an **event-driven architecture with adapters** pattern for 
 - Physics system - Gravity and flap mechanics for bird movement
 - Input system - Handles keyboard and click events
 - Audio system with BrowserAudioAdapter - Sound effect playback (wing flap)
-- PixiJS integration via PixiStageAdapter - Manages rendering and component lifecycle
+- PixiJS integration via PixiStageAdapter - Manages rendering and renderer lifecycle
 - PixiInputAdapter - Callback pattern for input handling
-- Score component - Renders digit sprites with alignment and spacing
+- Score renderer - Renders digit sprites with alignment and spacing
 - Asset loading system - Async preload of game sprites and sounds
 
 **Not Yet Implemented:**
@@ -82,13 +82,13 @@ The architecture separates concerns into distinct layers:
 
 4. **Adapters** (`src/adapters/`): External system interfaces
    - Bridge between pure engine and PixiJS rendering
-   - `PixiStageAdapter` manages components, provides lifecycle hooks
+   - `PixiStageAdapter` manages renderers, provides lifecycle hooks
    - Implements interfaces defined by systems (loose coupling)
 
-5. **Components** (`src/components/`): PixiJS visual components
+5. **Renderers** (`src/renderers/`): PixiJS visual renderers
    - Factory pattern for creating display objects
    - `sync(entity)` method reconciles state changes
-   - Example: `Score` component renders number sprites
+   - Example: `Score` renderer renders number sprites
 
 ### Data Flow
 
@@ -168,9 +168,9 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
 };
 ```
 
-### Component Sync Pattern
+### Renderer Sync Pattern
 
-Components reconcile state changes via `sync()`:
+Renderers reconcile state changes via `sync()`:
 
 ```typescript
 class Score extends Container {
@@ -271,9 +271,9 @@ This project follows a design-first approach using custom slash commands:
 
 ### `/design [feature description] [clarify instructions]`
 Creates or edits design documents for game mechanics:
-- Creates documents in `docs/design/entity/`, `docs/design/system/`, or `docs/design/component/`
-- Uses templates from `docs/templates/` (entity.md, system.md, component.md)
-- Updates index files in `docs/entities.md`, `docs/systems.md`, `docs/components.md`
+- Creates documents in `docs/design/entity/`, `docs/design/system/`, or `docs/design/renderer/`
+- Uses templates from `docs/templates/` (entity.md, system.md, renderer.md)
+- Updates index files in `docs/entities.md`, `docs/systems.md`, `docs/renderers.md`
 - May create pending Gherkin tests in `features/` (tests fail until implementation)
 - Design documents are technology-agnostic, focusing on behavior not implementation
 
@@ -281,7 +281,7 @@ Creates or edits design documents for game mechanics:
 Implements or refactors features based on design documents:
 - Reads design documents from `docs/design/` to understand requirements
 - Creates tasks and assigns them (uses Task tool for parallel work)
-- Implements entities in `src/entity/`, systems in `src/systems/`, components in `src/components/`
+- Implements entities in `src/entity/`, systems in `src/systems/`, renderers in `src/renderers/`
 - Ensures all Gherkin tests in `features/` pass after implementation
 - Includes self-review for quality assurance
 

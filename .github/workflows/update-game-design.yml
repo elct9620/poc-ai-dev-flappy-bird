@@ -38,7 +38,7 @@ jobs:
         uses: anthropics/claude-code-action@v1
         timeout-minutes: 15
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
             /game-design
           claude_args: "--allowed-tools Read,Write,Edit,Glob,Grep,Slash(/game-design)"

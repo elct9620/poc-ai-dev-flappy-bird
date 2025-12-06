@@ -9,4 +9,5 @@ This document provides an overview of the systems used in the game engine and th
 | [GroundSystem](./design/system/ground_system.md)           | Manages ground entities at the bottom of the screen.                |
 | [InputSystem](./design/system/input_system.md)             | Handles user input (mouse clicks and keyboard) for bird control.   |
 | [PhysicsSystem](./design/system/physics_system.md)         | Manages bird physics including gravity, flapping, and movement.     |
+| [PipeSystem](./design/system/pipe_system.md)               | Manages pipe obstacle generation, movement, and removal.            |
 | [ScoreSystem](./design/system/score_system.md)             | Tracks and updates the game score.                                  |

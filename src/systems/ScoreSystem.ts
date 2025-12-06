@@ -1,3 +1,4 @@
+import { SCORE_INCREMENT_VALUE } from "@/constants";
 import type { Command, System } from "@/engine/engine";
 import type { GameState } from "@/entity/GameState";
 import type { Score } from "@/entity/Score";
@@ -82,7 +83,7 @@ export const ScoreSystem = (adapter: StageAdapter): System => {
           const scoreEntity = entity as Score;
           const updatedEntity = updateScoreValue(
             scoreEntity,
-            scoreEntity.value + 1,
+            scoreEntity.value + SCORE_INCREMENT_VALUE,
           );
 
           // Update adapter immediately

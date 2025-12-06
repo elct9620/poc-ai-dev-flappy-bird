@@ -1,3 +1,4 @@
+import { WING_FLAP_SOUND } from "@/constants";
 import type { Command, System } from "@/engine/engine";
 import { GameEventType, type Event } from "@/events";
 import type { AudioAdapter } from "@/systems/AudioAdapter";
@@ -14,7 +15,7 @@ export const AudioSystem = (adapter: AudioAdapter): System => {
   return (_state, event: Event): Command[] => {
     // Play wing sound when bird flaps
     if (event.type === GameEventType.BirdFlap) {
-      adapter.playSound("wing");
+      adapter.playSound(WING_FLAP_SOUND);
     }
 
     return [];

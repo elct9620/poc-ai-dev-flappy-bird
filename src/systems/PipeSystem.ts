@@ -1,3 +1,14 @@
+import {
+  MAX_GAP_SIZE,
+  MAX_GAP_Y,
+  MIN_GAP_SIZE,
+  MIN_GAP_Y,
+  PIPE_HEIGHT,
+  PIPE_SPACING,
+  PIPE_WIDTH,
+  REFERENCE_HEIGHT,
+  SCROLL_SPEED,
+} from "@/constants";
 import type { Command, System } from "@/engine/engine";
 import type { Bird } from "@/entity/Bird";
 import type { GameState } from "@/entity/GameState";
@@ -10,19 +21,6 @@ import {
 import { GameEventType, type Event } from "@/events";
 import { SystemEventType, type TickEvent } from "@/events/SystemEvents";
 import type { StageAdapter } from "@/systems/StageAdapter";
-
-// Pipe generation constants (texture dimensions and movement)
-const PIPE_WIDTH = 52;
-const PIPE_HEIGHT = 320; // Pipe texture height in pixels
-const SCROLL_SPEED = 2;
-const REFERENCE_HEIGHT = 512;
-
-// Pipe generation constants (gap parameters and spacing)
-const MIN_GAP_SIZE = 140;
-const MAX_GAP_SIZE = 160;
-const MIN_GAP_Y = 120;
-const MAX_GAP_Y = 280;
-const PIPE_SPACING = 200;
 
 /**
  * Utility function to build a Pipe entity from parameters.

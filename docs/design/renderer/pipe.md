@@ -45,29 +45,34 @@ See the [Scale Guidelines](../foundation/scale.md) for details.
 
 ## Rendering Details
 
+The renderer uses a **full-height approach** where all pipes use the complete 320px texture without cropping:
+
 ### Top Pipe
-- Sprite is vertically flipped (scale.y = -1)
-- Position represents the bottom edge of the visible pipe
-- The pipe extends upward from this position
+- Sprite uses anchor(0,0) - top-left corner
+- Sprite is vertically flipped using negative Y scale (scale.y = -scale)
+- Position represents where the pipe's anchor point is placed (gap top edge)
+- The sprite extends 320px × scale downward, but appears upward when flipped
+- Parts extending above the screen are naturally clipped by viewport bounds
 
 ### Bottom Pipe
-- Sprite is in normal orientation (scale.y = 1)
-- Position represents the top edge of the visible pipe
-- The pipe extends downward from this position
+- Sprite uses anchor(0,0) - top-left corner
+- Sprite is in normal orientation (scale.y = scale)
+- Position represents where the pipe's anchor point is placed (gap bottom edge)
+- The sprite extends 320px × scale downward
+- Parts extending below the playable area are covered by the ground layer (zIndex=100)
 
-### Height Adjustment
+### No Height Adjustment
 
-The renderer adjusts the visible height of pipes to create gaps of varying sizes. This is achieved using PixiJS texture cropping:
+Unlike traditional implementations, this renderer **does not crop textures**:
 
-**Implementation approach:**
-- Use sprite texture's `frame` property to crop the visible region
-- For bottom pipes: crop from the top by adjusting frame's y-offset and height
-- For top pipes: crop from the bottom by adjusting frame's height only
-- The scaled height (`320 × scale`) determines the maximum visible pipe length
+- Both pipes always use the full 320px texture height
+- No `frame` property manipulation needed
+- No dynamic texture cropping in `sync()` method
+- Simpler implementation with the same visual result
 
-**Example (bottom pipe cropping to 200px visible height at scale 1.0):**
-```typescript
-sprite.texture.frame = new Rectangle(0, 120, 52, 200);
-```
+The gap between pipes is created purely through positioning, and the visual appearance is achieved through:
+1. **Natural clipping** by screen boundaries (top)
+2. **Layer ordering** with ground covering bottom parts (zIndex)
+3. **Vertical flipping** using negative scale for top pipes
 
-This approach avoids the overhead of masking while providing precise control over visible pipe portions. The height adjustment is applied in the `sync()` method when the entity's height property changes.
+This approach simplifies the renderer while maintaining proper game mechanics. See the [Pipe System](../system/pipe_system.md) for coordinate calculation details.

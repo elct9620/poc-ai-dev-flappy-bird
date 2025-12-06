@@ -6,6 +6,7 @@ import { BackgroundSystem } from "@/systems/BackgroundSystem";
 import { GroundSystem } from "@/systems/GroundSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
+import { PipeSystem } from "@/systems/PipeSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import { QuickPickleWorld } from "quickpickle";
 import type { TestContext } from "vitest";
@@ -35,6 +36,7 @@ export class GameWorld extends QuickPickleWorld {
       ScoreSystem(this.adapter),
       BackgroundSystem(this.adapter),
       GroundSystem(this.adapter),
+      PipeSystem(this.adapter),
       PhysicsSystem(this.adapter),
       InputSystem(this.eventBus, "bird"),
       AudioSystem(this.audioAdapter),

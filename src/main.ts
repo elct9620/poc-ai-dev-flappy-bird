@@ -14,12 +14,14 @@ import { BackgroundSystem } from "@/systems/BackgroundSystem";
 import { GroundSystem } from "@/systems/GroundSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
+import { PipeSystem } from "@/systems/PipeSystem";
 import { ScoreSystem } from "@/systems/ScoreSystem";
 import {
   loadBackgroundAssets,
   loadBirdAssets,
   loadGroundAssets,
   loadNumberAssets,
+  loadPipeAssets,
 } from "@/utils/AssetLoader";
 import "./style.css";
 
@@ -41,6 +43,7 @@ const numberTextures = await loadNumberAssets();
 const birdTextures = await loadBirdAssets();
 const backgroundTexture = await loadBackgroundAssets();
 const groundTexture = await loadGroundAssets();
+const pipeTexture = await loadPipeAssets();
 
 // Create adapters
 const stageAdapter = new PixiStageAdapter(
@@ -49,6 +52,7 @@ const stageAdapter = new PixiStageAdapter(
   birdTextures,
   backgroundTexture,
   groundTexture,
+  pipeTexture,
 );
 const audioAdapter = new BrowserAudioAdapter();
 
@@ -63,6 +67,7 @@ const backgroundSystem = BackgroundSystem(stageAdapter);
 const groundSystem = GroundSystem(stageAdapter);
 const scoreSystem = ScoreSystem(stageAdapter);
 const physicsSystem = PhysicsSystem(stageAdapter);
+const pipeSystem = PipeSystem(stageAdapter);
 const audioSystem = AudioSystem(audioAdapter);
 
 // Create initial state
@@ -78,6 +83,7 @@ const inputSystem = InputSystem(eventBus, "bird");
 const engine = new Engine(initialState, eventBus, [
   backgroundSystem,
   groundSystem,
+  pipeSystem,
   scoreSystem,
   physicsSystem,
   inputSystem,
@@ -123,6 +129,62 @@ engine.dispatch({
     id: "bird",
     position: { x: window.innerWidth / 4, y: window.innerHeight / 2 },
   },
+});
+
+// Pipe generation configuration
+const MIN_GAP_SIZE = 140;
+const MAX_GAP_SIZE = 160;
+const MIN_GAP_Y = 120;
+const MAX_GAP_Y = 280;
+const PIPE_SPACING = 200;
+const PIPE_SCROLL_SPEED = 2;
+
+// Helper function to generate random gap size and position
+function generatePipeParams() {
+  const gapSize = MIN_GAP_SIZE + Math.random() * (MAX_GAP_SIZE - MIN_GAP_SIZE);
+  const gapY = MIN_GAP_Y + Math.random() * (MAX_GAP_Y - MIN_GAP_Y);
+  return { gapSize, gapY };
+}
+
+// Track pipe generation state
+let pipeCounter = 0;
+let lastPipeX = window.innerWidth;
+
+// Function to spawn a new pipe pair
+function spawnPipePair() {
+  const { gapSize, gapY } = generatePipeParams();
+  const x = lastPipeX + PIPE_SPACING;
+
+  engine.dispatch({
+    type: GameEventType.CreatePipe,
+    payload: {
+      topId: `pipe-top-${pipeCounter}`,
+      bottomId: `pipe-bottom-${pipeCounter}`,
+      x,
+      gapY,
+      gapSize,
+    },
+  });
+
+  lastPipeX = x;
+  pipeCounter++;
+}
+
+// Create initial pipe pairs
+for (let i = 0; i < 3; i++) {
+  spawnPipePair();
+}
+
+// Continuous pipe generation - spawn new pipe when the last one moves into view
+app.ticker.add(() => {
+  // When the last pipe has scrolled enough, spawn a new one
+  const distanceFromEdge = lastPipeX - window.innerWidth;
+  if (distanceFromEdge < PIPE_SPACING) {
+    spawnPipePair();
+  }
+
+  // Update lastPipeX based on scroll speed
+  lastPipeX -= PIPE_SCROLL_SPEED;
 });
 
 // Setup input handling with callback pattern

@@ -41,14 +41,44 @@ Removes a [Pipe](../entity/pipe.md) from the game state's entities record when i
 The PipeSystem uses the following constants for pipe generation and movement:
 
 - **Pipe Width**: 52 pixels (from sprite dimensions)
-- **Pipe Height**: 320 pixels (from sprite dimensions)
-- **Gap Size**: 100-120 pixels (vertical space between top and bottom pipes)
+- **Pipe Height**: 320 pixels (full sprite texture height, not cropped)
+- **Gap Size**: 140-160 pixels (vertical space between top and bottom pipes)
 - **Horizontal Spacing**: 200 pixels (distance between pipe pairs)
 - **Scroll Speed**: 2 pixels/frame (horizontal movement speed, equivalent to ~120 pixels/second at 60fps)
-- **Min Gap Y**: 100 pixels (minimum y-coordinate for gap center)
-- **Max Gap Y**: 300 pixels (maximum y-coordinate for gap center)
+- **Min Gap Y**: 120 pixels (minimum y-coordinate for gap center)
+- **Max Gap Y**: 280 pixels (maximum y-coordinate for gap center)
+- **Reference Height**: 512 pixels (base screen height for coordinate calculations)
 
 These values provide appropriate difficulty while ensuring the game remains playable.
+
+## Coordinate System and Rendering Strategy
+
+The system uses a **full-height rendering approach** where pipes use the complete 320px texture:
+
+- **No texture cropping**: Pipes always use the full 320px sprite height
+- **Natural clipping**: Parts extending beyond the screen top are clipped by viewport bounds
+- **Ground coverage**: Parts extending beyond the playable area are covered by the ground layer (zIndex)
+- **Anchor point**: Both top and bottom pipes use anchor(0,0) - top-left corner
+- **Vertical flip**: Top pipes use negative Y scale (`scale.y = -scale`) to flip upside-down
+
+**Layout (reference coordinates, 512px base height):**
+```
+y = 0 (screen top)
+│
+├─ Top Pipe: positioned at gapTopY (gap center - gap size/2)
+│  └─ Uses anchor(0,0) + scale.y = -1 (flipped)
+│  └─ Extends 320px × scale downward (appears upward when flipped)
+│
+├─ Gap: center at gapY, size = 140-160px
+│
+├─ Bottom Pipe: positioned at gapBottomY (gap center + gap size/2)
+│  └─ Uses anchor(0,0) + scale.y = 1 (normal)
+│  └─ Extends 320px × scale downward
+│
+└─ Ground: covers bottom portion (zIndex=100)
+```
+
+This approach simplifies the implementation by avoiding complex texture frame calculations while achieving the same visual result through natural rendering boundaries.
 
 ## Adapter Interface
 

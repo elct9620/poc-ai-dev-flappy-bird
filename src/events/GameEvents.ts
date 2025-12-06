@@ -23,6 +23,8 @@ export enum GameEventType {
   RemoveBackground = "REMOVE_BACKGROUND",
   CreateGround = "CREATE_GROUND",
   RemoveGround = "REMOVE_GROUND",
+  CreatePipe = "CREATE_PIPE",
+  RemovePipe = "REMOVE_PIPE",
 }
 
 // ============================================================================
@@ -214,6 +216,45 @@ export interface RemoveGroundEvent {
   };
 }
 
+// ============================================================================
+// Pipe Events
+// ============================================================================
+
+/**
+ * CREATE_PIPE event
+ *
+ * Creates a new pipe pair (top and bottom) in the game state.
+ * Pipes are positioned at the right edge with a gap for navigation.
+ */
+export interface CreatePipeEvent {
+  type: GameEventType.CreatePipe;
+  payload: {
+    /** Unique identifier for the top pipe */
+    topId: string;
+    /** Unique identifier for the bottom pipe */
+    bottomId: string;
+    /** X position for both pipes */
+    x: number;
+    /** Y-coordinate of the gap center */
+    gapY: number;
+    /** Size of the gap between top and bottom pipes (100-120 pixels) */
+    gapSize: number;
+  };
+}
+
+/**
+ * REMOVE_PIPE event
+ *
+ * Removes a pipe entity from the game state when it moves off-screen.
+ */
+export interface RemovePipeEvent {
+  type: GameEventType.RemovePipe;
+  payload: {
+    /** Identifier of the pipe to remove */
+    id: string;
+  };
+}
+
 /**
  * Union type of all game events
  */
@@ -229,4 +270,6 @@ export type GameEvent =
   | CreateBackgroundEvent
   | RemoveBackgroundEvent
   | CreateGroundEvent
-  | RemoveGroundEvent;
+  | RemoveGroundEvent
+  | CreatePipeEvent
+  | RemovePipeEvent;

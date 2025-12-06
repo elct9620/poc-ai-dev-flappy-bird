@@ -1,6 +1,7 @@
 import type { Background } from "@/entity/Background";
 import type { Bird } from "@/entity/Bird";
 import type { Ground } from "@/entity/Ground";
+import type { Pipe } from "@/entity/Pipe";
 import type { Score } from "@/entity/Score";
 
 /**
@@ -15,5 +16,7 @@ export interface StageAdapter {
   updateBackground(entity: Background): void;
   updateBird(entity: Bird): void;
   updateGround(entity: Ground): void;
+  updatePipe(entity: Pipe): void;
   removeEntity(id: string): void;
+  getScreenDimensions(): { width: number; height: number };
 }

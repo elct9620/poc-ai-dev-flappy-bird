@@ -1,6 +1,7 @@
 import type { Background } from "@/entity/Background";
 import type { Bird } from "@/entity/Bird";
 import type { Ground } from "@/entity/Ground";
+import type { Pipe } from "@/entity/Pipe";
 import type { Score } from "@/entity/Score";
 import type { AudioAdapter } from "@/systems/AudioAdapter";
 import type { StageAdapter } from "@/systems/StageAdapter";
@@ -10,6 +11,7 @@ export class MockStageAdapter implements StageAdapter {
   public updateBackgroundCalls: Background[] = [];
   public updateBirdCalls: Bird[] = [];
   public updateGroundCalls: Ground[] = [];
+  public updatePipeCalls: Pipe[] = [];
   public removeEntityCalls: string[] = [];
 
   updateScore(entity: Score): void {
@@ -28,8 +30,17 @@ export class MockStageAdapter implements StageAdapter {
     this.updateGroundCalls.push(entity);
   }
 
+  updatePipe(entity: Pipe): void {
+    this.updatePipeCalls.push(entity);
+  }
+
   removeEntity(id: string): void {
     this.removeEntityCalls.push(id);
+  }
+
+  getScreenDimensions(): { width: number; height: number } {
+    // Return mock screen dimensions matching reference height for tests
+    return { width: 800, height: 512 };
   }
 
   reset(): void {
@@ -37,6 +48,7 @@ export class MockStageAdapter implements StageAdapter {
     this.updateBackgroundCalls = [];
     this.updateBirdCalls = [];
     this.updateGroundCalls = [];
+    this.updatePipeCalls = [];
     this.removeEntityCalls = [];
   }
 }

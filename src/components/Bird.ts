@@ -26,8 +26,8 @@ export class Bird extends Container {
     this.sprite = new AnimatedSprite(textures);
     // Set anchor to center for proper rotation
     this.sprite.anchor.set(0.5, 0.5);
-    // Apply responsive scale with design factor 2.0
-    const scale = scaleCalculator.getResponsiveScale(2.0);
+    // Apply base scale to match background scaling
+    const scale = scaleCalculator.getBaseScale();
     this.sprite.scale.set(scale, scale);
     // Set animation speed: 8 ticks per frame at 60fps = 0.133 frames per tick
     // AnimationSpeed is in frames per tick, so 1/8 ≈ 0.125

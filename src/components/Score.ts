@@ -21,8 +21,8 @@ export class Score extends Container {
     super();
     this.textures = textures;
 
-    // Apply responsive scale with design factor 2.0
-    const scale = scaleCalculator.getResponsiveScale(2.0);
+    // Apply base scale to match background scaling
+    const scale = scaleCalculator.getBaseScale();
     this.scale.set(scale);
   }
 

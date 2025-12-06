@@ -29,14 +29,28 @@ export class ScaleCalculator {
   }
 
   /**
+   * Get the base scale that all game elements should use.
+   * This is the same scale the background uses to fill the screen height.
+   * All sprites should scale proportionally with the background.
+   *
+   * @returns Base scale factor (screenHeight / REFERENCE_HEIGHT)
+   */
+  getBaseScale(): number {
+    return this.screenHeight / ScaleCalculator.REFERENCE_HEIGHT;
+  }
+
+  /**
    * Calculate responsive scale with design factor.
-   * Used for game objects and UI elements that should scale proportionally
-   * with screen size while maintaining a design-specified multiplier.
+   * @deprecated Use getBaseScale() instead. The design factor multiplier causes
+   * sprites to scale disproportionately with the background.
    *
    * @param designScaleFactor - The base scale factor from design (e.g., 2.0)
    * @returns Responsive scale factor adjusted for current screen height
    */
   getResponsiveScale(designScaleFactor: number): number {
+    console.warn(
+      "getResponsiveScale() is deprecated. Use getBaseScale() for unified scaling.",
+    );
     return (
       (this.screenHeight / ScaleCalculator.REFERENCE_HEIGHT) * designScaleFactor
     );

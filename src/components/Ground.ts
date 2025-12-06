@@ -19,8 +19,8 @@ export class Ground extends Container {
       scaleCalculator.getDimensions();
 
     // Ground should be a strip at the bottom, not fill entire screen
-    // Use responsive scale with design factor 2.0
-    const scale = scaleCalculator.getResponsiveScale(2.0);
+    // Use base scale to match background scaling
+    const scale = scaleCalculator.getBaseScale();
     const groundHeight = texture.height * scale;
 
     // Create TilingSprite with scaled dimensions

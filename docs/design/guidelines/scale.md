@@ -40,31 +40,56 @@ Calculates scale for fullscreen elements (backgrounds) that should fill the enti
 
 **Use case**: Background components that tile to fill the screen
 
-#### `getResponsiveScale(designScaleFactor: number): number`
+#### `getBaseScale(): number`
 
-Calculates responsive scale for game objects and UI elements using a design-specified multiplier.
+Returns the unified base scale that all game elements should use. This is the same scale the background uses to fill the screen height, ensuring all sprites scale proportionally together.
 
-**Formula**: `(screenHeight / 512) × designScaleFactor`
+**Formula**: `screenHeight / 512`
 
-**Use case**: Game objects (Bird, Pipes, Ground) and UI elements (Score) that scale proportionally
+**Use case**: All game sprites (Bird, Ground, Score, Pipes) to maintain consistent proportions
 
-## Design Scale Factors
+#### `getResponsiveScale(designScaleFactor: number): number` ⚠️ **DEPRECATED**
 
-All scale factors are defined relative to the 512px reference height.
+**⚠️ This method is deprecated.** Use `getBaseScale()` instead.
 
-| Sprite Category | Design Scale Factor | Method | Purpose |
-|----------------|---------------------|---------|---------|
-| **Background** | Dynamic (fullscreen) | `getFullscreenScale(textureHeight)` | Fill entire screen height |
-| **Ground** | 2.0 | `getResponsiveScale(2.0)` | Maintain ~20% of screen height |
-| **Bird** | 2.0 | `getResponsiveScale(2.0)` | Visible but balanced size |
-| **Score** | 2.0 | `getResponsiveScale(2.0)` | Readable at all screen sizes |
-| **Pipes** | 2.0 | `getResponsiveScale(2.0)` | Match bird and ground scale |
+The design factor multiplier causes sprites to scale disproportionately with the background, making elements too large relative to the game canvas.
 
-### Rationale
+## Unified Base Scale
 
-- **2.0 base factor**: Doubles the original sprite size at 512px reference height, ensuring visibility on modern high-resolution displays
-- **Uniform factors**: Bird, Ground, Score, and Pipes use the same factor (2.0) for visual consistency
-- **Dynamic background**: Background fills screen completely for seamless tiling
+All game sprites use the same base scale to ensure proportional scaling across all screen sizes.
+
+**Base Scale Formula**: `screenHeight / 512`
+
+| Element | Method | Multiplier | Result | Purpose |
+|---------|--------|------------|--------|---------|
+| **Background** | `getFullscreenScale(512)` | N/A | `screenHeight / 512` | Fill entire screen height |
+| **Bird** | `getBaseScale()` | 1.0 | `screenHeight / 512` | Scale proportionally with background |
+| **Ground** | `getBaseScale()` | 1.0 | `screenHeight / 512` | Maintain ~22% of screen height |
+| **Score** | `getBaseScale()` | 1.0 | `screenHeight / 512` | Scale proportionally with background |
+| **Pipes** | `getBaseScale()` | 1.0 | `screenHeight / 512` | Scale proportionally with background |
+
+All elements scale together proportionally - no individual multipliers.
+
+### Why Unified Scaling?
+
+The background texture is 288×512px, where 512px is the reference height for the entire game. When the background scales to fill the screen (`screenHeight / 512`), all other sprites should use the **same scale factor** to maintain proper proportions.
+
+**Previous Problem:**
+Sprites used `(screenHeight / 512) × 2.0`, making them twice as large relative to the background. This caused the ground to consume 44% of the screen instead of the intended 22%.
+
+**Solution:**
+Remove the 2.0 multiplier. All sprites now use base scale = `screenHeight / 512`.
+
+### Expected Results
+
+At different screen heights, all elements maintain consistent proportions:
+
+| Screen Height | Base Scale | Bird Size | Ground Height | Ground % |
+|---------------|------------|-----------|---------------|----------|
+| 360px | 0.70 | 24×17px | 78px | 22% |
+| 512px (ref) | 1.0 | 34×24px | 112px | 22% |
+| 768px | 1.5 | 51×36px | 168px | 22% |
+| 1080px | 2.11 | 72×51px | 236px | 22% |
 
 ## Implementation Pattern
 
@@ -78,7 +103,7 @@ export class GameObjectComponent extends Container {
     super();
 
     const sprite = new Sprite(texture);
-    const scale = scaleCalculator.getResponsiveScale(2.0);
+    const scale = scaleCalculator.getBaseScale();
     sprite.scale.set(scale, scale);
 
     this.addChild(sprite);
@@ -127,7 +152,7 @@ interface Score {
 // Component owns scale logic
 constructor(textures: Record<string, Texture>, scaleCalculator: ScaleCalculator) {
   super();
-  const scale = scaleCalculator.getResponsiveScale(2.0); // ✅ Component calculates
+  const scale = scaleCalculator.getBaseScale(); // ✅ Component calculates
   this.scale.set(scale);
 }
 
@@ -157,7 +182,7 @@ tilingSprite.tileScale.set(scale, scale);
 ### Ground Component
 
 ```typescript
-const scale = scaleCalculator.getResponsiveScale(2.0);
+const scale = scaleCalculator.getBaseScale();
 const groundHeight = texture.height * scale;
 tilingSprite.tileScale.set(scale, scale);
 ```
@@ -165,14 +190,14 @@ tilingSprite.tileScale.set(scale, scale);
 ### Bird Component
 
 ```typescript
-const scale = scaleCalculator.getResponsiveScale(2.0);
+const scale = scaleCalculator.getBaseScale();
 sprite.scale.set(scale, scale);
 ```
 
 ### Score Component
 
 ```typescript
-const scale = scaleCalculator.getResponsiveScale(2.0);
+const scale = scaleCalculator.getBaseScale();
 this.scale.set(scale); // Container scale affects all children
 ```
 

@@ -18,7 +18,16 @@ const REFERENCE_HEIGHT = 512;
 
 /**
  * Utility function to build a Pipe entity from parameters.
- * Converts reference coordinates (based on 512px height) to screen coordinates.
+ *
+ * Coordinate System Overview:
+ * - Reference coords (512px height): gapY (120-280), gapSize (140-160)
+ * - Texture coords (320px height): PIPE_HEIGHT, height for cropping
+ * - Screen coords: positions are in screen pixels, renderer applies baseScale
+ *
+ * The renderer will apply baseScale = screenHeight / 512 to the sprite.
+ * Therefore:
+ * - height must be in TEXTURE PIXELS (0-320) for Rectangle cropping
+ * - position must be in SCREEN PIXELS (will be rendered as-is)
  *
  * @param gapSize The gap size in reference pixels (140-160)
  * @param gapY The gap center Y position in reference pixels (120-280)
@@ -35,16 +44,25 @@ function buildPipeEntity(
   // Calculate scale factor to convert reference coords to screen coords
   const scale = screenHeight / REFERENCE_HEIGHT;
 
-  // Convert reference coordinates to screen coordinates for positioning
+  // Convert reference coordinates to screen coordinates
   const gapYScreen = gapY * scale;
   const gapSizeScreen = gapSize * scale;
 
-  // Height remains in texture pixels (for Rectangle frame cropping in renderer)
-  const height = isTop
-    ? gapY - gapSize / 2
-    : PIPE_HEIGHT - (gapY + gapSize / 2);
+  // Calculate how much of the 320px texture should be shown
+  // The gap is defined in reference coords, we need to convert to texture coords
+  // Texture height (320px) corresponds to some portion of reference height (512px)
+  // We need to calculate what portion of the 320px texture corresponds to the visible pipe
+  const gapYTexture = (gapY / REFERENCE_HEIGHT) * PIPE_HEIGHT;
+  const gapSizeTexture = (gapSize / REFERENCE_HEIGHT) * PIPE_HEIGHT;
 
-  // Position is in screen pixels
+  // Height in texture pixels (for Rectangle cropping)
+  const height = isTop
+    ? gapYTexture - gapSizeTexture / 2
+    : PIPE_HEIGHT - (gapYTexture + gapSizeTexture / 2);
+
+  // Position in screen pixels
+  // Top pipe: positioned at y=0, extends down to gap top edge
+  // Bottom pipe: positioned at gap bottom edge, extends down
   const position = isTop
     ? { x, y: 0 }
     : { x, y: gapYScreen + gapSizeScreen / 2 };

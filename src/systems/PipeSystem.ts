@@ -11,11 +11,18 @@ import { GameEventType, type Event } from "@/events";
 import { SystemEventType, type TickEvent } from "@/events/SystemEvents";
 import type { StageAdapter } from "@/systems/StageAdapter";
 
-// Pipe generation constants (texture dimensions)
+// Pipe generation constants (texture dimensions and movement)
 const PIPE_WIDTH = 52;
 const PIPE_HEIGHT = 320; // Pipe texture height in pixels
 const SCROLL_SPEED = 2;
 const REFERENCE_HEIGHT = 512;
+
+// Pipe generation constants (gap parameters and spacing)
+const MIN_GAP_SIZE = 140;
+const MAX_GAP_SIZE = 160;
+const MIN_GAP_Y = 120;
+const MAX_GAP_Y = 280;
+const PIPE_SPACING = 200;
 
 /**
  * Utility function to build a Pipe entity from parameters.
@@ -74,6 +81,30 @@ function buildPipeEntity(
 }
 
 /**
+ * Generate random gap parameters for a new pipe pair.
+ * @returns Object with gapSize and gapY in reference pixels
+ */
+function generatePipeParams(): { gapSize: number; gapY: number } {
+  const gapSize = MIN_GAP_SIZE + Math.random() * (MAX_GAP_SIZE - MIN_GAP_SIZE);
+  const gapY = MIN_GAP_Y + Math.random() * (MAX_GAP_Y - MIN_GAP_Y);
+  return { gapSize, gapY };
+}
+
+/**
+ * Determine if a new pipe should be spawned based on current generation state.
+ * @param generationState - Current pipe generation state
+ * @returns true if distance from screen edge is less than PIPE_SPACING
+ */
+function shouldSpawnPipe(generationState: {
+  lastPipeX: number;
+  screenWidth: number;
+}): boolean {
+  const distanceFromEdge =
+    generationState.lastPipeX - generationState.screenWidth;
+  return distanceFromEdge < PIPE_SPACING;
+}
+
+/**
  * PipeSystem manages pipe obstacle lifecycle including creation, movement, and removal.
  * Handles CREATE_PIPE, TICK, and REMOVE_PIPE events.
  *
@@ -125,10 +156,79 @@ export const PipeSystem = (adapter: StageAdapter): System => {
       });
     }
 
-    // Handle TICK event - update pipe positions and mark as passed
+    // Handle TICK event - automatic pipe generation, update positions, and mark as passed
     if (event.type === SystemEventType.Tick) {
       const tickEvent = event as TickEvent;
       const deltaTime = tickEvent.payload.deltaTime;
+
+      // Automatic pipe generation (if enabled)
+      if (
+        gameState.pipeGeneration &&
+        shouldSpawnPipe(gameState.pipeGeneration)
+      ) {
+        const { gapSize, gapY } = generatePipeParams();
+        const genState = gameState.pipeGeneration;
+        const x = genState.lastPipeX + PIPE_SPACING;
+        const counter = genState.counter;
+        const { height: screenHeight } = adapter.getScreenDimensions();
+
+        // Create pipes inline (avoids event timing issues)
+        commands.push((state) => {
+          const currentState = state as GameState;
+
+          const topPipe = buildPipeEntity(
+            `pipe-top-${counter}`,
+            x,
+            gapY,
+            gapSize,
+            true,
+            screenHeight,
+          );
+          const bottomPipe = buildPipeEntity(
+            `pipe-bottom-${counter}`,
+            x,
+            gapY,
+            gapSize,
+            false,
+            screenHeight,
+          );
+
+          adapter.updatePipe(topPipe);
+          adapter.updatePipe(bottomPipe);
+
+          return {
+            ...currentState,
+            entities: {
+              ...currentState.entities,
+              [`pipe-top-${counter}`]: topPipe,
+              [`pipe-bottom-${counter}`]: bottomPipe,
+            },
+            pipeGeneration: {
+              ...currentState.pipeGeneration!,
+              lastPipeX: x,
+              counter: counter + 1,
+            },
+          };
+        });
+      }
+
+      // Scroll lastPipeX every tick (tracks spawn position)
+      if (gameState.pipeGeneration) {
+        commands.push((state) => {
+          const currentState = state as GameState;
+          if (!currentState.pipeGeneration) return currentState;
+
+          return {
+            ...currentState,
+            pipeGeneration: {
+              ...currentState.pipeGeneration,
+              lastPipeX:
+                currentState.pipeGeneration.lastPipeX -
+                SCROLL_SPEED * deltaTime,
+            },
+          };
+        });
+      }
 
       // Get all pipe entities
       const pipeEntities = Object.values(gameState.entities).filter(

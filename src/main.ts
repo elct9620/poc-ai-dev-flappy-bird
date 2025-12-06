@@ -7,7 +7,6 @@ import { PixiInputAdapter } from "@/adapters/PixiInputAdapter";
 import { PixiStageAdapter } from "@/adapters/PixiStageAdapter";
 import { Engine } from "@/engine/engine";
 import { EventBus } from "@/engine/eventbus";
-import { createGameState } from "@/entity/GameState";
 import { GameEventType, SystemEventType } from "@/events";
 import { AudioSystem } from "@/systems/AudioSystem";
 import { BackgroundSystem } from "@/systems/BackgroundSystem";
@@ -70,8 +69,16 @@ const physicsSystem = PhysicsSystem(stageAdapter);
 const pipeSystem = PipeSystem(stageAdapter);
 const audioSystem = AudioSystem(audioAdapter);
 
-// Create initial state
-const initialState = createGameState();
+// Create initial state with pipe generation enabled
+// Setting lastPipeX to (width - 600) triggers automatic pipe spawning on first few ticks
+const initialState = {
+  entities: {},
+  pipeGeneration: {
+    counter: 0,
+    lastPipeX: window.innerWidth - 600,
+    screenWidth: window.innerWidth,
+  },
+};
 
 // Create event bus
 const eventBus = new EventBus();
@@ -131,61 +138,8 @@ engine.dispatch({
   },
 });
 
-// Pipe generation configuration
-const MIN_GAP_SIZE = 140;
-const MAX_GAP_SIZE = 160;
-const MIN_GAP_Y = 120;
-const MAX_GAP_Y = 280;
-const PIPE_SPACING = 200;
-const PIPE_SCROLL_SPEED = 2;
-
-// Helper function to generate random gap size and position
-function generatePipeParams() {
-  const gapSize = MIN_GAP_SIZE + Math.random() * (MAX_GAP_SIZE - MIN_GAP_SIZE);
-  const gapY = MIN_GAP_Y + Math.random() * (MAX_GAP_Y - MIN_GAP_Y);
-  return { gapSize, gapY };
-}
-
-// Track pipe generation state
-let pipeCounter = 0;
-let lastPipeX = window.innerWidth;
-
-// Function to spawn a new pipe pair
-function spawnPipePair() {
-  const { gapSize, gapY } = generatePipeParams();
-  const x = lastPipeX + PIPE_SPACING;
-
-  engine.dispatch({
-    type: GameEventType.CreatePipe,
-    payload: {
-      topId: `pipe-top-${pipeCounter}`,
-      bottomId: `pipe-bottom-${pipeCounter}`,
-      x,
-      gapY,
-      gapSize,
-    },
-  });
-
-  lastPipeX = x;
-  pipeCounter++;
-}
-
-// Create initial pipe pairs
-for (let i = 0; i < 3; i++) {
-  spawnPipePair();
-}
-
-// Continuous pipe generation - spawn new pipe when the last one moves into view
-app.ticker.add(() => {
-  // When the last pipe has scrolled enough, spawn a new one
-  const distanceFromEdge = lastPipeX - window.innerWidth;
-  if (distanceFromEdge < PIPE_SPACING) {
-    spawnPipePair();
-  }
-
-  // Update lastPipeX based on scroll speed
-  lastPipeX -= PIPE_SCROLL_SPEED;
-});
+// Note: Pipe generation is now handled automatically by PipeSystem via TICK events
+// No manual pipe creation or ticker callbacks needed here
 
 // Setup input handling with callback pattern
 const inputAdapter = new PixiInputAdapter(app);

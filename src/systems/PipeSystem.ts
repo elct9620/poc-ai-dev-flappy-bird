@@ -8,7 +8,7 @@ import {
   updatePipePosition,
 } from "@/entity/Pipe";
 import { GameEventType, type Event } from "@/events";
-import type { SystemEventType } from "@/events/SystemEvents";
+import { SystemEventType, type TickEvent } from "@/events/SystemEvents";
 import type { StageAdapter } from "@/systems/StageAdapter";
 
 // Pipe generation constants (texture dimensions)
@@ -62,10 +62,10 @@ function buildPipeEntity(
     : PIPE_HEIGHT - (gapYTexture + gapSizeTexture / 2);
 
   // Position in screen pixels
-  // Top pipe: positioned at y=0, extends down to gap top edge
-  // Bottom pipe: positioned at gap bottom edge, extends down
+  // Top pipe: positioned at gap top edge with anchor at bottom (0,1), extends upward
+  // Bottom pipe: positioned at gap bottom edge with anchor at top (0,0), extends downward
   const position = isTop
-    ? { x, y: 0 }
+    ? { x, y: gapYScreen - gapSizeScreen / 2 }
     : { x, y: gapYScreen + gapSizeScreen / 2 };
 
   return createPipe(id, position, height, isTop, gapYScreen);
@@ -124,11 +124,8 @@ export const PipeSystem = (adapter: StageAdapter): System => {
     }
 
     // Handle TICK event - update pipe positions and mark as passed
-    if (event.type === ("TICK" as SystemEventType)) {
-      const tickEvent = event as {
-        type: string;
-        payload: { deltaTime: number };
-      };
+    if (event.type === SystemEventType.Tick) {
+      const tickEvent = event as TickEvent;
       const deltaTime = tickEvent.payload.deltaTime;
 
       // Get all pipe entities

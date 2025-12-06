@@ -60,6 +60,7 @@ export class PixiStageAdapter implements StageAdapter {
       if (!renderer) {
         renderer = new ScoreRenderer(this.numberTextures, this.scaleCalculator);
         this.renderers[entity.id] = renderer;
+        renderer.zIndex = 200; // Score above all game elements
         this.app.stage.addChild(renderer);
       }
 

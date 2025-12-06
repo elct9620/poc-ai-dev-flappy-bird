@@ -31,14 +31,14 @@ export class Pipe extends Container {
 
     // Apply scale and anchor once in constructor based on pipe type
     const scale = scaleCalculator.getBaseScale();
-    // Both top and bottom pipes use anchor at top-left
-    // Top pipes are flipped using negative Y scale
-    this.sprite.anchor.set(0, 0);
     if (isTop) {
-      // Top pipes: flip vertically with negative Y scale
+      // Top pipes: use bottom anchor (0, 1) and flip vertically with negative Y scale
+      // This makes the pipe extend upward from the bottom anchor point
+      this.sprite.anchor.set(0, 1);
       this.sprite.scale.set(scale, -scale);
     } else {
-      // Bottom pipes: normal orientation
+      // Bottom pipes: use top anchor (0, 0) and normal orientation
+      this.sprite.anchor.set(0, 0);
       this.sprite.scale.set(scale, scale);
     }
 

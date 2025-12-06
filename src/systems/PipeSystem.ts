@@ -27,15 +27,15 @@ function buildPipeEntity(
   isTop: boolean,
 ): Pipe {
   // Calculate height based on position and gap
-  // Both top and bottom pipes are cropped based on gap position
+  // Top pipe: extends from y=0 down to gap top edge
+  // Bottom pipe: extends from gap bottom edge down
   const height = isTop
     ? gapY - gapSize / 2
     : PIPE_HEIGHT - (gapY + gapSize / 2);
-  // Top pipe: position at gap top edge (will flip upward with negative scale)
-  // Bottom pipe: position at gap bottom edge
-  const position = isTop
-    ? { x, y: gapY - gapSize / 2 }
-    : { x, y: gapY + gapSize / 2 };
+
+  // Top pipe: position at y=0 (top of screen), extends down to gap
+  // Bottom pipe: position at gap bottom edge, extends down
+  const position = isTop ? { x, y: 0 } : { x, y: gapY + gapSize / 2 };
 
   return createPipe(id, position, height, isTop, gapY);
 }

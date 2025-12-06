@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pnpm tsc"
+            "command": "pnpm tsc 1>&2"
           }
         ]
       }

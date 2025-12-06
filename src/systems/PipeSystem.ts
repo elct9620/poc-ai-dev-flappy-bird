@@ -28,7 +28,11 @@ function buildPipeEntity(
 ): Pipe {
   // Calculate height based on position and gap
   const height = isTop ? gapY - gapSize / 2 : PIPE_HEIGHT;
-  const position = isTop ? { x, y: 0 } : { x, y: gapY + gapSize / 2 };
+  // Top pipe: position at gap top edge (will flip upward with negative scale)
+  // Bottom pipe: position at gap bottom edge
+  const position = isTop
+    ? { x, y: gapY - gapSize / 2 }
+    : { x, y: gapY + gapSize / 2 };
 
   return createPipe(id, position, height, isTop, gapY);
 }
@@ -133,8 +137,9 @@ export const PipeSystem = (adapter: StageAdapter): System => {
           });
         }
 
-        // Auto-remove pipes that are off-screen (left edge)
-        if (pipe.position.x < -PIPE_WIDTH) {
+        // Auto-remove pipes that are completely off-screen (left edge)
+        // Pipe must be fully past the left edge (position + width < 0)
+        if (pipe.position.x + PIPE_WIDTH < 0) {
           commands.push((state) => {
             const currentState = state as GameState;
             const { [pipe.id]: removed, ...remaining } = currentState.entities;

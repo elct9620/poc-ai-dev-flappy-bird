@@ -114,8 +114,8 @@ export class PixiStageAdapter implements StageAdapter {
       if (!renderer) {
         renderer = new GroundRenderer(this.groundTexture, this.scaleCalculator);
         this.renderers[entity.id] = renderer;
-        // Add ground above background but below other elements (index 1)
-        this.app.stage.addChildAt(renderer, 1);
+        // Add ground on top to cover pipe bottoms (pipes at index 1, ground at index 2)
+        this.app.stage.addChildAt(renderer, 2);
       }
 
       // Sync renderer with entity
@@ -136,8 +136,8 @@ export class PixiStageAdapter implements StageAdapter {
           entity.isTop,
         );
         this.renderers[entity.id] = renderer;
-        // Add pipe above ground but below bird (index 2)
-        this.app.stage.addChildAt(renderer, 2);
+        // Add pipe above background but below ground (index 1)
+        this.app.stage.addChildAt(renderer, 1);
       }
 
       // Sync renderer with entity

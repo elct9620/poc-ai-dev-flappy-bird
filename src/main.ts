@@ -131,12 +131,13 @@ engine.dispatch({
   },
 });
 
-// Create initial pipe pairs for demonstration
+// Pipe generation configuration
 const MIN_GAP_SIZE = 100;
 const MAX_GAP_SIZE = 120;
 const MIN_GAP_Y = 100;
 const MAX_GAP_Y = 300;
 const PIPE_SPACING = 200;
+const PIPE_SCROLL_SPEED = 2;
 
 // Helper function to generate random gap size and position
 function generatePipeParams() {
@@ -145,22 +146,46 @@ function generatePipeParams() {
   return { gapSize, gapY };
 }
 
-// Create a few pipe pairs
-for (let i = 0; i < 3; i++) {
+// Track pipe generation state
+let pipeCounter = 0;
+let lastPipeX = window.innerWidth;
+
+// Function to spawn a new pipe pair
+function spawnPipePair() {
   const { gapSize, gapY } = generatePipeParams();
-  const x = window.innerWidth + i * PIPE_SPACING;
+  const x = lastPipeX + PIPE_SPACING;
 
   engine.dispatch({
     type: GameEventType.CreatePipe,
     payload: {
-      topId: `pipe-top-${i}`,
-      bottomId: `pipe-bottom-${i}`,
+      topId: `pipe-top-${pipeCounter}`,
+      bottomId: `pipe-bottom-${pipeCounter}`,
       x,
       gapY,
       gapSize,
     },
   });
+
+  lastPipeX = x;
+  pipeCounter++;
 }
+
+// Create initial pipe pairs
+for (let i = 0; i < 3; i++) {
+  spawnPipePair();
+}
+
+// Continuous pipe generation - spawn new pipe when the last one moves into view
+app.ticker.add(() => {
+  // When the last pipe has scrolled enough, spawn a new one
+  const distanceFromEdge = lastPipeX - window.innerWidth;
+  if (distanceFromEdge < PIPE_SPACING) {
+    spawnPipePair();
+  }
+
+  // Update lastPipeX based on scroll speed
+  lastPipeX -= PIPE_SCROLL_SPEED;
+});
 
 // Setup input handling with callback pattern
 const inputAdapter = new PixiInputAdapter(app);

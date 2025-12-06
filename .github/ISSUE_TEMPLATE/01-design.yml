@@ -8,17 +8,18 @@ body:
       value: |
         ## Design New Feature
 
-        This template helps you describe **what** you want and **why** you need it. Focus on the desired behavior and user value - Claude will handle all technical decisions.
+        Describe the game mechanic or feature you want to apply to the system. Focus on **what** should happen - Claude will handle the technical details and test creation.
 
         **You don't need to know:**
         - Which architecture layers to use (Entity/System/Renderer)
-        - How many design documents to create
+        - How to write test cases (Claude will create them)
         - Technical implementation details
 
         **Just describe:**
-        - What you want the feature to do
-        - Why users need it
-        - How it should behave (using scenarios)
+        - What behavior you want to add
+        - How it should work from the player's perspective
+
+        **Tip:** You can add more details later using the "Clarify Design" issue template.
 
   - type: input
     id: claude_command
@@ -38,73 +39,25 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: user_story_role
-    attributes:
-      label: User Story - Role
-      description: "As a [role]"
-      placeholder: "e.g., game player"
-    validations:
-      required: true
-
-  - type: input
-    id: user_story_goal
-    attributes:
-      label: User Story - Goal
-      description: "I want [feature]"
-      placeholder: "e.g., the bird to fall when I don't tap"
-    validations:
-      required: true
-
-  - type: input
-    id: user_story_benefit
-    attributes:
-      label: User Story - Benefit
-      description: "So that [benefit]"
-      placeholder: "e.g., the game feels realistic and challenging"
-    validations:
-      required: true
-
   - type: textarea
     id: feature_description
     attributes:
       label: Feature Description
       description: Detailed explanation of the desired behavior. Focus on WHAT it should do, not HOW.
       placeholder: |
-        Describe what you want this feature to do. For example:
+        Describe what you want this feature to do:
+
+        **Behavior:**
         - What should happen when the user interacts?
-        - What should the visual/audio feedback be?
-        - What should the game state changes be?
-    validations:
-      required: true
+        - What visual/audio feedback should occur?
+        - How should the game state change?
 
-  - type: textarea
-    id: bdd_scenarios
-    attributes:
-      label: BDD Scenarios
-      description: Describe the expected behavior using Given/When/Then format (see example below)
-      placeholder: |
-        Scenario: Bird falls due to gravity
-          Given the game has started
-          And the bird is in the air
-          When no input is received
-          Then the bird should accelerate downward
-          And the bird's vertical position should decrease
+        **Examples:**
+        - "The bird should fall continuously due to gravity"
+        - "When the player taps, the bird should jump upward"
+        - "Play a sound effect when the bird jumps"
 
-        Scenario: Bird jumps when tapped
-          Given the game is running
-          And the bird is falling
-          When the player taps the screen
-          Then the bird should move upward
-          And the falling speed should reset
-      value: |
-        ```gherkin
-        Scenario: [Scenario name]
-          Given [precondition]
-          When [action]
-          Then [expected result]
-        ```
-      render: gherkin
+        You can add more details later via clarify issues if needed.
     validations:
       required: true
 
@@ -134,6 +87,7 @@ body:
 
         After submitting this issue:
         1. Add a comment with `@claude` to trigger the design process
-        2. Claude will analyze your requirements and BDD scenarios
-        3. Claude will automatically create the appropriate design documents in `docs/design/`
+        2. Claude will create design documents based on your description
+        3. Claude will generate BDD test scenarios automatically
         4. You'll receive a summary of what was created
+        5. Use the "Clarify Design" template if you need to add more details

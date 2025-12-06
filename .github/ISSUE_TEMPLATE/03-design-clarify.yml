@@ -8,13 +8,9 @@ body:
       value: |
         ## Clarify Design
 
-        Use this template when an existing design document needs clarification, updates, or additional details.
+        Explain what's missing from the current design and what should happen instead.
 
-        **Common reasons for clarification:**
-        - Requirements were ambiguous or incomplete
-        - New edge cases discovered during implementation
-        - User feedback requires design adjustments
-        - Missing scenarios or behavior definitions
+        Claude will update the design documents and create any needed tests.
 
   - type: input
     id: claude_command
@@ -34,51 +30,24 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: design_document_path
-    attributes:
-      label: Design Document Path (Optional)
-      description: Path to the existing design document that needs clarification. Leave empty for Claude to infer from feature name.
-      placeholder: "e.g., docs/design/entity/bird.md"
-
   - type: textarea
-    id: clarification_needed
+    id: clarification
     attributes:
-      label: What Needs Clarification
-      description: Specific questions or unclear requirements. Be as specific as possible.
+      label: What needs to be clarified
+      description: Describe what's missing and what should happen
       placeholder: |
-        Describe what's unclear or needs updating:
-        - Which part of the design is ambiguous?
-        - What questions came up during implementation?
-        - What new requirements emerged?
-        - What behavior is undefined?
+        Explain the gap and the desired behavior:
+
+        **What's missing:**
+        "The current design doesn't specify what happens when the bird hits the top of the screen"
+
+        **What should happen:**
+        "When the bird reaches the top, it should stop moving upward and start falling"
+
+        **Why it matters:**
+        "Without this, the bird can fly off-screen infinitely, which breaks the game"
     validations:
       required: true
-
-  - type: textarea
-    id: reason
-    attributes:
-      label: Reason for Clarification
-      description: Why is this clarification needed? What problem does it solve?
-      placeholder: |
-        Examples:
-        - "During implementation, we discovered the design doesn't specify what happens when..."
-        - "User testing revealed that the current design doesn't handle..."
-        - "The original requirements were ambiguous about..."
-    validations:
-      required: true
-
-  - type: textarea
-    id: additional_bdd_scenarios
-    attributes:
-      label: Additional BDD Scenarios (Optional)
-      description: If new scenarios are needed to clarify behavior, add them here
-      placeholder: |
-        Scenario: [New scenario that clarifies behavior]
-          Given [precondition]
-          When [action]
-          Then [expected result that wasn't clear before]
-      render: gherkin
 
   - type: input
     id: related_issues
@@ -106,7 +75,6 @@ body:
 
         After submitting this issue:
         1. Add a comment with `@claude` to trigger the clarification process
-        2. Claude will review the existing design document
-        3. Claude will update the design with clarifications
-        4. Claude will add any new BDD scenarios if needed
-        5. You'll receive a summary of what was updated
+        2. Claude will update the design documents
+        3. Claude will add any new BDD scenarios automatically
+        4. You'll receive a summary of what was updated

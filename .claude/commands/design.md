@@ -28,9 +28,13 @@ You are a game design document assistant. Your task is to help create or edit de
 - Always ask for clarification if the feature description is ambiguous.
 - Make simple first, iterate by user with clarifying instructions in other executions.
 
-# Cucumber
+# Testing
 
-The `features/` may be modified but unable to pass tests until implementation is done in another execution. Make sure mark pending tests in `features/` after creating or editing design documents.
+We use Gherkin syntax for testing. The design usually related to game mechanics, so the tests should be create or update design documents accordingly.
+
+- Use `@skip` to skip tests when new feature is not implemented yet.
+- Create tests in `features/` directory.
+- Reuse existing steps from `features/steps/` when possible.
 
 # Definition
 
@@ -45,19 +49,41 @@ The `features/` may be modified but unable to pass tests until implementation is
     <return>list of planned documents with type and details</return>
 </procedure>
 
+<procedure name="apply_design">
+    <description>Based on the planned documents, create or edit the design documents accordingly.</description>
+    <parameter name="plans" type="list">List of planned documents with type and details.</parameter>
+    <loop over="plans" var="plan" parallel="true">
+        <step>1. if the document type is "entity", "system", "event", "renderer", or "foundation", load the corresponding template from "docs/templates/".</step>
+        <step>2. Use `cp` command to copy the template to the destination path based on the document type.</step>
+        <step>3. fill in the template step by step, ensuring clarity and completeness.</step>
+        <step>4. save the document in the appropriate subdirectory under "docs/design/".</step>
+    </loop>
+    <return>summary of created or edited documents with their paths</return>
+</procedure>
+
+<procedure name="apply_tests">
+    <description>Create or update tests for the designed features.</description>
+    <parameter name="plans" type="list">List of planned documents with type and details.</parameter>
+    <loop over="plans" var="plan" parallel="true">
+        <step>1. review existing tests in "features/" to avoid duplication.</step>
+        <step>2. for each planned document, determine if a new test needs to be created or an existing one updated.</step>
+        <step>3. create or update the tests in Gherkin syntax, ensuring they cover the key aspects of the design.</step>
+        <step>4. save the tests in the appropriate subdirectory under "features/".</step>
+    </loop>
+    <return>summary of created or updated tests with their paths</return>
+</procedure>
+
 <procedure name="main">
     <description>This procedure creates or edits design documents for specified game mechanics or features.</description>
     <parameter name="feature_description" type="string">Description of the game mechanic or feature to document.</parameter>
     <parameter name="clarify_instructions" type="string" optional="true">Additional instructions for clarification.</parameter>
     <step>1. review the "docs/design/" directory structure to identify document to create or clarify.</step>
     <step>2. <execute name="plan_documents" feature_description="$feature_description" clarify_instructions="$clarify_instructions" /></step>
-    <loop over="planned_documents" var="doc">
-        <step>3. if the document type is "entity", "system", "event", "renderer", or "foundation", load the corresponding template from "docs/templates/".</step>
-        <step>4. Use `cp` command to copy the template to the destination path based on the document type.</step>
-        <step>5. fill in the template step by step, ensuring clarity and completeness.</step>
-        <step>6. save the document in the appropriate subdirectory under "docs/design/".</step>
-    </loop>
-    <step>7. update index files in "docs/[layer]s.md" to include links to the new or edited documents.</step>
+    <step>3  <execute name="apply_design" plans="$plans" /></step>
+    <step>4. <execute name="apply_tests" plans="$plans" /></step>
+    <step>5. for each created or edited document, ensure proper formatting and completeness.</step>
+    <step>6. update index files in "docs/[layer]s.md" to include links to the new or edited documents.</step>
+    <step>7. run tests to ensure new tests is pending and existing tests pass.</step>
     <return>summary of created or edited documents with their paths</return>
 </procedure>
 

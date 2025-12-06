@@ -20,18 +20,21 @@ const REFERENCE_HEIGHT = 512;
 /**
  * Utility function to build a Pipe entity from parameters.
  *
- * Coordinate System Overview:
- * - Reference coords (512px height): gapY (120-280), gapSize (140-160)
- * - Texture coords (320px height): PIPE_HEIGHT, height for cropping
- * - Screen coords: positions are in screen pixels, renderer applies baseScale
+ * Coordinate System (Top-Down Approach):
+ * Y-axis goes from top (0) to bottom (screenHeight):
  *
- * The renderer will apply baseScale = screenHeight / 512 to the sprite.
- * Therefore:
- * - height must be in TEXTURE PIXELS (0-320) for Rectangle cropping
- * - position must be in SCREEN PIXELS (will be rendered as-is)
+ *   y = 0 (screen top)
+ *   ├─ Top Pipe: y=0, height=gapTopY
+ *   ├─ Gap: y=gapTopY, height=gapSize
+ *   └─ Bottom Pipe: y=gapTopY+gapSize, height=(screenHeight-gapTopY-gapSize)
  *
+ * Coordinate spaces:
+ * - Reference coords (512px): gapY (120-280) = gap TOP edge, gapSize (140-160)
+ * - Texture coords (320px): PIPE_HEIGHT for cropping Rectangle
+ * - Screen coords: actual screen pixels for positioning
+ *
+ * @param gapY The gap TOP edge Y position in reference pixels (120-280)
  * @param gapSize The gap size in reference pixels (140-160)
- * @param gapY The gap center Y position in reference pixels (120-280)
  * @param screenHeight The actual screen height for coordinate conversion
  */
 function buildPipeEntity(
@@ -46,29 +49,29 @@ function buildPipeEntity(
   const scale = screenHeight / REFERENCE_HEIGHT;
 
   // Convert reference coordinates to screen coordinates
-  const gapYScreen = gapY * scale;
+  const gapTopYScreen = gapY * scale;
   const gapSizeScreen = gapSize * scale;
 
-  // Calculate how much of the 320px texture should be shown
-  // The gap is defined in reference coords, we need to convert to texture coords
-  // Texture height (320px) corresponds to some portion of reference height (512px)
-  // We need to calculate what portion of the 320px texture corresponds to the visible pipe
-  const gapYTexture = (gapY / REFERENCE_HEIGHT) * PIPE_HEIGHT;
+  // Convert to texture coordinates for cropping
+  // Texture height (320px) represents full pipe height
+  const gapTopYTexture = (gapY / REFERENCE_HEIGHT) * PIPE_HEIGHT;
   const gapSizeTexture = (gapSize / REFERENCE_HEIGHT) * PIPE_HEIGHT;
 
-  // Height in texture pixels (for Rectangle cropping)
+  // Calculate height in texture pixels for Rectangle cropping
+  // Top pipe: from screen top (y=0) to gap top edge
+  // Bottom pipe: from gap bottom edge to screen bottom
   const height = isTop
-    ? gapYTexture - gapSizeTexture / 2
-    : PIPE_HEIGHT - (gapYTexture + gapSizeTexture / 2);
+    ? gapTopYTexture
+    : PIPE_HEIGHT - (gapTopYTexture + gapSizeTexture);
 
-  // Position in screen pixels
-  // Top pipe: positioned at gap top edge with anchor at bottom (0,1), extends upward
-  // Bottom pipe: positioned at gap bottom edge with anchor at top (0,0), extends downward
+  // Calculate position in screen pixels
+  // Top pipe: y=gapTopY with anchor(0,1) at bottom, extends upward
+  // Bottom pipe: y=gapTopY+gapSize with anchor(0,0) at top, extends downward
   const position = isTop
-    ? { x, y: gapYScreen - gapSizeScreen / 2 }
-    : { x, y: gapYScreen + gapSizeScreen / 2 };
+    ? { x, y: gapTopYScreen }
+    : { x, y: gapTopYScreen + gapSizeScreen };
 
-  return createPipe(id, position, height, isTop, gapYScreen);
+  return createPipe(id, position, height, isTop, gapTopYScreen);
 }
 
 /**

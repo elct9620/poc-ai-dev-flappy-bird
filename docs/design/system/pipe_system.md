@@ -8,7 +8,7 @@ The PipeSystem is responsible for managing pipe obstacles in the game, including
 
 | Event Triggered | Description |
 |-----------------|-------------|
-| CREATE_PIPE | Creates a new pair of pipes (top and bottom) with a gap |
+| [CREATE_PIPE](../event/create_pipe.md) | Creates a new pair of pipes (top and bottom) with a gap |
 
 Adds two new [Pipe](../entity/pipe.md) entities to the game state - one top pipe and one bottom pipe. The pipes are positioned at the right edge of the screen with a randomized gap position that creates a navigable space for the bird. Both pipes share the same `gapY` value to ensure proper alignment. Returns a new state with both entities added immutably.
 
@@ -32,7 +32,7 @@ During each TICK event, checks if the bird's x-position has passed each pipe's x
 
 | Event Triggered | Description |
 |-----------------|-------------|
-| REMOVE_PIPE | Removes a pipe entity that has moved off-screen |
+| [REMOVE_PIPE](../event/remove_pipe.md) | Removes a pipe entity that has moved off-screen |
 
 Removes a [Pipe](../entity/pipe.md) from the game state's entities record when it moves beyond the left edge of the screen. This command is triggered automatically when a pipe's x-position becomes less than the negative pipe width, recycling memory for new pipes. Returns a new state with the entity removed immutably.
 

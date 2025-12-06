@@ -77,6 +77,7 @@ export class PixiStageAdapter implements StageAdapter {
       if (!renderer) {
         renderer = new BirdRenderer(this.birdTextures, this.scaleCalculator);
         this.renderers[entity.id] = renderer;
+        renderer.zIndex = 50; // Bird above pipes but below ground
         this.app.stage.addChild(renderer);
       }
 

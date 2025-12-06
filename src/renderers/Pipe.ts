@@ -20,8 +20,6 @@ export class Pipe extends Container {
 
     // Create sprite with pipe texture
     this.sprite = new Sprite(texture);
-    // Both top and bottom pipes use anchor (0, 0) at top-left
-    this.sprite.anchor.set(0, 0);
 
     // Apply scale once in constructor
     const scale = scaleCalculator.getBaseScale();
@@ -31,6 +29,21 @@ export class Pipe extends Container {
   }
 
   sync(entity: PipeEntity): void {
+    // For top pipes, flip vertically and adjust anchor
+    if (entity.isTop) {
+      // Anchor at bottom-left (0, 1) so the bottom of the sprite is at position.y
+      this.sprite.anchor.set(0, 1);
+      // Negative y scale to flip vertically (pipe cap will be at bottom)
+      const currentScale = this.sprite.scale.x;
+      this.sprite.scale.set(currentScale, -currentScale);
+    } else {
+      // Bottom pipes use anchor at top-left (0, 0)
+      this.sprite.anchor.set(0, 0);
+      // Positive y scale (normal orientation)
+      const currentScale = this.sprite.scale.x;
+      this.sprite.scale.set(currentScale, currentScale);
+    }
+
     // Update position
     this.position.set(entity.position.x, entity.position.y);
 

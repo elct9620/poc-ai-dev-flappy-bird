@@ -11,28 +11,29 @@ import type { ScaleCalculator } from "@/utils/ScaleCalculator";
  */
 export class Pipe extends Container {
   private sprite: Sprite;
-  private scaleCalculator: ScaleCalculator;
   private baseTexture: Texture;
 
-  constructor(texture: Texture, scaleCalculator: ScaleCalculator) {
+  constructor(
+    texture: Texture,
+    scaleCalculator: ScaleCalculator,
+    isTop: boolean,
+  ) {
     super();
 
-    this.scaleCalculator = scaleCalculator;
     this.baseTexture = texture;
 
     // Create sprite with pipe texture
     this.sprite = new Sprite(texture);
     this.sprite.anchor.set(0, 0);
 
+    // Apply scale once in constructor - for top pipes, flip vertically
+    const scale = scaleCalculator.getBaseScale();
+    this.sprite.scale.set(scale, isTop ? -scale : scale);
+
     this.addChild(this.sprite);
   }
 
   sync(entity: PipeEntity): void {
-    const scale = this.scaleCalculator.getBaseScale();
-
-    // Apply scale - for top pipes, flip vertically
-    this.sprite.scale.set(scale, entity.isTop ? -scale : scale);
-
     // Update position
     this.position.set(entity.position.x, entity.position.y);
 

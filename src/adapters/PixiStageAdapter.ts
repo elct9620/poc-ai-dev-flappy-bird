@@ -130,7 +130,11 @@ export class PixiStageAdapter implements StageAdapter {
       // Get or create Pipe renderer
       let renderer = this.renderers[entity.id];
       if (!renderer) {
-        renderer = new PipeRenderer(this.pipeTexture, this.scaleCalculator);
+        renderer = new PipeRenderer(
+          this.pipeTexture,
+          this.scaleCalculator,
+          entity.isTop,
+        );
         this.renderers[entity.id] = renderer;
         // Add pipe above ground but below bird (index 2)
         this.app.stage.addChildAt(renderer, 2);

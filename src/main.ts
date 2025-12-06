@@ -131,6 +131,37 @@ engine.dispatch({
   },
 });
 
+// Create initial pipe pairs for demonstration
+const MIN_GAP_SIZE = 100;
+const MAX_GAP_SIZE = 120;
+const MIN_GAP_Y = 100;
+const MAX_GAP_Y = 300;
+const PIPE_SPACING = 200;
+
+// Helper function to generate random gap size and position
+function generatePipeParams() {
+  const gapSize = MIN_GAP_SIZE + Math.random() * (MAX_GAP_SIZE - MIN_GAP_SIZE);
+  const gapY = MIN_GAP_Y + Math.random() * (MAX_GAP_Y - MIN_GAP_Y);
+  return { gapSize, gapY };
+}
+
+// Create a few pipe pairs
+for (let i = 0; i < 3; i++) {
+  const { gapSize, gapY } = generatePipeParams();
+  const x = window.innerWidth + i * PIPE_SPACING;
+
+  engine.dispatch({
+    type: GameEventType.CreatePipe,
+    payload: {
+      topId: `pipe-top-${i}`,
+      bottomId: `pipe-bottom-${i}`,
+      x,
+      gapY,
+      gapSize,
+    },
+  });
+}
+
 // Setup input handling with callback pattern
 const inputAdapter = new PixiInputAdapter(app);
 

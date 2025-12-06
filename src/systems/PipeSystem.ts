@@ -13,21 +13,22 @@ import type { StageAdapter } from "@/systems/StageAdapter";
 // Pipe generation constants
 const PIPE_WIDTH = 52;
 const PIPE_HEIGHT = 320;
-const GAP_SIZE = 100;
 const SCROLL_SPEED = 2;
 
 /**
  * Utility function to build a Pipe entity from parameters.
+ * @param gapSize The gap size to use for this pipe pair (should be between 100 and 120 pixels)
  */
 function buildPipeEntity(
   id: string,
   x: number,
   gapY: number,
+  gapSize: number,
   isTop: boolean,
 ): Pipe {
   // Calculate height based on position and gap
-  const height = isTop ? gapY - GAP_SIZE / 2 : PIPE_HEIGHT;
-  const position = isTop ? { x, y: 0 } : { x, y: gapY + GAP_SIZE / 2 };
+  const height = isTop ? gapY - gapSize / 2 : PIPE_HEIGHT;
+  const position = isTop ? { x, y: 0 } : { x, y: gapY + gapSize / 2 };
 
   return createPipe(id, position, height, isTop, gapY);
 }
@@ -47,10 +48,10 @@ export const PipeSystem = (adapter: StageAdapter): System => {
     if (event.type === GameEventType.CreatePipe) {
       commands.push((state) => {
         const currentState = state as GameState;
-        const { topId, bottomId, x, gapY } = event.payload;
+        const { topId, bottomId, x, gapY, gapSize } = event.payload;
 
-        const topPipe = buildPipeEntity(topId, x, gapY, true);
-        const bottomPipe = buildPipeEntity(bottomId, x, gapY, false);
+        const topPipe = buildPipeEntity(topId, x, gapY, gapSize, true);
+        const bottomPipe = buildPipeEntity(bottomId, x, gapY, gapSize, false);
 
         // Update adapter for both pipes
         adapter.updatePipe(topPipe);

@@ -39,12 +39,14 @@ root/
 │   ├── design/                 # Game design documents
 │   │   ├── entity/             # Entity design documents
 │   │   ├── system/             # System design documents
-│   │   ├── renderer/          # Renderer design documents
+│   │   ├── renderer/           # Renderer design documents
 │   │   ├── foundation/         # The shared logic and principles, e.g. scale management, adapter interfaces & implementations
 │   ├── ARCHITECTURE.md         # This architecture document
+│   ├── GAME_DESIGN.md          # Overall game design document
 │   ├── entities.md             # Entity index and descriptions
 │   ├── systems.md              # System index and descriptions
-│   ├── renderers.md           # Renderer index and descriptions
+│   ├── renderers.md            # Renderer index and descriptions
+│   ├── foundation.md           # Foundation index and descriptions
 ├── public/                     # Public assets served directly
 ├── index.html                  # Main HTML file
 ├── vite.config.ts              # Vite configuration file

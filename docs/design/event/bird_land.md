@@ -2,7 +2,7 @@
 
 **Type:** `GameEvent`
 
-Marks that the bird has landed (hit the ground). This event occurs during the falling phase after the bird's death and marks the completion of the game-over sequence.
+Marks that the [Bird](../entity/bird.md) has landed (hit the [Ground](../entity/ground.md)). This event occurs during the falling phase after the bird's death and marks the completion of the game-over sequence.
 
 ## Payload
 

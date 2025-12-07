@@ -2,7 +2,7 @@
 
 **Type:** `GameEvent`
 
-Marks that the bird has collided with an obstacle (pipe). This event triggers the start of the game-over sequence, including stopping all scrolling and marking the bird as dead.
+Marks that the bird has collided with an obstacle ([Pipe](../entity/pipe.md)). This event signals that a collision has occurred, which will be followed by the [KILL_BIRD](../event/kill_bird.md) event to mark the [Bird](../entity/bird.md) as dead.
 
 ## Payload
 

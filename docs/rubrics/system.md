@@ -4,28 +4,31 @@ This document outlines the criteria for evaluating the quality of entity. We ass
 
 ## Criteria
 
-### Side Effects as Commands (1 point)
+### Pure System Functions (1 point)
 
-The system should produce side effects as commands rather than executing them directly within the system function.
+The system must be a pure function that calculates decisions and returns commands. All side effects (state changes) must be deferred to command execution.
 
 ```typescript
 // src/systems/ScoreSystem.ts
 
 export function ScoreSystem(state: GameState, event: Event): Command[] {
   if (event.type === 'INCREMENT_SCORE') {
+    // System decides what to do, returns command for execution
     return [(state) => ({
         ...state,
         score: incrementScore(state.score, event.payload.amount),
-    })
+    })];
   }
 
   return [];
 }
 ```
 
-- The generated commands is caused side effects.
+- System function only reads state and events, never mutates them.
+- All state changes happen through returned commands.
+- Do not dispatch events or call adapter methods inside the system function.
+- Business logic and checks should be in the system function, not in commands.
 - Use entity's update functions to modify entities.
-- Do not make check inside the command function, check should be done in the system function.
 
 ### No Dependencies (1 point)
 

@@ -9,3 +9,4 @@ Marks that the bird has collided with an obstacle (pipe). This event triggers th
 | Field | Type   | Description                       |
 |-------|--------|-----------------------------------|
 | id    | string | Identifier of the bird that collided |
+

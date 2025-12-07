@@ -65,5 +65,5 @@ When created, the renderer:
 ## Visual Details
 
 - **Pivot Point**: Center of the bird sprite for natural rotation
-- **Z-Index**: Rendered above background elements but below UI elements
-- **Scale**: Can be adjusted based on game design (typically 1:1 with asset size)
+- **Layer Order**: Rendered above ground, pipes, and background, but below UI elements. See [Layer Guidelines](../foundation/layer.md) for z-index details.
+- **Scale**: Managed by renderer using ScaleCalculator. See [Scale Guidelines](../foundation/scale.md) for details.

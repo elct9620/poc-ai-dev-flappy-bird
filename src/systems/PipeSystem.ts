@@ -10,6 +10,7 @@ import {
   SCROLL_SPEED,
 } from "@/constants";
 import type { Command, System } from "@/engine/engine";
+import type { EventBus } from "@/engine/eventbus";
 import type { Bird } from "@/entity/Bird";
 import type { GameState } from "@/entity/GameState";
 import type { Pipe } from "@/entity/Pipe";
@@ -108,7 +109,10 @@ function shouldSpawnPipe(generationState: {
  *
  * @see {@link ../../docs/design/system/pipe_system.md|Pipe System Design Document}
  */
-export const PipeSystem = (adapter: StageAdapter): System => {
+export const PipeSystem = (
+  adapter: StageAdapter,
+  eventBus: EventBus,
+): System => {
   return (state, event: Event): Command[] => {
     const gameState = state as GameState;
     const commands: Command[] = [];
@@ -240,6 +244,9 @@ export const PipeSystem = (adapter: StageAdapter): System => {
       const birdX = bird ? bird.position.x : 0;
 
       pipeEntities.forEach((pipe) => {
+        // Calculate new position for this tick
+        const newX = pipe.position.x - SCROLL_SPEED * deltaTime;
+
         // Update position command
         commands.push((state) => {
           const currentState = state as GameState;
@@ -247,7 +254,6 @@ export const PipeSystem = (adapter: StageAdapter): System => {
 
           if (!currentPipe) return currentState;
 
-          const newX = currentPipe.position.x - SCROLL_SPEED * deltaTime;
           const updatedPipe = updatePipePosition(currentPipe, {
             x: newX,
             y: currentPipe.position.y,
@@ -264,8 +270,8 @@ export const PipeSystem = (adapter: StageAdapter): System => {
           };
         });
 
-        // Mark as passed command
-        if (!pipe.passed && birdX > pipe.position.x + PIPE_WIDTH) {
+        // Mark as passed command (bird's left edge >= pipe's right edge after movement)
+        if (!pipe.passed && birdX >= newX + PIPE_WIDTH) {
           commands.push((state) => {
             const currentState = state as GameState;
             const currentPipe = currentState.entities[pipe.id] as Pipe;
@@ -274,6 +280,21 @@ export const PipeSystem = (adapter: StageAdapter): System => {
 
             const updatedPipe = markPipeAsPassed(currentPipe);
             adapter.update(updatedPipe);
+
+            // Dispatch INCREMENT_SCORE event only for bottom pipes (to avoid counting twice per pair)
+            if (!currentPipe.isTop) {
+              // Find the score entity in the game state
+              const scoreEntity = Object.values(currentState.entities).find(
+                (entity) => entity.type === "score",
+              );
+
+              if (scoreEntity) {
+                eventBus.dispatch({
+                  type: GameEventType.IncrementScore,
+                  payload: { id: scoreEntity.id },
+                });
+              }
+            }
 
             return {
               ...currentState,

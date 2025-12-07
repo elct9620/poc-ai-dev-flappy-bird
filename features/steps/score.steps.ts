@@ -164,3 +164,7 @@ Then("the previous state should not be modified", (world: GameWorld) => {
   // For now, we'll just pass this test as the architecture guarantees immutability
   expect(true).toBe(true);
 });
+
+Then("the point sound effect should play", (world: GameWorld) => {
+  expect(world.audioAdapter.playedSounds).toContain("point");
+});

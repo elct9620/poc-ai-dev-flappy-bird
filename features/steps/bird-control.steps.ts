@@ -31,6 +31,20 @@ Given("the bird is killed", (world: GameWorld) => {
   world.engine.tick({ deltaTime: 0 });
 });
 
+Given(
+  "the bird is at position \\({int}, {int}\\)",
+  (world: GameWorld, x: number, y: number) => {
+    world.engine.dispatch({
+      type: GameEventType.CreateBird,
+      payload: {
+        id: "bird",
+        position: { x, y },
+      },
+    });
+    world.engine.tick({ deltaTime: 0 });
+  },
+);
+
 When(
   "the game advances by {float} second(s)",
   (world: GameWorld, seconds: number) => {

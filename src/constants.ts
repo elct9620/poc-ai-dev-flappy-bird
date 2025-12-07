@@ -63,6 +63,9 @@ export const PIPE_SPACING = 200;
 /** Sound asset key for bird wing flap sound effect */
 export const WING_FLAP_SOUND = "wing";
 
+/** Sound asset key for point scoring sound effect */
+export const POINT_SOUND = "point";
+
 // =============================================================================
 // Game Mechanics Constants
 // =============================================================================

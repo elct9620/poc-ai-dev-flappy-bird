@@ -3,6 +3,7 @@ import { EventBus } from "@/engine/eventbus";
 import { createGameState, type GameState } from "@/entity/GameState";
 import { AudioSystem } from "@/systems/AudioSystem";
 import { BackgroundSystem } from "@/systems/BackgroundSystem";
+import { CollisionSystem } from "@/systems/CollisionSystem";
 import { GroundSystem } from "@/systems/GroundSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
@@ -38,6 +39,7 @@ export class GameWorld extends QuickPickleWorld {
       GroundSystem(this.adapter),
       PipeSystem(this.adapter, this.eventBus),
       PhysicsSystem(this.adapter),
+      CollisionSystem(this.adapter, this.eventBus),
       InputSystem(this.eventBus, "bird"),
       AudioSystem(this.audioAdapter),
     ]);

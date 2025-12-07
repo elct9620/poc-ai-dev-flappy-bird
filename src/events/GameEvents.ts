@@ -17,6 +17,8 @@ export enum GameEventType {
   RemoveScore = "REMOVE_SCORE",
   CreateBird = "CREATE_BIRD",
   BirdFlap = "BIRD_FLAP",
+  BirdCollision = "BIRD_COLLISION",
+  BirdLand = "BIRD_LAND",
   KillBird = "KILL_BIRD",
   RemoveBird = "REMOVE_BIRD",
   CreateBackground = "CREATE_BACKGROUND",
@@ -123,6 +125,36 @@ export interface BirdFlapEvent {
   type: GameEventType.BirdFlap;
   payload: {
     /** Identifier of the bird to flap */
+    id: string;
+  };
+}
+
+/**
+ * BIRD_COLLISION event
+ *
+ * Marks that the bird has collided with an obstacle (Pipe).
+ * This event signals that a collision has occurred, which will be followed by the KILL_BIRD event.
+ * @see {@link ../../docs/design/event/bird_collision.md|BIRD_COLLISION Event Design Document}
+ */
+export interface BirdCollisionEvent {
+  type: GameEventType.BirdCollision;
+  payload: {
+    /** Identifier of the bird that collided */
+    id: string;
+  };
+}
+
+/**
+ * BIRD_LAND event
+ *
+ * Marks that the bird has landed (hit the ground).
+ * This event occurs during the falling phase after the bird's death and marks the completion of the game-over sequence.
+ * @see {@link ../../docs/design/event/bird_land.md|BIRD_LAND Event Design Document}
+ */
+export interface BirdLandEvent {
+  type: GameEventType.BirdLand;
+  payload: {
+    /** Identifier of the bird that landed */
     id: string;
   };
 }
@@ -265,6 +297,8 @@ export type GameEvent =
   | RemoveScoreEvent
   | CreateBirdEvent
   | BirdFlapEvent
+  | BirdCollisionEvent
+  | BirdLandEvent
   | KillBirdEvent
   | RemoveBirdEvent
   | CreateBackgroundEvent

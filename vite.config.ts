@@ -20,6 +20,7 @@ export default {
       "features/steps/bird-control.steps.ts",
       "features/steps/background.steps.ts",
       "features/steps/ground.steps.ts",
+      "features/steps/collision.steps.ts",
     ],
   },
 };

@@ -56,7 +56,6 @@ export class Bird extends Container {
       this.sprite.stop();
     }
 
-    // Update visibility based on isAlive
-    this.visible = entity.isAlive;
+    // Bird remains visible after death to show falling animation
   }
 }

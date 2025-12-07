@@ -12,6 +12,7 @@ import { registerRenderers } from "@/renderers";
 import { RendererFactory } from "@/renderers/RendererFactory";
 import { AudioSystem } from "@/systems/AudioSystem";
 import { BackgroundSystem } from "@/systems/BackgroundSystem";
+import { CollisionSystem } from "@/systems/CollisionSystem";
 import { GroundSystem } from "@/systems/GroundSystem";
 import { InputSystem } from "@/systems/InputSystem";
 import { PhysicsSystem } from "@/systems/PhysicsSystem";
@@ -109,6 +110,7 @@ const groundSystem = GroundSystem(stageAdapter);
 const scoreSystem = ScoreSystem(stageAdapter);
 const physicsSystem = PhysicsSystem(stageAdapter);
 const pipeSystem = PipeSystem(stageAdapter, eventBus);
+const collisionSystem = CollisionSystem(stageAdapter, eventBus);
 const audioSystem = AudioSystem(audioAdapter);
 
 // Create input system (needs event bus to dispatch BIRD_FLAP)
@@ -121,6 +123,7 @@ const engine = new Engine(initialState, eventBus, [
   pipeSystem,
   scoreSystem,
   physicsSystem,
+  collisionSystem,
   inputSystem,
   audioSystem,
 ]);

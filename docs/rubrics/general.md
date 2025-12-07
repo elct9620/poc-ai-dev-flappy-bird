@@ -77,3 +77,24 @@ export function ScoreSystem() {
 - Avoid mixing different functionalities in a single module.
 - Refactor code to separate concerns when necessary.
 - Cohesive related functionalities together, decoupling unrelated ones.
+
+### No Magic Numbers (1 point)
+
+Avoid using magic numbers in the code. Instead, define constants with meaningful names to improve code readability and maintainability.
+
+```typescript
+// src/constants.ts
+export const MAX_PLAYER_HEALTH = 100;
+
+// src/systems/HealthSystem.ts
+import { MAX_PLAYER_HEALTH } from '@/constants';
+
+function initializePlayerHealth() {
+    let playerHealth = MAX_PLAYER_HEALTH;
+    // Implementation code...
+}
+```
+
+- Define constants for all significant numeric values.
+- Use descriptive names for constants to convey their purpose.
+- Replace magic numbers in the code with the defined constants.

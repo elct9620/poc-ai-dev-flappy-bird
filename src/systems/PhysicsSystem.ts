@@ -2,8 +2,9 @@ import {
   BIRD_COLLISION_HEIGHT,
   FLAP_VELOCITY,
   GRAVITY,
-  GROUND_HEIGHT,
   MAX_ROTATION_DOWN,
+  GROUND_TEXTURE_HEIGHT,
+  REFERENCE_HEIGHT,
   MAX_ROTATION_UP,
   TERMINAL_VELOCITY,
 } from "@/constants";
@@ -76,7 +77,10 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
 
       // Get screen dimensions once for all bird calculations
       const screenDimensions = adapter.getScreenDimensions();
-      const groundY = screenDimensions.height - GROUND_HEIGHT;
+      // Calculate scaled ground height using same formula as Ground renderer
+      const scale = screenDimensions.height / REFERENCE_HEIGHT;
+      const scaledGroundHeight = GROUND_TEXTURE_HEIGHT * scale;
+      const groundY = screenDimensions.height - scaledGroundHeight;
 
       // Apply physics to all birds
       for (const entityId in gameState.entities) {

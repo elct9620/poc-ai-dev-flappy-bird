@@ -46,8 +46,8 @@ export const BIRD_COLLISION_WIDTH = 28;
 /** Bird collision box height (pixels) - reduced for better gameplay feel */
 export const BIRD_COLLISION_HEIGHT = 20;
 
-/** Ground height when scaled (pixels) */
-export const GROUND_HEIGHT = 112;
+/** Ground texture height in pixels (unscaled) */
+export const GROUND_TEXTURE_HEIGHT = 112;
 
 // =============================================================================
 // Pipe Constants

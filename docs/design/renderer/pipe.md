@@ -59,7 +59,7 @@ The renderer uses a **full-height approach** where all pipes use the complete 32
 - Sprite is in normal orientation (scale.y = scale)
 - Position represents where the pipe's anchor point is placed (gap bottom edge)
 - The sprite extends 320px × scale downward
-- Parts extending below the playable area are covered by the ground layer (zIndex=100)
+- Parts extending below the playable area are covered by the ground layer (see [Layer Guidelines](../foundation/layer.md))
 
 ### No Height Adjustment
 
@@ -72,7 +72,7 @@ Unlike traditional implementations, this renderer **does not crop textures**:
 
 The gap between pipes is created purely through positioning, and the visual appearance is achieved through:
 1. **Natural clipping** by screen boundaries (top)
-2. **Layer ordering** with ground covering bottom parts (zIndex)
+2. **Layer ordering** with ground covering bottom parts (see [Layer Guidelines](../foundation/layer.md))
 3. **Vertical flipping** using negative scale for top pipes
 
 This approach simplifies the renderer while maintaining proper game mechanics. See the [Pipe System](../system/pipe_system.md) for coordinate calculation details.

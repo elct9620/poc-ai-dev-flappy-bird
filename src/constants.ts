@@ -25,6 +25,17 @@ export const MAX_ROTATION_UP = -Math.PI / 7.2;
 export const TERMINAL_VELOCITY = 1;
 
 // =============================================================================
+// Bird Constants
+// =============================================================================
+// Texture dimensions from sprite assets (yellowbird-*.png)
+
+/** Width of bird texture (pixels) */
+export const BIRD_WIDTH = 34;
+
+/** Height of bird texture (pixels) */
+export const BIRD_HEIGHT = 24;
+
+// =============================================================================
 // Pipe Constants
 // =============================================================================
 // Texture dimensions and movement parameters

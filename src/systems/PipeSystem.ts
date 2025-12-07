@@ -1,4 +1,5 @@
 import {
+  BIRD_WIDTH,
   MAX_GAP_SIZE,
   MAX_GAP_Y,
   MIN_GAP_SIZE,
@@ -243,6 +244,11 @@ export const PipeSystem = (
       );
       const birdX = bird ? bird.position.x : 0;
 
+      // Calculate scale for bird width (bird dimensions scale with screen height)
+      const { height: screenHeight } = adapter.getScreenDimensions();
+      const scale = screenHeight / REFERENCE_HEIGHT;
+      const birdRightEdge = birdX + BIRD_WIDTH * scale;
+
       pipeEntities.forEach((pipe) => {
         // Calculate new position for this tick
         const newX = pipe.position.x - SCROLL_SPEED * deltaTime;
@@ -270,8 +276,10 @@ export const PipeSystem = (
           };
         });
 
-        // Mark as passed command (bird's left edge >= pipe's right edge after movement)
-        if (!pipe.passed && birdX >= newX + PIPE_WIDTH) {
+        // Mark as passed command (bird's right edge > pipe's right edge after movement)
+        // Per design doc: bird right edge (x + bird width × scale) > pipe right edge (x + pipe width × scale)
+        const pipeRightEdge = newX + PIPE_WIDTH * scale;
+        if (!pipe.passed && birdRightEdge > pipeRightEdge) {
           commands.push((state) => {
             const currentState = state as GameState;
             const currentPipe = currentState.entities[pipe.id] as Pipe;

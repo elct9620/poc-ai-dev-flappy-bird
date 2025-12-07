@@ -52,5 +52,5 @@ Feature: Score Calculation
       | pipe_x | bird_x | expected_score | description                    |
       | 100    | 160    | 1              | bird clearly passed pipe       |
       | 100    | 90     | 0              | bird has not reached pipe      |
-      | 100    | 152    | 1              | bird just passed pipe edge     |
-      | 100    | 150    | 0              | bird just before pipe edge     |
+      | 100    | 119    | 1              | bird just passed pipe edge     |
+      | 100    | 118    | 0              | bird just before pipe edge     |

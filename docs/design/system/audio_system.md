@@ -12,6 +12,14 @@ The AudioSystem is responsible for handling game audio playback, including sound
 
 When the player provides input to make the bird flap (via mouse click or space key), plays the wing flapping sound effect to provide audio feedback. The sound file is located at `src/assets/soundEffects/wing.ogg` (preferred format) or `wing.wav`.
 
+### Play Point Sound Command
+
+| Event Triggered | Description                                           |
+|-----------------|-------------------------------------------------------|
+| [INCREMENT_SCORE](../event/increment_score.md) | Player successfully passes through a pipe pair |
+
+When the player successfully passes through a pipe pair and the score increments, plays the point scoring sound effect to provide audio feedback. This command responds to score increment events triggered by the [PipeSystem](./pipe_system.md) when the player successfully navigates through pipe pairs. The sound file is located at `src/assets/soundEffects/point.ogg`.
+
 ## Adapter Interface
 
 The AudioSystem depends on an `AudioAdapter` interface for platform-specific audio playback:

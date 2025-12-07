@@ -117,7 +117,10 @@ function checkBirdGroundCollision(bird: Bird, adapter: StageAdapter): boolean {
   const screenDimensions = adapter.getScreenDimensions();
   const groundY = screenDimensions.height - GROUND_HEIGHT;
 
-  return bird.position.y >= groundY;
+  // Check if bird's bottom edge touches the ground
+  // Bird's position is at center, so add half height to get bottom edge
+  const birdBottomY = bird.position.y + BIRD_COLLISION_HEIGHT / 2;
+  return birdBottomY >= groundY;
 }
 
 /**

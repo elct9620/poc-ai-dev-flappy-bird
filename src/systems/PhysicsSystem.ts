@@ -1,4 +1,5 @@
 import {
+  BIRD_COLLISION_HEIGHT,
   FLAP_VELOCITY,
   GRAVITY,
   GROUND_HEIGHT,
@@ -98,8 +99,11 @@ export const PhysicsSystem = (adapter: StageAdapter): System => {
           };
 
           // Clamp bird position to ground level and stop movement when it lands
-          if (newPosition.y >= groundY) {
-            newPosition.y = groundY;
+          // Bird's position is at center, so add half height to get bottom edge
+          const birdBottomY = newPosition.y + BIRD_COLLISION_HEIGHT / 2;
+          if (birdBottomY >= groundY) {
+            // Position bird so its bottom edge is exactly at ground level
+            newPosition.y = groundY - BIRD_COLLISION_HEIGHT / 2;
             newVelocityY = 0; // Stop falling when bird hits ground
           }
 

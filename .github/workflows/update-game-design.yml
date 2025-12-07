@@ -1,8 +1,9 @@
 name: Update Game Design Document
 
 on:
-  pull_request:
-    types: [opened, synchronize]
+  push:
+    branches:
+      - main
     paths:
       - "docs/design/**/*.md"
       - "docs/entities.md"
@@ -10,22 +11,21 @@ on:
       - "docs/renderers.md"
       - "docs/events.md"
       - "docs/foundations.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   update-game-design:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      pull-requests: read
-      issues: read
-      id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update GAME_DESIGN.md with Claude Code
         id: claude
@@ -33,12 +33,15 @@ jobs:
         timeout-minutes: 15
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          use_commit_signing: true
-          track_progress: true
-          allowed_bots: "claude[bot]"
           prompt: |
             /game-design
 
-            After updating GAME_DESIGN.md, commit the changes with message:
-            "docs: update GAME_DESIGN.md based on design changes"
-          claude_args: "--allowed-tools Read,Write,Edit,Glob,Grep,Slash(/game-design),Bash(git:*)"
+            DO NOT commit the changes. Only update the GAME_DESIGN.md file.
+          claude_args: "--allowed-tools Read,Write,Edit,Glob,Grep,Slash(/game-design)"
+
+      - name: Commit updated GAME_DESIGN.md
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const commit = require('./scripts/commit-game-design.js');
+            await commit({github, context, core, glob, exec});

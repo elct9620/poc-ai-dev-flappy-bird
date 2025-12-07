@@ -1,8 +1,10 @@
-# Design Document: docs/design/system/pipe_system.md, docs/design/system/audio_system.md
+# This feature is related to:
+# - docs/design/system/pipe_system.md
+# - docs/design/system/audio_system.md
 
 Feature: Score Calculation
   As a player
-  I want to earn points when passing through pipes
+  I want to see my score increase automatically when I successfully navigate through pipes
   So that I can track my progress and compete for high scores
 
   Background:
@@ -52,6 +54,8 @@ Feature: Score Calculation
     Then the score "game-score" should have value <expected_score>
 
     Examples:
-      | pipe_x | bird_x | expected_score |
-      | 100    | 160    | 1              |
-      | 100    | 90     | 0              |
+      | pipe_x | bird_x | expected_score | description                    |
+      | 100    | 160    | 1              | bird clearly passed pipe       |
+      | 100    | 90     | 0              | bird has not reached pipe      |
+      | 100    | 152    | 1              | bird just passed pipe edge     |
+      | 100    | 151    | 0              | bird just before pipe edge     |

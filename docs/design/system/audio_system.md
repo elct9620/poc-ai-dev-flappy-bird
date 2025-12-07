@@ -12,6 +12,16 @@ The AudioSystem is responsible for handling game audio playback, including sound
 
 When the player provides input to make the bird flap (via mouse click or space key), plays the wing flapping sound effect to provide audio feedback. The sound file is located at `src/assets/soundEffects/wing.ogg` (preferred format) or `wing.wav`.
 
+**Volume Settings**:
+- Default volume: 1.0 (full volume)
+- Volume is configurable via the adapter's `setVolume` method
+
+**Error Handling**:
+- If the sound file has not been preloaded, the adapter should silently fail without throwing errors to prevent game crashes
+- Sound playback is non-blocking and should not interrupt game flow
+- Missing sound files should be handled gracefully during the preload phase
+- Multiple rapid flap commands should allow sound overlap (not cut off previous playback)
+
 ### Play Point Sound Command
 
 | Event Triggered | Description                                           |
@@ -19,6 +29,15 @@ When the player provides input to make the bird flap (via mouse click or space k
 | [INCREMENT_SCORE](../event/increment_score.md) | Player successfully passes through a pipe pair |
 
 When the player successfully passes through a pipe pair and the score increments, plays the point scoring sound effect to provide audio feedback. This command responds to score increment events triggered by the [PipeSystem](./pipe_system.md) when the player successfully navigates through pipe pairs. The sound file is located at `src/assets/soundEffects/point.ogg`.
+
+**Volume Settings**:
+- Default volume: 1.0 (full volume)
+- Volume is configurable via the adapter's `setVolume` method
+
+**Error Handling**:
+- If the sound file has not been preloaded, the adapter should silently fail without throwing errors to prevent game crashes
+- Sound playback is non-blocking and should not interrupt game flow
+- Missing sound files should be handled gracefully during the preload phase
 
 ## Adapter Interface
 

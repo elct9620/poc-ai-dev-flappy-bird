@@ -14,10 +14,14 @@ The system must be a pure function that calculates decisions and returns command
 export function ScoreSystem(state: GameState, event: Event): Command[] {
   if (event.type === 'INCREMENT_SCORE') {
     // System decides what to do, returns command for execution
-    return [(state) => ({
-        ...state,
-        score: incrementScore(state.score, event.payload.amount),
-    })];
+    return [(state) => {
+        // dispatch event, call adapter methods
+
+        return {
+          ...state,
+          score: state.score + event.payload.amount,
+        };
+    }];
   }
 
   return [];
@@ -25,7 +29,7 @@ export function ScoreSystem(state: GameState, event: Event): Command[] {
 ```
 
 - System function only reads state and events, never mutates them.
-- All state changes happen through returned commands.
+- All state changes happen through returned commands, e.g. dispatch event, call adapter methods, and update state.
 - Do not dispatch events or call adapter methods inside the system function, they should be in commands.
 - Business logic and checks should be in the system function, not in commands.
 - Use entity's update functions to modify entities.

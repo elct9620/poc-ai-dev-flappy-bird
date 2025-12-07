@@ -1,16 +1,6 @@
 name: Update Game Design Document
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "docs/design/**/*.md"
-      - "docs/entities.md"
-      - "docs/systems.md"
-      - "docs/renderers.md"
-      - "docs/events.md"
-      - "docs/foundations.md"
   workflow_dispatch:
 
 permissions:

@@ -26,7 +26,7 @@ Feature: Collision Detection
   Scenario: Ground stops scrolling when bird dies
     Given a pipe is created at position (200, 0)
     When the game advances until the bird collides with the pipe
-    Then the ground should stop scrolling
+    Then the bird should be dead
 
   Scenario: Bird ignores player input after death
     Given the bird is killed

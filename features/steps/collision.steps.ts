@@ -24,11 +24,12 @@ Given(
   },
 );
 
-Given("the bird has collided with the pipe", (world: GameWorld) => {
-  // Advance game until collision occurs
-  // Bird is at (100, 200), pipe is at (200, 0)
-  // Need to move bird or advance time until they overlap
-  // For simplicity, advance time until bird position overlaps with pipe
+/**
+ * Advances the game until the bird collides with a pipe.
+ * Used by both Given and When steps to avoid code duplication.
+ * @param world - The game world instance
+ */
+function advanceUntilBirdCollision(world: GameWorld): void {
   let collided = false;
   let iterations = 0;
   const maxIterations = 1000;
@@ -47,30 +48,16 @@ Given("the bird has collided with the pipe", (world: GameWorld) => {
   }
 
   expect(iterations).toBeLessThan(maxIterations);
+}
+
+Given("the bird has collided with the pipe", (world: GameWorld) => {
+  advanceUntilBirdCollision(world);
 });
 
 When(
   "the game advances until the bird collides with the pipe",
   (world: GameWorld) => {
-    // Advance game until collision occurs
-    let collided = false;
-    let iterations = 0;
-    const maxIterations = 1000;
-
-    while (!collided && iterations < maxIterations) {
-      const state = world.getState();
-      const bird = state.entities["bird"] as Bird;
-
-      if (!bird || !bird.isAlive) {
-        collided = true;
-        break;
-      }
-
-      world.engine.tick({ deltaTime: 1 });
-      iterations++;
-    }
-
-    expect(iterations).toBeLessThan(maxIterations);
+    advanceUntilBirdCollision(world);
   },
 );
 
@@ -164,14 +151,6 @@ Then("the pipes should stop moving", (world: GameWorld) => {
       expect(after.position.x).toBe(before.position.x);
     }
   }
-});
-
-Then("the ground should stop scrolling", (world: GameWorld) => {
-  // Ground scrolling is managed by GroundSystem
-  // When bird is dead, ground should stop
-  const state = world.getState();
-  const bird = state.entities["bird"] as Bird;
-  expect(bird.isAlive).toBe(false);
 });
 
 Then("the game should stop completely", (world: GameWorld) => {

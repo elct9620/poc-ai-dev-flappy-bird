@@ -1,9 +1,7 @@
 import {
   BIRD_COLLISION_HEIGHT,
   BIRD_COLLISION_WIDTH,
-  GROUND_TEXTURE_HEIGHT,
   PIPE_WIDTH,
-  REFERENCE_HEIGHT,
 } from "@/constants";
 import type { Command, System } from "@/engine/engine";
 import type { EventBus } from "@/engine/eventbus";
@@ -12,6 +10,7 @@ import type { GameState } from "@/entity/GameState";
 import type { Pipe } from "@/entity/Pipe";
 import { GameEventType, SystemEventType, type Event } from "@/events";
 import type { StageAdapter } from "@/systems/StageAdapter";
+import { calculateGroundY } from "@/utils/GroundCalculator";
 
 /**
  * CollisionSystem implements collision detection for the game.
@@ -117,12 +116,7 @@ function checkBirdGroundCollision(bird: Bird, adapter: StageAdapter): boolean {
   }
 
   const screenDimensions = adapter.getScreenDimensions();
-
-  // Calculate scaled ground height using same formula as Ground renderer
-  // Scale = screenHeight / REFERENCE_HEIGHT (matching ScaleCalculator.getBaseScale())
-  const scale = screenDimensions.height / REFERENCE_HEIGHT;
-  const scaledGroundHeight = GROUND_TEXTURE_HEIGHT * scale;
-  const groundY = screenDimensions.height - scaledGroundHeight;
+  const groundY = calculateGroundY(screenDimensions.height);
 
   // Check if bird's bottom edge touches the ground
   // Bird's position is at center, so add half height to get bottom edge

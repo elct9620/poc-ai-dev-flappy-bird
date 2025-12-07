@@ -72,15 +72,22 @@ const audioAdapter = new BrowserAudioAdapter();
 
 // Preload sound effects
 // Use Vite's asset URL handling to get the correct bundled path
-const wingAudioUrl = new URL("./assets/soundEffects/wing.ogg", import.meta.url)
-  .href;
-await audioAdapter.preloadSound("wing", wingAudioUrl);
+try {
+  const wingAudioUrl = new URL(
+    "./assets/soundEffects/wing.ogg",
+    import.meta.url,
+  ).href;
+  await audioAdapter.preloadSound("wing", wingAudioUrl);
 
-const pointAudioUrl = new URL(
-  "./assets/soundEffects/point.ogg",
-  import.meta.url,
-).href;
-await audioAdapter.preloadSound("point", pointAudioUrl);
+  const pointAudioUrl = new URL(
+    "./assets/soundEffects/point.ogg",
+    import.meta.url,
+  ).href;
+  await audioAdapter.preloadSound("point", pointAudioUrl);
+} catch (error) {
+  console.warn("Failed to preload sound effects:", error);
+  // Continue game initialization even if audio fails
+}
 
 // Create initial state with pipe generation enabled
 // Setting lastPipeX to (width - 600) triggers automatic pipe spawning on first few ticks

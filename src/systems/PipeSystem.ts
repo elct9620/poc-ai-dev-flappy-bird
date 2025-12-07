@@ -244,10 +244,15 @@ export const PipeSystem = (
       );
       const birdX = bird ? bird.position.x : 0;
 
-      // Calculate scale for bird width (bird dimensions scale with screen height)
+      // Calculate scale and bird's right edge once (optimization: moved outside forEach loop)
       const { height: screenHeight } = adapter.getScreenDimensions();
       const scale = screenHeight / REFERENCE_HEIGHT;
       const birdRightEdge = birdX + BIRD_WIDTH * scale;
+
+      // Pre-query score entity once (optimization: avoid repeated Object.values calls in loop)
+      const scoreEntity = Object.values(gameState.entities).find(
+        (entity) => entity.type === "score",
+      );
 
       pipeEntities.forEach((pipe) => {
         // Calculate new position for this tick
@@ -290,18 +295,11 @@ export const PipeSystem = (
             adapter.update(updatedPipe);
 
             // Dispatch INCREMENT_SCORE event only for bottom pipes (to avoid counting twice per pair)
-            if (!currentPipe.isTop) {
-              // Find the score entity in the game state
-              const scoreEntity = Object.values(currentState.entities).find(
-                (entity) => entity.type === "score",
-              );
-
-              if (scoreEntity) {
-                eventBus.dispatch({
-                  type: GameEventType.IncrementScore,
-                  payload: { id: scoreEntity.id },
-                });
-              }
+            if (!currentPipe.isTop && scoreEntity) {
+              eventBus.dispatch({
+                type: GameEventType.IncrementScore,
+                payload: { id: scoreEntity.id },
+              });
             }
 
             return {

@@ -1,3 +1,4 @@
+import { POINT_SOUND } from "@/constants";
 import { GameEventType } from "@/events";
 import { Given, Then, When } from "quickpickle";
 import { expect } from "vitest";
@@ -166,5 +167,5 @@ Then("the previous state should not be modified", (world: GameWorld) => {
 });
 
 Then("the point sound effect should play", (world: GameWorld) => {
-  expect(world.audioAdapter.playedSounds).toContain("point");
+  expect(world.audioAdapter.playedSounds).toContain(POINT_SOUND);
 });

@@ -18,7 +18,8 @@ export const AudioSystem = (adapter: AudioAdapter): System => {
       adapter.playSound(WING_FLAP_SOUND);
     }
 
-    // Play point sound when score increments
+    // Play point sound when score increments (triggered when bird passes pipes)
+    // This provides audio feedback for successful pipe navigation
     if (event.type === GameEventType.IncrementScore) {
       adapter.playSound(POINT_SOUND);
     }

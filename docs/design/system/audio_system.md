@@ -18,7 +18,7 @@ When the player provides input to make the bird flap (via mouse click or space k
 |-----------------|-------------------------------------------------------|
 | [INCREMENT_SCORE](../event/increment_score.md) | Player successfully passes through a pipe pair |
 
-When the player successfully passes through a pipe pair and the score increments, plays the point scoring sound effect to provide audio feedback. The sound file is located at `src/assets/soundEffects/point.ogg`.
+When the player successfully passes through a pipe pair and the score increments, plays the point scoring sound effect to provide audio feedback. This command responds to score increment events triggered by the [PipeSystem](./pipe_system.md) when the player successfully navigates through pipe pairs. The sound file is located at `src/assets/soundEffects/point.ogg`.
 
 ## Adapter Interface
 

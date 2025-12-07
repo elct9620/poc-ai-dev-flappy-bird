@@ -1,7 +1,11 @@
-export interface Entity {
-  id: string;
-  type: string;
-}
+import type { Entity } from "@/entity/Entity";
+
+export type {
+  Entity,
+  EntityByType,
+  EntityTypeName,
+  IEntity,
+} from "@/entity/Entity";
 
 /**
  * PipeGenerationState tracks the state of automatic pipe generation.

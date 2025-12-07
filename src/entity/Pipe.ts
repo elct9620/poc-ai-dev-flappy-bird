@@ -1,4 +1,4 @@
-import type { Entity } from "@/entity/GameState";
+import type { IEntity } from "@/entity/GameState";
 import type { Vector } from "@/entity/Vector";
 
 /**
@@ -6,7 +6,7 @@ import type { Vector } from "@/entity/Vector";
  * Pipes appear in pairs (top and bottom) with a gap between them.
  * @see {@link ../../docs/design/entity/pipe.md|Pipe Entity Design Document}
  */
-export interface Pipe extends Entity {
+export interface Pipe extends IEntity {
   type: "pipe";
   position: Vector;
   height: number;

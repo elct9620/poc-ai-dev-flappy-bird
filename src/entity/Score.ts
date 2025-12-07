@@ -1,4 +1,4 @@
-import type { Entity } from "@/entity/GameState";
+import type { IEntity } from "@/entity/GameState";
 import type { Vector } from "@/entity/Vector";
 
 /**
@@ -6,7 +6,7 @@ import type { Vector } from "@/entity/Vector";
  * Scale is managed by the Score renderer, not the entity.
  * @see {@link ../../docs/design/entity/score.md|Score Entity Design Document}
  */
-export interface Score extends Entity {
+export interface Score extends IEntity {
   type: "score";
   value: number;
   position: Vector;

@@ -1,19 +1,20 @@
 import type { Texture } from "pixi.js";
 
 import type { Renderer } from "@/adapters/Renderer";
-import type { Entity } from "@/entity/GameState";
+import type { Entity, EntityByType, IEntity } from "@/entity/GameState";
 import type { ScaleCalculator } from "@/utils/ScaleCalculator";
 
 /**
  * Configuration for creating a renderer for a specific entity type.
+ * Generic parameter TEntity allows type-safe renderer creation.
  */
-interface RendererConfig {
+interface RendererConfig<TEntity extends IEntity> {
   /**
    * Factory function to create a renderer instance for the given entity.
    * @param entity The entity to create a renderer for
    * @returns A new renderer instance
    */
-  create: (entity: Entity) => Renderer;
+  create: (entity: TEntity) => Renderer;
 }
 
 /**
@@ -27,7 +28,8 @@ interface RendererConfig {
  * @see {@link ../../docs/ARCHITECTURE.md|Architecture Document} (lines 240-278)
  */
 export class RendererFactory {
-  private registry: Map<string, RendererConfig> = new Map();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private registry: Map<string, RendererConfig<any>> = new Map();
   private numberTextures: Record<string, Texture>;
   private birdTextures: Texture[];
   private backgroundTexture: Texture;
@@ -82,10 +84,14 @@ export class RendererFactory {
 
   /**
    * Register a renderer configuration for a specific entity type.
+   * Uses TypeScript's infer to automatically extract the correct entity type from the string literal.
    * @param entityType The type identifier of the entity (e.g., "score", "bird")
-   * @param config The configuration containing the create function and zIndex
+   * @param config The configuration containing the create function
    */
-  register(entityType: string, config: RendererConfig): void {
+  register<K extends string>(
+    entityType: K,
+    config: RendererConfig<EntityByType<K>>,
+  ): void {
     this.registry.set(entityType, config);
   }
 
@@ -100,6 +106,10 @@ export class RendererFactory {
     if (!config) {
       throw new Error(`No renderer registered for entity type: ${entity.type}`);
     }
-    return config.create(entity);
+    // Type assertion is safe here because:
+    // 1. Registry is type-safe (register() enforces correct entity types)
+    // 2. Runtime check ensures config exists
+    // 3. Discriminated union guarantees entity.type correlates to entity structure
+    return config.create(entity as EntityByType<typeof entity.type>);
   }
 }

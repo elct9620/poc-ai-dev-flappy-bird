@@ -1,10 +1,10 @@
-import type { Entity } from "@/entity/GameState";
+import type { IEntity } from "@/entity/GameState";
 
 /**
  * Ground entity representing the ground (base) at the bottom of the screen.
  * @see {@link ../../docs/design/entity/ground.md|Ground Entity Design Document}
  */
-export interface Ground extends Entity {
+export interface Ground extends IEntity {
   type: "ground";
 }
 

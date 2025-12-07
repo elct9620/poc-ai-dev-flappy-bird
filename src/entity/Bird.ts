@@ -1,4 +1,4 @@
-import type { Entity } from "@/entity/GameState";
+import type { IEntity } from "@/entity/GameState";
 import type { Vector } from "@/entity/Vector";
 
 /**
@@ -8,7 +8,7 @@ import type { Vector } from "@/entity/Vector";
  *
  * @see {@link ../../docs/design/entity/bird.md|Bird Entity Design Document}
  */
-export interface Bird extends Entity {
+export interface Bird extends IEntity {
   type: "bird";
   position: Vector;
   velocity: Vector;

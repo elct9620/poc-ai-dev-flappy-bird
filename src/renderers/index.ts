@@ -1,4 +1,3 @@
-import type { Pipe } from "@/entity/Pipe";
 import { Background as BackgroundRenderer } from "@/renderers/Background";
 import { Bird as BirdRenderer } from "@/renderers/Bird";
 import { Ground as GroundRenderer } from "@/renderers/Ground";
@@ -50,7 +49,7 @@ export function registerRenderers(rendererFactory: RendererFactory): void {
       new PipeRenderer(
         rendererFactory.getPipeTexture(),
         rendererFactory.getScaleCalculator(),
-        (entity as Pipe).isTop,
+        entity.isTop,
       ),
   });
 }

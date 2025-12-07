@@ -1,10 +1,10 @@
-import type { Entity } from "@/entity/GameState";
+import type { IEntity } from "@/entity/GameState";
 
 /**
  * Background entity representing a background scene in the game.
  * @see {@link ../../docs/design/entity/background.md|Background Entity Design Document}
  */
-export interface Background extends Entity {
+export interface Background extends IEntity {
   type: "background";
 }
 

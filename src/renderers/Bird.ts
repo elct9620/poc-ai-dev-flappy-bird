@@ -38,7 +38,7 @@ export class Bird extends Container {
 
     this.addChild(this.sprite);
 
-    // Set zIndex for rendering order - Bird above pipes but below ground
+    // Set zIndex for rendering order - Bird above ground to ensure player visibility
     this.zIndex = ZINDEX_BIRD;
   }
 

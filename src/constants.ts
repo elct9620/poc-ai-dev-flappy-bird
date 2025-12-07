@@ -82,11 +82,11 @@ export const ZINDEX_BACKGROUND = 0;
 /** Pipe layer - renders above background */
 export const ZINDEX_PIPE = 10;
 
-/** Bird layer - renders above pipes but below ground */
-export const ZINDEX_BIRD = 50;
+/** Ground layer - renders above pipes to cover pipe bottoms */
+export const ZINDEX_GROUND = 50;
 
-/** Ground layer - renders on top to cover pipe bottoms */
-export const ZINDEX_GROUND = 100;
+/** Bird layer - renders above ground to ensure player visibility */
+export const ZINDEX_BIRD = 100;
 
 /** Score layer - renders above all game elements */
 export const ZINDEX_SCORE = 200;

@@ -40,7 +40,7 @@ export class Ground extends Container {
 
     this.addChild(this.tilingSprite);
 
-    // Set zIndex for rendering order - Ground on top to cover pipe bottoms
+    // Set zIndex for rendering order - Ground above pipes to cover pipe bottoms
     this.zIndex = ZINDEX_GROUND;
   }
 

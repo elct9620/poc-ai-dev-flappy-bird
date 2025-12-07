@@ -24,9 +24,17 @@ During each TICK event, updates all pipe positions by subtracting the scroll spe
 
 | Event Triggered | Description |
 |-----------------|-------------|
-| TICK | Marks pipes as passed when bird crosses them |
+| TICK | Marks pipes as passed when bird crosses them and triggers score increment |
 
-During each TICK event, checks if the bird's x-position has passed each pipe's x-position. When a pipe pair is passed for the first time (and `passed` is false), sets the `passed` property to true. This enables score tracking by ensuring each pipe pair only increments the score once.
+During each TICK event, checks if the bird's x-position has passed each pipe's x-position. When a pipe pair is passed for the first time (and `passed` is false), sets the `passed` property to true and dispatches an [INCREMENT_SCORE](../event/increment_score.md) event. This ensures each pipe pair only increments the score once.
+
+**Score Detection Logic:**
+- Compares the bird's x-position (considering the bird's width) with each pipe's x-position
+- A pipe is considered "passed" when the bird's right edge (x + bird width × scale) is greater than the pipe's right edge (x + pipe width × scale)
+- Bird dimensions: 34×24 pixels (from sprite `src/assets/gameObjects/yellowbird-*.png`)
+- Pipe width: 52 pixels (from sprite dimensions)
+- All dimensions are multiplied by the current scale factor (from [Scale Guidelines](../foundation/scale.md)) to account for responsive scaling
+- Only triggers once per pipe pair by checking the `passed` flag
 
 ### Remove Pipe Command
 

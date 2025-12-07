@@ -25,6 +25,17 @@ export const MAX_ROTATION_UP = -Math.PI / 7.2;
 export const TERMINAL_VELOCITY = 1;
 
 // =============================================================================
+// Bird Constants
+// =============================================================================
+// Texture dimensions from sprite assets (yellowbird-*.png)
+
+/** Width of bird texture (pixels) */
+export const BIRD_WIDTH = 34;
+
+/** Height of bird texture (pixels) */
+export const BIRD_HEIGHT = 24;
+
+// =============================================================================
 // Pipe Constants
 // =============================================================================
 // Texture dimensions and movement parameters
@@ -62,6 +73,9 @@ export const PIPE_SPACING = 200;
 
 /** Sound asset key for bird wing flap sound effect */
 export const WING_FLAP_SOUND = "wing";
+
+/** Sound asset key for point scoring sound effect */
+export const POINT_SOUND = "point";
 
 // =============================================================================
 // Game Mechanics Constants

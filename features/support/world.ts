@@ -36,7 +36,7 @@ export class GameWorld extends QuickPickleWorld {
       ScoreSystem(this.adapter),
       BackgroundSystem(this.adapter),
       GroundSystem(this.adapter),
-      PipeSystem(this.adapter),
+      PipeSystem(this.adapter, this.eventBus),
       PhysicsSystem(this.adapter),
       InputSystem(this.eventBus, "bird"),
       AudioSystem(this.audioAdapter),

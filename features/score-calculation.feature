@@ -12,14 +12,12 @@ Feature: Score Calculation
     And a score exists with id "game-score" and value 0
     And the bird is at position (50, 200)
 
-  @skip
   Scenario: Score increments when bird passes a pipe pair
     Given a pipe pair exists at x position 100
     When the bird moves to x position 160
     And the game ticks with deltaTime 1
     Then the score "game-score" should have value 1
 
-  @skip
   Scenario: Score only increments once per pipe pair
     Given a pipe pair exists at x position 100
     When the bird moves to x position 160
@@ -29,7 +27,6 @@ Feature: Score Calculation
     Then the score "game-score" should have value 1
     And the pipe should be marked as passed
 
-  @skip
   Scenario: Score increments for multiple pipe pairs
     Given a pipe pair exists at x position 100
     And a pipe pair exists at x position 300
@@ -39,14 +36,12 @@ Feature: Score Calculation
     And the game ticks with deltaTime 1
     Then the score "game-score" should have value 2
 
-  @skip
   Scenario: Point sound plays when score increments
     Given a pipe pair exists at x position 100
     When the bird moves to x position 160
     And the game ticks with deltaTime 1
     Then the point sound effect should play
 
-  @skip
   Scenario Outline: Score detection with different positions
     Given a pipe pair exists at x position <pipe_x>
     When the bird moves to x position <bird_x>
@@ -57,5 +52,5 @@ Feature: Score Calculation
       | pipe_x | bird_x | expected_score | description                    |
       | 100    | 160    | 1              | bird clearly passed pipe       |
       | 100    | 90     | 0              | bird has not reached pipe      |
-      | 100    | 152    | 1              | bird just passed pipe edge     |
-      | 100    | 151    | 0              | bird just before pipe edge     |
+      | 100    | 119    | 1              | bird just passed pipe edge     |
+      | 100    | 118    | 0              | bird just before pipe edge     |

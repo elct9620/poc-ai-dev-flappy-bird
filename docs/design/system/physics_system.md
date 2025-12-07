@@ -26,7 +26,7 @@ When BIRD_FLAP is received, applies an upward velocity to the bird by setting it
 |-----------------|-------------|
 | TICK | Each frame applies downward gravity acceleration to the bird |
 
-During each TICK event, increases the bird's y-velocity by the gravity constant multiplied by deltaTime (e.g., +0.8 pixels/frame²). This simulates continuous downward acceleration. This command is only applied if the bird is alive.
+During each TICK event, increases the bird's y-velocity by the gravity constant multiplied by deltaTime (e.g., +0.8 pixels/frame²). This simulates continuous downward acceleration. This command is applied regardless of the bird's alive status to allow dead birds to fall to the ground.
 
 ### Update Position Command
 

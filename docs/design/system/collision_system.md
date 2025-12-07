@@ -6,70 +6,43 @@ The system uses AABB (Axis-Aligned Bounding Box) collision detection to determin
 
 ## Side Effects
 
-### Detect Bird-Pipe Collision Command
+### Detect Bird-Pipe Collision
 
-| Event Triggered                          | Description                                               |
-|------------------------------------------|-----------------------------------------------------------|
-| [TICK](../event/tick.md)                 | Each frame checks for collisions between bird and all pipes (only when bird.isAlive is true) |
+| Event Triggered | Description |
+|-----------------|-------------|
+| [TICK](../event/tick.md) | Each frame checks for collisions between bird and all pipes |
 
-When the bird collides with a pipe, the system will dispatch events in the following order **within the same tick**:
+During each TICK event, the system checks for collisions between the bird and all active pipes using AABB (Axis-Aligned Bounding Box) collision detection. When a collision is detected, the system dispatches [BIRD_COLLISION](../event/bird_collision.md) followed by [KILL_BIRD](../event/kill_bird.md) **within the same tick** to mark the collision occurrence and set the bird's `isAlive` property to false.
 
-1. **First**: Dispatch [BIRD_COLLISION](../event/bird_collision.md) event to mark the collision occurrence
-2. **Second**: Dispatch [KILL_BIRD](../event/kill_bird.md) event to set the bird's isAlive property to false
+The system uses the following collision boundaries:
 
-**Collision Detection Logic:**
+- **Bird Collision Box**: 28×20 pixels (slightly reduced from 34×24 sprite for better gameplay feel)
+  - Padding: 3 pixels left/right, 2 pixels top/bottom
+  - Center point: Bird's position
+  - Calculation: `(position.x - 14, position.y - 10)` to `(position.x + 14, position.y + 10)`
 
-The system performs AABB collision detection with the following boundaries:
-
-- **Bird Collision Box**: Slightly reduced from sprite size for better gameplay feel
-  - Width: 28 pixels (3 pixels padding on each side of 34px sprite)
-  - Height: 20 pixels (2 pixels padding on top/bottom of 24px sprite)
-  - Center: Bird's position represents the center point
-  - Calculation: Box extends from `(position.x - 14, position.y - 10)` to `(position.x + 14, position.y + 10)`
-
-- **Pipe Collision Box**: Full sprite dimensions
-  - Width: 52 pixels
-  - Height: Variable based on pipe.height property
-  - Position: Pipe's position represents the top-left corner
+- **Pipe Collision Box**: 52 pixels width × variable height (full sprite dimensions)
+  - Top-left corner: Pipe's position
   - Calculation: `(position.x, position.y)` to `(position.x + 52, position.y + height)`
 
-**Detection Conditions:**
-- Only checked when `bird.isAlive === true`
-- Checked every frame during TICK event
-- Early exit after first collision detected
+This collision detection is only performed when `bird.isAlive === true` and exits early after the first collision is detected.
 
-**Scrolling Stop Mechanism**:
+**Scrolling Stop Mechanism**: The system doesn't directly stop scrolling. Instead, the [KILL_BIRD](../event/kill_bird.md) event sets `bird.isAlive = false`, and other systems (PipeSystem, GroundSystem, BackgroundSystem) check this status each frame to skip position updates.
 
-Scrolling is not stopped by the CollisionSystem directly. Instead:
-- The KILL_BIRD event sets `bird.isAlive = false`
-- Other systems (PipeSystem, GroundSystem, BackgroundSystem) check the bird's `isAlive` status each frame
-- When `isAlive === false`, these systems skip position updates, effectively stopping all scrolling
+### Detect Bird-Ground Collision
 
-### Detect Bird-Ground Collision Command
+| Event Triggered | Description |
+|-----------------|-------------|
+| [TICK](../event/tick.md) | Each frame checks for collision between bird and ground |
 
-| Event Triggered                          | Description                                               |
-|------------------------------------------|-----------------------------------------------------------|
-| [TICK](../event/tick.md)                 | Each frame checks for collision between bird and ground (checked regardless of bird.isAlive status) |
+During each TICK event, the system checks whether the bird has reached the ground using a Y-threshold calculation. When the bird's position crosses this threshold, the system dispatches [BIRD_LAND](../event/bird_land.md) to mark that the bird has landed, completing the game-over sequence.
 
-When the bird collides with the ground:
+The ground collision uses the following boundary:
 
-1. Dispatch [BIRD_LAND](../event/bird_land.md) event to mark that the bird has landed
-2. This marks the final step in the game-over sequence
+- **Ground Collision Box**: Full screen width × 112 pixels (scaled)
+  - Y-threshold: `screenHeight - (112 × scale)`
 
-**Collision Detection Logic:**
-
-- **Ground Collision Box**: Full screen width at bottom
-  - Width: Screen width
-  - Height: 112 pixels (scaled)
-  - Position: Bottom of screen
-  - Calculation: Y-threshold at `screenHeight - (112 × scale)`
-
-**Detection Conditions:**
-- Checked every frame during TICK event
-- Always checked, regardless of `bird.isAlive` status
-- This allows the landing animation to complete after death
-
-**Note**: The bird can only land if it has already been killed (either by pipe collision or falling off-screen). The landing collision is checked continuously, but only becomes relevant after the bird's death during the falling phase.
+Unlike pipe collision, ground collision is checked **regardless of `bird.isAlive` status**. This allows the landing animation to complete after the bird's death during the falling phase. The bird can only land after it has already been killed (either by pipe collision or falling off-screen).
 
 ### Game Over Flow
 

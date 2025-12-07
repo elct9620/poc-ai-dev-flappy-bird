@@ -2,10 +2,10 @@ import {
   BIRD_COLLISION_HEIGHT,
   FLAP_VELOCITY,
   GRAVITY,
-  MAX_ROTATION_DOWN,
   GROUND_TEXTURE_HEIGHT,
-  REFERENCE_HEIGHT,
+  MAX_ROTATION_DOWN,
   MAX_ROTATION_UP,
+  REFERENCE_HEIGHT,
   TERMINAL_VELOCITY,
 } from "@/constants";
 import type { Command, System } from "@/engine/engine";

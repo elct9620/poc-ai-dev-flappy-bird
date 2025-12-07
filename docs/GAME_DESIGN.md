@@ -48,9 +48,16 @@ Flappy Bird 是一款簡單的橫向捲軸遊戲，玩家透過點擊或按鍵�
 
 當以下任一情況發生時，遊戲結束：
 
-- 小鳥撞到管道（上方或下方的管道）
-- 小鳥撞到地面
-- 小鳥掉出螢幕範圍（過高或過低）
+1. **撞到管道**：小鳥與管道發生碰撞（上方或下方的管道）
+2. **撞到地面**：小鳥落地觸碰到螢幕底部的地面
+3. **掉出螢幕**：小鳥飛出螢幕頂部範圍
+
+**遊戲結束流程**：
+- 當發生碰撞時，小鳥會被標記為死亡狀態
+- 所有障礙物、背景和地面停止捲動
+- 小鳥失去控制，持續受重力影響下墜
+- 小鳥最終落地後，遊戲完全停止
+- 顯示最終分數（未來功能）
 
 ### 物理規則
 
@@ -211,6 +218,22 @@ Flappy Bird 是一款簡單的橫向捲軸遊戲，玩家透過點擊或按鍵�
   - 移除地面 → 清除地面圖層
 - **運作方式**：維護地面實體，委託渲染層負責視覺呈現
 
+#### 碰撞偵測系統（Collision System）
+
+- **功能**：偵測遊戲中的碰撞並觸發遊戲結束邏輯
+- **處理事件**：
+  - 每幀更新 → 檢查小鳥與管道的碰撞
+  - 每幀更新 → 檢查小鳥與地面的碰撞
+  - 碰撞發生 → 觸發小鳥死亡和落地事件
+- **運作方式**：
+  - 使用 AABB（軸對齊邊界框）碰撞偵測演算法
+  - **小鳥碰撞框**：28×20 像素（略小於 34×24 精靈圖，提升遊戲體驗）
+    - 左右各縮小 3 像素，上下各縮小 2 像素
+  - **管道碰撞框**：52 像素寬 × 可變高度（完整精靈圖尺寸）
+  - **地面碰撞閾值**：螢幕高度 - (112 × 縮放比例)
+  - 只有在小鳥存活時才檢查管道碰撞
+  - 地面碰撞無論小鳥狀態都會檢查，允許死亡後的落地動畫完成
+
 ---
 
 ### 視覺呈現（Visual Rendering）
@@ -337,6 +360,7 @@ Flappy Bird 是一款簡單的橫向捲軸遊戲，玩家透過點擊或按鍵�
 - [PhysicsSystem（物理系統）](./design/system/physics_system.md) - 管理物理模擬
 - [ScoreSystem（計分系統）](./design/system/score_system.md) - 追蹤分數
 - [PipeSystem（障礙物系統）](./design/system/pipe_system.md) - 管理管道生成與移動
+- [CollisionSystem（碰撞偵測系統）](./design/system/collision_system.md) - 偵測碰撞並觸發遊戲結束
 - [AudioSystem（音效系統）](./design/system/audio_system.md) - 處理音效播放
 - [BackgroundSystem（背景系統）](./design/system/background_system.md) - 管理背景元素
 - [GroundSystem（地面系統）](./design/system/ground_system.md) - 管理地面元素
@@ -357,6 +381,9 @@ Flappy Bird 是一款簡單的橫向捲軸遊戲，玩家透過點擊或按鍵�
 
 - [CREATE_BIRD](./design/event/create_bird.md) - 創建小鳥
 - [BIRD_FLAP](./design/event/bird_flap.md) - 小鳥拍翅
+- [BIRD_COLLISION](./design/event/bird_collision.md) - 小鳥碰撞障礙物
+- [BIRD_LAND](./design/event/bird_land.md) - 小鳥落地
+- [KILL_BIRD](./design/event/kill_bird.md) - 小鳥死亡
 - [CREATE_PIPE](./design/event/create_pipe.md) - 創建管道
 - [CREATE_SCORE](./design/event/create_score.md) - 創建分數
 - [INCREMENT_SCORE](./design/event/increment_score.md) - 增加分數

@@ -12,6 +12,16 @@ Given("a ground exists with id {string}", (world: GameWorld, id: string) => {
   world.engine.tick({ deltaTime: 0 });
 });
 
+Given("a ground is created at the bottom of the screen", (world: GameWorld) => {
+  world.engine.dispatch({
+    type: GameEventType.CreateGround,
+    payload: {
+      id: "ground",
+    },
+  });
+  world.engine.tick({ deltaTime: 0 });
+});
+
 // When steps
 When("a ground is created with id {string}", (world: GameWorld, id: string) => {
   world.engine.dispatch({

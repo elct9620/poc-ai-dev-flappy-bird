@@ -3,7 +3,6 @@
 # - docs/design/entity/bird.md
 # - docs/design/entity/pipe.md
 # - docs/design/entity/ground.md
-@skip
 Feature: Collision Detection
   As a player
   I want the game to detect when I hit obstacles

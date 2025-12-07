@@ -32,6 +32,23 @@ export const TERMINAL_VELOCITY = 1;
 /** Width of bird texture (pixels) */
 export const BIRD_WIDTH = 34;
 
+/** Height of bird texture (pixels) */
+export const BIRD_HEIGHT = 24;
+
+// =============================================================================
+// Collision Detection Constants
+// =============================================================================
+// Per design document: docs/design/system/collision_system.md
+
+/** Bird collision box width (pixels) - reduced for better gameplay feel */
+export const BIRD_COLLISION_WIDTH = 28;
+
+/** Bird collision box height (pixels) - reduced for better gameplay feel */
+export const BIRD_COLLISION_HEIGHT = 20;
+
+/** Ground height when scaled (pixels) */
+export const GROUND_HEIGHT = 112;
+
 // =============================================================================
 // Pipe Constants
 // =============================================================================

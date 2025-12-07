@@ -30,7 +30,7 @@ jobs:
             DO NOT commit the changes. Only update the GAME_DESIGN.md file.
           claude_args: "--allowed-tools Read,Write,Edit,Glob,Grep,Slash(/game-design)"
 
-      - name: Commit updated GAME_DESIGN.md
+      - name: Create or update GAME_DESIGN.md PR
         uses: actions/github-script@v8
         with:
           script: |

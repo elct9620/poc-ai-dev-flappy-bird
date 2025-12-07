@@ -1,8 +1,8 @@
 /**
- * Commits GAME_DESIGN.md changes directly to the main branch via GitHub API
+ * Creates or updates a PR for GAME_DESIGN.md changes (release-please style)
  *
- * This script is used by GitHub Actions to avoid nested PR loops when
- * design documents are updated. It only commits docs/GAME_DESIGN.md.
+ * This script maintains a single "design update" PR that gets continuously updated
+ * when design documents change. When the PR is merged, a new cycle begins.
  *
  * @param {Object} options - GitHub Actions context
  * @param {Object} options.github - Authenticated Octokit instance
@@ -12,7 +12,13 @@
  */
 module.exports = async ({ github, context, core, exec }) => {
   const ALLOWED_FILE = "docs/GAME_DESIGN.md";
+  const BRANCH_NAME = "design/game-design-update";
+  const PR_TITLE = "docs: update GAME_DESIGN.md";
   const COMMIT_MESSAGE = "docs: update GAME_DESIGN.md based on design changes";
+
+  const owner = context.repo.owner;
+  const repo = context.repo.repo;
+  const baseBranch = context.ref.replace("refs/heads/", "");
 
   // Check for changes in GAME_DESIGN.md
   let statusOutput = "";
@@ -43,15 +49,32 @@ module.exports = async ({ github, context, core, exec }) => {
     return;
   }
 
-  // Get current commit SHA
-  const { data: refData } = await github.rest.git.getRef({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    ref: `heads/${context.ref.replace("refs/heads/", "")}`,
-  });
+  // Check if PR branch already exists
+  let branchExists = false;
+  try {
+    await github.rest.git.getRef({
+      owner,
+      repo,
+      ref: `heads/${BRANCH_NAME}`,
+    });
+    branchExists = true;
+    core.info(`Branch ${BRANCH_NAME} already exists`);
+  } catch (error) {
+    if (error.status === 404) {
+      core.info(`Branch ${BRANCH_NAME} does not exist, will create it`);
+    } else {
+      throw error;
+    }
+  }
 
-  const currentCommitSha = refData.object.sha;
-  core.info(`Current commit: ${currentCommitSha}`);
+  // Get base branch commit SHA
+  const { data: baseRefData } = await github.rest.git.getRef({
+    owner,
+    repo,
+    ref: `heads/${baseBranch}`,
+  });
+  const baseCommitSha = baseRefData.object.sha;
+  core.info(`Base commit (${baseBranch}): ${baseCommitSha}`);
 
   // Read file content
   let fileContent = "";
@@ -65,26 +88,26 @@ module.exports = async ({ github, context, core, exec }) => {
 
   // Create blob for the file
   const { data: blobData } = await github.rest.git.createBlob({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
+    owner,
+    repo,
     content: Buffer.from(fileContent).toString("base64"),
     encoding: "base64",
   });
 
   core.info(`Created blob: ${blobData.sha}`);
 
-  // Get current tree
-  const { data: commitData } = await github.rest.git.getCommit({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    commit_sha: currentCommitSha,
+  // Get base tree
+  const { data: baseCommitData } = await github.rest.git.getCommit({
+    owner,
+    repo,
+    commit_sha: baseCommitSha,
   });
 
   // Create new tree with updated file
   const { data: treeData } = await github.rest.git.createTree({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    base_tree: commitData.tree.sha,
+    owner,
+    repo,
+    base_tree: baseCommitData.tree.sha,
     tree: [
       {
         path: ALLOWED_FILE,
@@ -99,24 +122,75 @@ module.exports = async ({ github, context, core, exec }) => {
 
   // Create commit
   const { data: newCommitData } = await github.rest.git.createCommit({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
+    owner,
+    repo,
     message: COMMIT_MESSAGE,
     tree: treeData.sha,
-    parents: [currentCommitSha],
+    parents: [baseCommitSha],
   });
 
   core.info(`Created commit: ${newCommitData.sha}`);
 
-  // Update branch reference
-  await github.rest.git.updateRef({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    ref: `heads/${context.ref.replace("refs/heads/", "")}`,
-    sha: newCommitData.sha,
+  // Create or update branch
+  if (branchExists) {
+    // Update existing branch
+    await github.rest.git.updateRef({
+      owner,
+      repo,
+      ref: `heads/${BRANCH_NAME}`,
+      sha: newCommitData.sha,
+      force: true, // Force update to avoid conflicts
+    });
+    core.info(`✓ Updated branch ${BRANCH_NAME}`);
+  } else {
+    // Create new branch
+    await github.rest.git.createRef({
+      owner,
+      repo,
+      ref: `refs/heads/${BRANCH_NAME}`,
+      sha: newCommitData.sha,
+    });
+    core.info(`✓ Created branch ${BRANCH_NAME}`);
+  }
+
+  // Check if PR already exists
+  const { data: existingPRs } = await github.rest.pulls.list({
+    owner,
+    repo,
+    head: `${owner}:${BRANCH_NAME}`,
+    base: baseBranch,
+    state: "open",
   });
 
-  core.info(`✓ Successfully committed ${ALLOWED_FILE} to ${context.ref}`);
-  core.setOutput("commit-sha", newCommitData.sha);
-  core.setOutput("files-changed", 1);
+  if (existingPRs.length > 0) {
+    const pr = existingPRs[0];
+    core.info(`PR #${pr.number} already exists, updated with latest changes`);
+    core.setOutput("pr-number", pr.number);
+    core.setOutput("pr-url", pr.html_url);
+    core.setOutput("pr-action", "updated");
+  } else {
+    // Create new PR
+    const { data: newPR } = await github.rest.pulls.create({
+      owner,
+      repo,
+      title: PR_TITLE,
+      head: BRANCH_NAME,
+      base: baseBranch,
+      body: `## Summary
+
+This PR updates \`GAME_DESIGN.md\` based on design document changes.
+
+### Changes
+- Updated game design documentation
+
+---
+🤖 This PR is automatically managed. It will be updated when design documents change.
+`,
+    });
+
+    core.info(`✓ Created PR #${newPR.number}`);
+    core.setOutput("pr-number", newPR.number);
+    core.setOutput("pr-url", newPR.html_url);
+    core.setOutput("pr-action", "created");
+  }
 };

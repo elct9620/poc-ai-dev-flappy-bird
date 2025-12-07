@@ -51,11 +51,14 @@ This project follows an **event-driven architecture with adapters** pattern for 
 - PixiInputAdapter - Callback pattern for input handling
 - Score renderer - Renders digit sprites with alignment and spacing
 - Asset loading system - Async preload of game sprites and sounds
+- Pipe system - Generation and movement (`features/pipe.feature`)
+- Collision detection - AABB algorithm (`features/collision.feature`)
+- Background renderer (`features/background.feature`)
+- Ground renderer (`features/ground.feature`)
+- Score calculation (`features/score-calculation.feature`)
 
 **Not Yet Implemented:**
-- Pipe generation and movement
-- Collision detection
-- Game state (menu, playing, game over)
+- Game state management (menu, playing, game over states)
 
 ### Architecture Layers
 
@@ -97,6 +100,18 @@ User/Timer → Events → Engine → Systems → Commands → State Updates → 
 ```
 
 **Key Pattern**: Systems are pure functions; side effects isolated in adapters.
+
+**Concrete Example - Bird Flap:**
+1. User clicks → `PixiInputAdapter` registers callback
+2. Callback dispatches `MouseClick` event to `EventBus`
+3. `InputSystem` processes `MouseClick` → generates `BirdFlap` event
+4. `PhysicsSystem` processes `BirdFlap` → returns command to update bird velocity
+5. Command updates bird entity immutably in state
+6. Command calls `adapter.update(updatedBird)` to sync renderer
+7. `PixiStageAdapter` calls `renderer.sync(entity)` to update visuals
+8. `AudioSystem` processes `BirdFlap` → plays wing sound via `BrowserAudioAdapter`
+
+This demonstrates how events flow through the system, from user input to visual/audio output.
 
 ### Testing Strategy
 
@@ -264,6 +279,33 @@ This project enforces quality standards through rubrics in `docs/rubrics/`:
 - Prettier configured with `organize-imports` plugin
 - Path alias `@/*` maps to `src/*` for clean imports
 - Full architecture documented in `docs/ARCHITECTURE.md`
+
+## Game Constants
+
+All game parameters are centralized in `src/constants.ts` following the "No Magic Numbers" rubric. Key constant categories:
+
+**Physics Constants:**
+- `GRAVITY` (0.08) - Downward acceleration in pixels/frame²
+- `FLAP_VELOCITY` (-3) - Upward velocity when bird flaps
+- `TERMINAL_VELOCITY` (1) - Maximum falling speed
+- `MAX_ROTATION_DOWN` / `MAX_ROTATION_UP` - Bird tilt angle limits
+
+**Collision Detection:**
+- `BIRD_COLLISION_WIDTH` (28) / `BIRD_COLLISION_HEIGHT` (20) - Reduced from sprite size for better gameplay feel
+- `GROUND_TEXTURE_HEIGHT` (112) - Used for ground collision calculations
+
+**Pipe Generation:**
+- `SCROLL_SPEED` (2) - Horizontal scroll speed
+- `MIN_GAP_SIZE` (140) / `MAX_GAP_SIZE` (160) - Gap between pipe pairs
+- `PIPE_SPACING` (200) - Horizontal spacing between pipes
+
+**Audio Assets:**
+- `WING_FLAP_SOUND` ("wing") - Bird flap sound effect key
+- `POINT_SOUND` ("point") - Score sound effect key
+
+**Rendering Layers (zIndex):**
+- Score: 200, Bird: 100, Ground: 50, Pipes: 10, Background: 0
+- See `docs/design/foundation/layer.md` for visual stacking details
 
 ## Design-First Workflow
 

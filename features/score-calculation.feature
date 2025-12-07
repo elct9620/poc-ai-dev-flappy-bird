@@ -49,6 +49,9 @@ Feature: Score Calculation
     Then the score "game-score" should have value <expected_score>
 
     Examples:
+      # Boundary calculation: pipe right edge = pipe_x (100) + PIPE_WIDTH (52) = 152
+      #                      bird passes when: bird_x + BIRD_WIDTH (34) > 152
+      #                      therefore: bird_x > 118 means passed
       | pipe_x | bird_x | expected_score | description                    |
       | 100    | 160    | 1              | bird clearly passed pipe       |
       | 100    | 90     | 0              | bird has not reached pipe      |

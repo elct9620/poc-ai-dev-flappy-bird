@@ -32,9 +32,6 @@ export const TERMINAL_VELOCITY = 1;
 /** Width of bird texture (pixels) */
 export const BIRD_WIDTH = 34;
 
-/** Height of bird texture (pixels) */
-export const BIRD_HEIGHT = 24;
-
 // =============================================================================
 // Pipe Constants
 // =============================================================================

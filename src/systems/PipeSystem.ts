@@ -254,6 +254,13 @@ export const PipeSystem = (
         (entity) => entity.type === "score",
       );
 
+      // Warn if score entity is missing (defensive programming for initialization issues)
+      if (!scoreEntity) {
+        console.warn(
+          "PipeSystem: Score entity not found. Score increments will be skipped.",
+        );
+      }
+
       pipeEntities.forEach((pipe) => {
         // Calculate new position for this tick
         const newX = pipe.position.x - SCROLL_SPEED * deltaTime;
@@ -289,18 +296,10 @@ export const PipeSystem = (
             const currentState = state as GameState;
             const currentPipe = currentState.entities[pipe.id] as Pipe;
 
-            if (!currentPipe || currentPipe.passed) return currentState;
+            if (!currentPipe) return currentState;
 
             const updatedPipe = markPipeAsPassed(currentPipe);
             adapter.update(updatedPipe);
-
-            // Dispatch INCREMENT_SCORE event only for bottom pipes (to avoid counting twice per pair)
-            if (!currentPipe.isTop && scoreEntity) {
-              eventBus.dispatch({
-                type: GameEventType.IncrementScore,
-                payload: { id: scoreEntity.id },
-              });
-            }
 
             return {
               ...currentState,
@@ -310,6 +309,17 @@ export const PipeSystem = (
               },
             };
           });
+
+          // Add INCREMENT_SCORE command for bottom pipes only (decision at system level)
+          if (!pipe.isTop && scoreEntity) {
+            commands.push((state) => {
+              eventBus.dispatch({
+                type: GameEventType.IncrementScore,
+                payload: { id: scoreEntity.id },
+              });
+              return state;
+            });
+          }
         }
 
         // Auto-remove pipes that are completely off-screen (left edge)

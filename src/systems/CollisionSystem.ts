@@ -139,14 +139,26 @@ function getBirdCollisionBox(bird: Bird) {
 /**
  * Calculate the pipe's collision box using AABB.
  * The collision box uses the full sprite dimensions.
+ * Top pipes extend upward from their position, bottom pipes extend downward.
  */
 function getPipeCollisionBox(pipe: Pipe) {
-  return {
-    x: pipe.position.x,
-    y: pipe.position.y,
-    width: PIPE_WIDTH,
-    height: pipe.height,
-  };
+  if (pipe.isTop) {
+    // Top pipe: position is at bottom edge, extends upward
+    return {
+      x: pipe.position.x,
+      y: pipe.position.y - pipe.height,
+      width: PIPE_WIDTH,
+      height: pipe.height,
+    };
+  } else {
+    // Bottom pipe: position is at top edge, extends downward
+    return {
+      x: pipe.position.x,
+      y: pipe.position.y,
+      width: PIPE_WIDTH,
+      height: pipe.height,
+    };
+  }
 }
 
 /**

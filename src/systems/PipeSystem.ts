@@ -105,6 +105,19 @@ function shouldSpawnPipe(generationState: {
 }
 
 /**
+ * Check if pipes should continue moving based on bird state.
+ * Pipes stop moving when bird is dead to freeze game state.
+ * @param gameState - Current game state
+ * @returns true if bird is alive or doesn't exist, false otherwise
+ */
+function shouldPipesMove(gameState: GameState): boolean {
+  const bird = Object.values(gameState.entities).find(
+    (entity): entity is Bird => entity.type === "bird",
+  );
+  return bird?.isAlive ?? true;
+}
+
+/**
  * PipeSystem manages pipe obstacle lifecycle including creation, movement, and removal.
  * Handles CREATE_PIPE, TICK, and REMOVE_PIPE events.
  *
@@ -163,6 +176,11 @@ export const PipeSystem = (
     if (event.type === SystemEventType.Tick) {
       const tickEvent = event as TickEvent;
       const deltaTime = tickEvent.payload.deltaTime;
+
+      // Only move pipes and generate new ones if bird is alive
+      if (!shouldPipesMove(gameState)) {
+        return commands;
+      }
 
       // Automatic pipe generation (if enabled)
       if (

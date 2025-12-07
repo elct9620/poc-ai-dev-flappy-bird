@@ -29,10 +29,10 @@ Feature: Score Calculation
 
   Scenario: Score increments for multiple pipe pairs
     Given a pipe pair exists at x position 100
-    And a pipe pair exists at x position 300
+    And a pipe pair exists at x position 200
     When the bird moves to x position 160
     And the game ticks with deltaTime 1
-    And the bird moves to x position 360
+    And the bird moves to x position 210
     And the game ticks with deltaTime 1
     Then the score "game-score" should have value 2
 

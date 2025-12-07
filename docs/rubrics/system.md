@@ -26,7 +26,7 @@ export function ScoreSystem(state: GameState, event: Event): Command[] {
 
 - System function only reads state and events, never mutates them.
 - All state changes happen through returned commands.
-- Do not dispatch events or call adapter methods inside the system function.
+- Do not dispatch events or call adapter methods inside the system function, they should be in commands.
 - Business logic and checks should be in the system function, not in commands.
 - Use entity's update functions to modify entities.
 

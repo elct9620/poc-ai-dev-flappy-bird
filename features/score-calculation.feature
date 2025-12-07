@@ -27,14 +27,14 @@ Feature: Score Calculation
     Then the score "game-score" should have value 1
     And the pipe should be marked as passed
 
-  Scenario: Score increments for multiple pipe pairs
+  Scenario: Score does not increment after bird dies
     Given a pipe pair exists at x position 100
-    And a pipe pair exists at x position 200
+    And a pipe pair exists at x position 180
     When the bird moves to x position 160
     And the game ticks with deltaTime 1
-    And the bird moves to x position 210
+    And the bird moves to x position 190
     And the game ticks with deltaTime 1
-    Then the score "game-score" should have value 2
+    Then the score "game-score" should have value 1
 
   Scenario: Point sound plays when score increments
     Given a pipe pair exists at x position 100

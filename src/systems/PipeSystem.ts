@@ -329,7 +329,8 @@ export const PipeSystem = (
           });
 
           // Add INCREMENT_SCORE command for bottom pipes only (decision at system level)
-          if (!pipe.isTop && scoreEntity) {
+          // Only increment score if bird is alive
+          if (!pipe.isTop && scoreEntity && bird?.isAlive) {
             commands.push((state) => {
               eventBus.dispatch({
                 type: GameEventType.IncrementScore,

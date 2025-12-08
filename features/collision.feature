@@ -65,7 +65,6 @@ Feature: Collision Detection
       | 100    | 120    | 180    | alive | bird in gap (safe zone)     |
       | 100    | 170    | 200    | alive | bird far right of pipe      |
 
-  @skip
   Scenario: Hit sound plays when bird collides with pipe
     Given a pipe is created at position (200, 0)
     When the game advances until the bird collides with the pipe

@@ -11,15 +11,21 @@ The system must be a pure function that calculates decisions and returns command
 ```typescript
 // src/systems/ScoreSystem.ts
 
+import { calculateNewScore } from '@/entity/Score';
+
 export function ScoreSystem(state: GameState, event: Event): Command[] {
   if (event.type === 'INCREMENT_SCORE') {
-    // System decides what to do, returns command for execution
-    return [(state) => {
-        // dispatch event, call adapter methods
+    // System decides what to do, returns command closures to be executed later
+    const newScore = calculateNewScore(state.score, event.payload.amount);
 
+    return [(state) => {
+        // adapter methods
+        sfxAdapter.playSound('score-increment');
+
+        // state update
         return {
           ...state,
-          score: state.score + event.payload.amount,
+          score: newScore,
         };
     }];
   }

@@ -7,6 +7,8 @@ import type { Event } from "@/events";
  * - Queue events via dispatch()
  * - Return and clear all events via flush()
  * - Maintain immutability (events are copied, not exposed directly)
+ *
+ * @see {@link ../../docs/ARCHITECTURE.md|Architecture Document}
  */
 export class EventBus {
   private queue: Event[] = [];

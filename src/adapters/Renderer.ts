@@ -1,3 +1,8 @@
+/**
+ * Base renderer interface for all game entity renderers.
+ * @see {@link ../../docs/ARCHITECTURE.md|Architecture - Renderer Pattern}
+ */
+
 import type { Container } from "pixi.js";
 
 import type { Entity } from "@/entity/GameState";

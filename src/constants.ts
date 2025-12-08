@@ -1,6 +1,9 @@
 /**
- * Centralized constants to avoid magic numbers across the codebase.
- * As documented in docs/ARCHITECTURE.md
+ * Centralized game constants to avoid magic numbers.
+ * References design documents for physics, collision, and rendering constants.
+ * @see {@link ../docs/design/system/physics_system.md|Physics System Design}
+ * @see {@link ../docs/design/system/collision_system.md|Collision System Design}
+ * @see {@link ../docs/design/foundation/layer.md|Rendering Layers}
  */
 
 // =============================================================================

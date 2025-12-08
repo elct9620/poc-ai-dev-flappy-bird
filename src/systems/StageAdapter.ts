@@ -1,3 +1,8 @@
+/**
+ * Stage adapter interface for managing PixiJS rendering lifecycle.
+ * @see {@link ../../docs/ARCHITECTURE.md|Architecture - Adapter Layer}
+ */
+
 import type { Entity } from "@/entity/GameState";
 
 /**

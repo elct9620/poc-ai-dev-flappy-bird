@@ -18,14 +18,18 @@ interface RendererConfig<TEntity extends IEntity> {
 }
 
 /**
+ * Factory registry for creating entity renderers.
+ * Uses factory pattern to instantiate renderers based on entity type.
+ * @see {@link ../../docs/ARCHITECTURE.md|Architecture - Renderer Layer}
+ */
+
+/**
  * Factory for creating and configuring entity renderers.
  *
  * This factory centralizes renderer creation logic and configuration,
  * eliminating the need for type-specific methods in the adapter.
  * New entity types can be registered dynamically without changing
  * the adapter interface.
- *
- * @see {@link ../../docs/ARCHITECTURE.md|Architecture Document} (lines 240-278)
  */
 export class RendererFactory {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,3 +1,8 @@
+/**
+ * Ground scrolling calculation utility.
+ * @see {@link ../../docs/design/renderer/ground_renderer.md|Ground Renderer Design}
+ */
+
 import { GROUND_TEXTURE_HEIGHT, REFERENCE_HEIGHT } from "@/constants";
 
 /**

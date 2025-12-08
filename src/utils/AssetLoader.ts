@@ -1,3 +1,8 @@
+/**
+ * Asset loading utility for preloading game sprites and sounds.
+ * @see {@link ../../docs/ARCHITECTURE.md|Architecture - Asset Loading}
+ */
+
 import { Assets, Texture } from "pixi.js";
 
 import backgroundDay from "@/assets/gameObjects/background-day.png";

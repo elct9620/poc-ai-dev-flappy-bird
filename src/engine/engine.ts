@@ -13,6 +13,10 @@ export type Command = (state: State) => State;
 
 export type System = (state: State, event: Event) => Command[];
 
+/**
+ * Core game engine implementing event-driven architecture.
+ * @see {@link ../../docs/ARCHITECTURE.md|Architecture Document}
+ */
 export class Engine {
   constructor(
     private state: State,

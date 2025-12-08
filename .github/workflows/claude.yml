@@ -70,6 +70,8 @@ jobs:
             - Use `/design` to process design-related tasks, the implementation not updated is expected to be minimal and focused on demonstrating the design.
             - Use `/implement` to process implementation-related or refactor-related tasks, must ensure the related design is fully implemented.
 
+            Consider the context of the PR is working on design or implementation, do not make any implementation when the PR is working on design only.
+
             Verification:
             - Use `pnpm tsc` to verify there is no type error.
             - Use `pnpm test` to verify all tests pass.`

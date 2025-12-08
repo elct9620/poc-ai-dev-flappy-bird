@@ -166,3 +166,7 @@ Then("the game should stop completely", (world: GameWorld) => {
   const birdAfter = stateAfter.entities["bird"] as Bird;
   expect(Math.abs(birdAfter.position.y - yBefore)).toBeLessThan(1);
 });
+
+Then("the hit sound effect should play", (world: GameWorld) => {
+  expect(world.audioAdapter.playedSounds).toContain("hit");
+});

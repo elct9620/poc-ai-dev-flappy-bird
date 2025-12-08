@@ -85,6 +85,10 @@ try {
     import.meta.url,
   ).href;
   await audioAdapter.preloadSound("point", pointAudioUrl);
+
+  const hitAudioUrl = new URL("./assets/soundEffects/hit.ogg", import.meta.url)
+    .href;
+  await audioAdapter.preloadSound("hit", hitAudioUrl);
 } catch (error) {
   console.warn("Failed to preload sound effects:", error);
   // Continue game initialization even if audio fails

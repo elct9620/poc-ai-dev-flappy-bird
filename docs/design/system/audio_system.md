@@ -39,6 +39,25 @@ When the player successfully passes through a pipe pair and the score increments
 - Sound playback is non-blocking and should not interrupt game flow
 - Missing sound files should be handled gracefully during the preload phase
 
+### Play Hit Sound Command
+
+| Event Triggered | Description                                           |
+|-----------------|-------------------------------------------------------|
+| [BIRD_COLLISION](../event/bird_collision.md) | Bird collides with a pipe obstacle |
+| [BIRD_LAND](../event/bird_land.md) | Bird lands on the ground |
+
+When the bird collides with obstacles (pipes or ground), plays the hit sound effect to provide audio feedback for the collision. This command responds to collision events triggered by the [CollisionSystem](./collision_system.md). The sound file is located at `src/assets/soundEffects/hit.ogg`.
+
+**Volume Settings**:
+- Default volume: 1.0 (full volume)
+- Volume is configurable via the adapter's `setVolume` method
+
+**Error Handling**:
+- If the sound file has not been preloaded, the adapter should silently fail without throwing errors to prevent game crashes
+- Sound playback is non-blocking and should not interrupt game flow
+- Missing sound files should be handled gracefully during the preload phase
+- Multiple collision events should allow sound overlap (not cut off previous playback)
+
 ## Adapter Interface
 
 The AudioSystem depends on an `AudioAdapter` interface for platform-specific audio playback:

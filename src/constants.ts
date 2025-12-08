@@ -91,6 +91,9 @@ export const WING_FLAP_SOUND = "wing";
 /** Sound asset key for point scoring sound effect */
 export const POINT_SOUND = "point";
 
+/** Sound asset key for collision hit sound effect */
+export const HIT_SOUND = "hit";
+
 // =============================================================================
 // Game Mechanics Constants
 // =============================================================================

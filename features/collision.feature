@@ -1,5 +1,6 @@
 # This feature is related to:
 # - docs/design/system/collision_system.md
+# - docs/design/system/audio_system.md
 # - docs/design/entity/bird.md
 # - docs/design/entity/pipe.md
 # - docs/design/entity/ground.md
@@ -63,3 +64,9 @@ Feature: Collision Detection
       | 100    | 114    | 350    | dead  | bird hits bottom pipe       |
       | 100    | 120    | 180    | alive | bird in gap (safe zone)     |
       | 100    | 170    | 200    | alive | bird far right of pipe      |
+
+  @skip
+  Scenario: Hit sound plays when bird collides with pipe
+    Given a pipe is created at position (200, 0)
+    When the game advances until the bird collides with the pipe
+    Then the hit sound effect should play

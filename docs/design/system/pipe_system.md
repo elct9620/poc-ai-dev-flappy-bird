@@ -92,7 +92,8 @@ This approach simplifies the implementation by avoiding complex texture frame ca
 
 The PipeSystem depends on a `StageAdapter` interface for rendering coordination:
 
-- `updatePipe(entity: Pipe): void` - Create or update visual representation
+- `update(entity: Entity): void` - Create or update visual representation using factory pattern
 - `removeEntity(id: string): void` - Destroy visual representation
+- `getScreenDimensions(): { width: number; height: number }` - Get current screen dimensions
 
-This follows the dependency inversion principle, allowing the system to remain framework-agnostic while coordinating with PixiJS through adapters.
+This follows the dependency inversion principle, allowing the system to remain framework-agnostic while coordinating with PixiJS through adapters. The generic `update()` method uses a factory pattern internally to dispatch to appropriate renderers based on entity type.

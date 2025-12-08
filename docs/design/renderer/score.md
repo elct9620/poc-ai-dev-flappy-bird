@@ -24,18 +24,18 @@ Container (Score)
 
 - Each digit in the score value is represented by a separate Sprite instance
 - Sprites are positioned horizontally with configurable spacing
-- The entire container is scaled using ScaleCalculator with design factor 2.0
+- The entire container is scaled using ScaleCalculator
 
 ## Scale Management
 
 Scale is applied in the constructor using ScaleCalculator:
 
 ```typescript
-const scale = scaleCalculator.getResponsiveScale(2.0);
+const scale = scaleCalculator.getBaseScale();
 this.scale.set(scale);
 ```
 
-This ensures consistent responsive rendering across all screen sizes. See the [Scale Guidelines](../foundation/scale.md) for details.
+This ensures consistent responsive rendering across all screen sizes. The base scale maintains proportional scaling with all game elements. See the [Scale Guidelines](../foundation/scale.md) for details.
 
 ## Synchronization
 

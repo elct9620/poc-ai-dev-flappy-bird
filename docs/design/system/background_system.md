@@ -24,7 +24,8 @@ Removes a Background entity from the game state and notifies the adapter to dest
 
 The Background System depends on a `StageAdapter` interface for rendering coordination:
 
-- `updateBackground(entity: Background): void` - Create or update visual representation
+- `update(entity: Entity): void` - Create or update visual representation using factory pattern
 - `removeEntity(id: string): void` - Destroy visual representation
+- `getScreenDimensions(): { width: number; height: number }` - Get current screen dimensions
 
-This follows the dependency inversion principle, allowing the system to remain framework-agnostic while coordinating with PixiJS through adapters.
+This follows the dependency inversion principle, allowing the system to remain framework-agnostic while coordinating with PixiJS through adapters. The generic `update()` method uses a factory pattern internally to dispatch to appropriate renderers based on entity type.

@@ -269,7 +269,7 @@ export interface CreatePipeEvent {
     x: number;
     /** Y-coordinate of the gap center */
     gapY: number;
-    /** Size of the gap between top and bottom pipes (100-120 pixels) */
+    /** Size of the gap between top and bottom pipes (140-160 pixels) */
     gapSize: number;
   };
 }

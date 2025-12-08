@@ -17,7 +17,7 @@ Container (Ground)
 
 - Uses PixiJS TilingSprite for efficient texture repetition with aspect-ratio-preserving scaling
 - Ground tiles horizontally (X-axis) to create continuous ground effect
-- Scale factor is fixed at 2.0 to create a ground strip at the bottom (not fill entire screen)
+- Scale factor uses base scale (`screenHeight / 512`) to maintain proportional scaling with all game elements
 - Both axes use the same scale to maintain aspect ratio and prevent distortion
 - The TilingSprite height is set to the scaled texture height (texture.height × scale)
 - The sprite is positioned at the bottom of the screen
@@ -37,7 +37,7 @@ The `sync(entity: Ground)` method reconciles the renderer's visual state with th
 When created, the renderer:
 
 1. Receives the ground texture as a parameter
-2. Calculates the ground height using a fixed scale factor (2.0)
+2. Calculates the ground height using base scale (`screenHeight / 512`)
 3. Creates a TilingSprite with the texture, setting its display area to screen width and scaled height
 4. Applies the scale factor to the tile scale to maintain aspect ratio
 5. Positions the TilingSprite at the bottom of the screen (y = screenHeight - groundHeight)

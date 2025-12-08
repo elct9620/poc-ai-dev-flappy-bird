@@ -70,9 +70,3 @@ Feature: Collision Detection
     Given a pipe is created at position (200, 0)
     When the game advances until the bird collides with the pipe
     Then the hit sound effect should play
-
-  @skip
-  Scenario: Hit sound plays when bird lands on ground
-    Given the bird is killed
-    When the game advances until the bird reaches the ground
-    Then the hit sound effect should play

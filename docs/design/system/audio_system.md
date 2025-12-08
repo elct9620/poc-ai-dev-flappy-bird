@@ -44,9 +44,8 @@ When the player successfully passes through a pipe pair and the score increments
 | Event Triggered | Description                                           |
 |-----------------|-------------------------------------------------------|
 | [BIRD_COLLISION](../event/bird_collision.md) | Bird collides with a pipe obstacle |
-| [BIRD_LAND](../event/bird_land.md) | Bird lands on the ground |
 
-When the bird collides with obstacles (pipes or ground), plays the hit sound effect to provide audio feedback for the collision. This command responds to collision events triggered by the [CollisionSystem](./collision_system.md). The sound file is located at `src/assets/soundEffects/hit.ogg`.
+When the bird collides with pipe obstacles, plays the hit sound effect to provide audio feedback for the collision. This command responds to collision events triggered by the [CollisionSystem](./collision_system.md). The sound file is located at `src/assets/soundEffects/hit.ogg`.
 
 **Volume Settings**:
 - Default volume: 1.0 (full volume)
